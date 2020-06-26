@@ -1,0 +1,19 @@
+\begin{thebibliography}{RS92}
+
+\bibitem[CS98]{cramer:cca2secure}
+Ronald Cramer and Victor Shoup.
+\newblock A practical public key cryptosystem provably secure against adaptive
+  chosen ciphertext attack.
+\newblock In {\em Proceedings of the 18th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '98}, volume 1462 of {\em
+  Lecture Notes in Computer Science}, pages 13--25. Springer-Verlag, 1998.
+
+\bibitem[RS92]{rackoff:chosenciphertext}
+Charles Rackoff and Daniel~R. Simon.
+\newblock Non-interactive zero-knowledge proof of knowledge and chosen
+  ciphertext attack.
+\newblock In {\em Proceedings of the 11th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '92}, pages 433--444.
+  Springer-Verlag, 1992.
+
+\end{thebibliography}

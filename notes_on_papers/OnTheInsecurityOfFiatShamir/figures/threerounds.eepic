@@ -1,0 +1,23 @@
+\setlength{\unitlength}{0.00083333in}
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+{\renewcommand{\dashlinestretch}{30}
+\begin{picture}(2538,1551)(0,-10)
+\path(450,1242)(2100,1242)
+\blacken\path(1980.000,1212.000)(2100.000,1242.000)(1980.000,1272.000)(1980.000,1212.000)
+\path(2100,642)(450,642)
+\blacken\path(570.000,672.000)(450.000,642.000)(570.000,612.000)(570.000,672.000)
+\path(450,42)(2100,42)
+\blacken\path(1980.000,12.000)(2100.000,42.000)(1980.000,72.000)(1980.000,12.000)
+\put(-850,642){\makebox(0,0)[lb]{\smash{{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}$P(PK,SK)$}}}}}
+\put(2400,642){\makebox(0,0)[lb]{\smash{{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}$V(PK)$}}}}}
+\put(1200,1392){\makebox(0,0)[lb]{\smash{{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}$\alpha$}}}}}
+\put(1200,792){\makebox(0,0)[lb]{\smash{{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}$\beta$}}}}}
+\put(1200,192){\makebox(0,0)[lb]{\smash{{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}$\gamma$}}}}}
+\end{picture}
+}

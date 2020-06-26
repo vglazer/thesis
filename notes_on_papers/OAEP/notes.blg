@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99c (Web2C 7.3.1)
+The top-level auxiliary file: notes.aux
+The style file: alpha.bst
+Database file #1: $THESISDIR/share/random_oracles.bib
+I was expecting a `,' or a `}'---line 171 of file $THESISDIR/share/random_oracles.bib
+ :     
+ :     series = {Lecture Notes in Computer Science},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "dolev:nonmalleable"
+You've used 2 entries,
+            2543 wiz_defined-function locations,
+            574 strings with 5039 characters,
+and the built_in function-call counts, 1100 in all, are:
+= -- 118
+> -- 38
+< -- 3
++ -- 13
+- -- 12
+* -- 71
+:= -- 164
+add.period$ -- 8
+call.type$ -- 2
+change.case$ -- 12
+chr.to.int$ -- 2
+cite$ -- 2
+duplicate$ -- 51
+empty$ -- 87
+format.name$ -- 14
+if$ -- 247
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 2
+newline$ -- 13
+num.names$ -- 6
+pop$ -- 13
+preamble$ -- 1
+purify$ -- 14
+quote$ -- 0
+skip$ -- 48
+stack$ -- 0
+substring$ -- 71
+swap$ -- 22
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 16
+warning$ -- 0
+while$ -- 12
+width$ -- 3
+write$ -- 31
+(There was 1 error message)

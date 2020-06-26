@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99c (Web2C 7.3.1)
+The top-level auxiliary file: notes.aux
+The style file: alpha.bst
+Database file #1: $THESISDIR/share/random_oracles.bib
+Warning--I didn't find a database entry for "bellare:fiatshamirrom"
+Warning--I didn't find a database entry for "micali:csproofs"
+You've used 9 entries,
+            2543 wiz_defined-function locations,
+            620 strings with 6455 characters,
+and the built_in function-call counts, 4670 in all, are:
+= -- 504
+> -- 150
+< -- 15
++ -- 51
+- -- 48
+* -- 297
+:= -- 670
+add.period$ -- 35
+call.type$ -- 9
+change.case$ -- 52
+chr.to.int$ -- 9
+cite$ -- 9
+duplicate$ -- 228
+empty$ -- 379
+format.name$ -- 60
+if$ -- 1057
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 10
+newline$ -- 48
+num.names$ -- 27
+pop$ -- 63
+preamble$ -- 1
+purify$ -- 62
+quote$ -- 0
+skip$ -- 200
+stack$ -- 0
+substring$ -- 314
+swap$ -- 95
+text.length$ -- 15
+text.prefix$ -- 3
+top$ -- 0
+type$ -- 68
+warning$ -- 0
+while$ -- 48
+width$ -- 12
+write$ -- 130
+(There were 2 warnings)

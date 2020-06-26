@@ -1,0 +1,490 @@
+This is TeX, Version 3.14159 (Web2C 7.3.1) (format=latex 2001.10.30)  14 AUG 2005 19:33
+**ut-thesis.tex
+(ut-thesis.tex
+LaTeX2e <1999/12/01> patch level 1
+Babel <v3.6Z> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(ut-thesis.cls
+Document Class: ut-thesis 2000/02/20 v1.8 LaTeX2e document class
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/base/report.cls
+Document Class: report 1999/09/10 v1.4a Standard LaTeX document class
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/base/size12.clo
+File: size12.clo 1999/09/10 v1.4a Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+))
+(../share/packages.tex
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/tools/enumerate.sty
+Package: enumerate 1999/03/05 v3.00 enumerate extensions (DPC)
+\@enLab=\toks14
+)
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/misc/psfrag.sty
+Package: psfrag 1998/04/11 v3.04 PSfrag (MCG)
+
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/graphics/graphics.sty
+Package: graphics 1999/02/16 v1.0l Standard LaTeX Graphics (DPC,SPQR)
+
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/config/graphics.cfg)
+Package graphics Info: Driver file: dvips.def on input line 80.
+
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
+\pfg@pcount=\count88
+\pfg@scount=\count89
+\pfg@temp=\write3
+)
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 1997/09/17 v2.2e
+\@emptytoks=\toks15
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 133.
+)
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 1996/11/03 v2.2b
+)
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/01/15 v2.05 AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amsmath/amstext.sty
+Package: amstext 1999/11/15 v2.0
+
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks16
+\ex@=\dimen103
+))
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen104
+)
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count90
+LaTeX Info: Redefining \frac on input line 198.
+\uproot@=\count91
+\leftroot@=\count92
+LaTeX Info: Redefining \overline on input line 302.
+\classnum@=\count93
+\DOTSCASE@=\count94
+LaTeX Info: Redefining \ldots on input line 376.
+LaTeX Info: Redefining \dots on input line 379.
+LaTeX Info: Redefining \cdots on input line 464.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 563.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 564.
+\macc@skew=\dimen106
+\c@MaxMatrixCols=\count95
+\dotsspace@=\muskip10
+\c@parentequation=\count96
+\dspbrk@lvl=\count97
+\tag@help=\toks17
+\row@=\count98
+\column@=\count99
+\maxfields@=\count100
+\andhelp@=\toks18
+\eqnshift@=\dimen107
+\alignsep@=\dimen108
+\tagshift@=\dimen109
+\tagwidth@=\dimen110
+\totwidth@=\dimen111
+\lineht@=\dimen112
+\@envbody=\toks19
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+LaTeX Info: Redefining \[ on input line 2594.
+LaTeX Info: Redefining \] on input line 2595.
+)
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amscls/amsthm.sty
+Package: amsthm 2000/01/17 v2.03
+\thm@style=\toks20
+\thm@bodyfont=\toks21
+\thm@headfont=\toks22
+\thm@notefont=\toks23
+\thm@headpunct=\toks24
+\thm@preskip=\skip46
+\thm@postskip=\skip47
+\thm@headsep=\skip48
+\dth@everypar=\toks25
+)
+(/common/TeX.local/share/texmf/tex/latex/html/url.sty
+Package: url 1999/03/02  ver 1.4  Verb mode for urls, email addresses, and file
+ names
+)
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/eepic/epic.sty
+Enhancements to Picture Environment. Version 1.2 - Released June 1, 1986
+\@@multicnt=\count101
+\d@lta=\count102
+\@delta=\dimen113
+\@@delta=\dimen114
+\@gridcnt=\count103
+\@joinkind=\count104
+\@dotgap=\dimen115
+\@ddotgap=\dimen116
+\@x@diff=\count105
+\@y@diff=\count106
+\x@diff=\dimen117
+\y@diff=\dimen118
+\@dotbox=\box28
+\num@segments=\count107
+\num@segmentsi=\count108
+\@datafile=\read1
+) (/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/eepic/eepic.sty
+Extension to Epic and LaTeX. Version 1.1b - Released Febrary 7, 1988
+\@gphlinewidth=\count109
+\@eepictcnt=\count110
+\@tempdimc=\dimen119
+\maxovaldiam=\dimen120
+\@filltype=\box29
+) (/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks26
+)
+\Gin@req@height=\dimen121
+\Gin@req@width=\dimen122
+))
+(../share/macros.tex) (../share/defs.tex) (ut-thesis.aux (intro.aux)
+(preliminaries.aux) (fiatshamir.aux) (encryption.aux) (uninst.aux)
+(realworld.aux))
+\openout1 = `ut-thesis.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 144.
+
+ (/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <14.4> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 144.
+ [1
+
+] [2
+
+] [3] [4] (ut-thesis.toc
+LaTeX Font Info:    Try loading font information for U+msa on input line 3.
+
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 1995/01/05 v2.2e AMS font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 3.
+
+(/direct/pkgs/teTeX-1.0.7/share/texmf/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 1995/01/05 v2.2e AMS font definitions
+) [5
+
+])
+\tf@toc=\write4
+\openout4 = `ut-thesis.toc'.
+
+ [6]
+\openout2 = `intro.aux'.
+
+
+(intro.tex
+Chapter 1.
+
+Underfull \vbox (badness 6047) has occurred while \output is active []
+
+ [1
+
+
+
+]
+Overfull \hbox (4.5092pt too wide) in paragraph at lines 215--224
+[]\OT1/cmr/m/n/12 In [[]], Mi-hir Bel-lare and Phillip Ro-g-away in-tro-duced t
+he ``Ran-dom Or-a-cle Method-
+ []
+
+
+Underfull \vbox (badness 3128) has occurred while \output is active []
+
+ [2]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3]
+Underfull \vbox (badness 7415) has occurred while \output is active []
+
+ [4]
+[5]) [6]
+\openout2 = `preliminaries.aux'.
+
+ (preliminaries.tex
+Chapter 2.
+[7
+
+
+
+] [8] [9]
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 234.
+ [10]
+Underfull \vbox (badness 7415) has occurred while \output is active []
+
+ [11]
+[12]
+File: ../figures/CanonicalIdScheme.eps Graphic file (type eps)
+ <../figures/CanonicalIdScheme.eps> [13]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [14]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [15]
+[16] [17]
+Underfull \vbox (badness 7415) has occurred while \output is active []
+
+ [18]
+Underfull \vbox (badness 3128) has occurred while \output is active []
+
+ [19]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [20])
+[21]
+\openout2 = `fiatshamir.aux'.
+
+ (fiatshamir.tex
+Chapter 3.
+
+Underfull \vbox (badness 2529) has occurred while \output is active []
+
+ [22
+
+
+
+]
+Overfull \hbox (3.42027pt too wide) in paragraph at lines 45--59
+\OT1/cmr/m/n/12 un-der stan-dard hard-ness as-sump-tions have been de-scribed o
+ver the years ([[]], [[]],
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 23
+ []
+
+[23]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 24
+ []
+
+[24]
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 25
+ []
+
+[25]
+Underfull \vbox (badness 7415) has occurred while \output is active []
+
+
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 26
+ []
+
+[26]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 27
+ []
+
+[27]
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 28
+ []
+
+[28]
+Overfull \hbox (5.198pt too wide) in paragraph at lines 561--566
+[]\OT1/cmr/m/n/12 Next, we show that $\OML/cmm/m/it/12 SIG\OT1/cmr/m/n/12 (\OML
+/cmm/m/it/12 ID[]\OT1/cmr/m/n/12 )$ is se-cure in the ROM. Sup-pose that $\OML/
+cmm/m/it/12 F[]$ \OT1/cmr/m/n/12 is a polynomial-
+ []
+
+
+Underfull \vbox (badness 3128) has occurred while \output is active []
+
+
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 29
+ []
+
+[29]
+Underfull \vbox (badness 7415) has occurred while \output is active []
+
+
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 30
+ []
+
+[30]
+Overfull \hbox (0.51251pt too wide) in paragraph at lines 707--711
+[]\OT1/cmr/m/n/12 Suppose that $\OML/cmm/m/it/12 F[]$ \OT1/cmr/m/n/12 is a poly
+nomial-time forger who breaks the se-cu-rity of $\OML/cmm/m/it/12 SIG\OT1/cmr/m
+/n/12 (\OML/cmm/m/it/12 ID\OT1/cmr/m/n/12 )$
+ []
+
+
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 31
+ []
+
+[31]
+Underfull \vbox (badness 3128) has occurred while \output is active []
+
+
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 32
+ []
+
+[32]
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 33
+ []
+
+[33])
+Overfull \hbox (9.4662pt too wide) has occurred while \output is active
+\OT1/cmr/m/sc/12 Chapter 3.  On the security of Fiat-Shamir signature schemes i
+n the ROM \OT1/cmr/m/n/12 34
+ []
+
+[34]
+\openout2 = `encryption.aux'.
+
+ (encryption.tex
+Chapter 4.
+
+Underfull \vbox (badness 2529) has occurred while \output is active []
+
+ [35
+
+
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [36]
+[37]
+Underfull \vbox (badness 7415) has occurred while \output is active []
+
+ [38]
+Underfull \vbox (badness 3128) has occurred while \output is active []
+
+ [39]
+[40] [41] [42] [43] [44]) [45]
+\openout2 = `uninst.aux'.
+
+ (uninst.tex
+Chapter 5.
+[46
+
+
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [47]
+[48]
+Overfull \hbox (8.02023pt too wide) in paragraph at lines 197--214
+[]\OT1/cmr/m/n/12 Fortunately, the above dif-fi-culty can be over-come with the
+ aid of Mi-cali's non-interactive
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [49]
+[50] [51]) [52]
+\openout2 = `realworld.aux'.
+
+ (realworld.tex
+Chapter 6.
+[53
+
+
+
+] [54] [55]) [56] (ut-thesis.bbl [57
+
+
+] [58] [59] [60] [61] [62]
+Underfull \hbox (badness 2680) in paragraph at lines 311--316
+[]\OT1/cmr/m/n/12 NIST.  FIPS 180-2, Se-cure Hash Stan-dard (SHS), 2004.  Avail
+-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 311--316
+\OT1/cmr/m/n/12 able on-line at $\OT1/cmtt/m/n/10.95 http : / / csrc . nist . g
+ov / publications / fips / fips180-[]2 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 311--316
+\OT1/cmtt/m/n/10.95 fips180-[]2withchangenotice . pdf$\OT1/cmr/m/n/12 ; also se
+e $\OT1/cmtt/m/n/10.95 http : / / csrc . nist . gov /
+ []
+
+[63] [64]) [65] (ut-thesis.aux (intro.aux) (preliminaries.aux) (fiatshamir.aux)
+(encryption.aux) (uninst.aux) (realworld.aux)) ) 
+Here is how much of TeX's memory you used:
+ 2041 strings out of 10901
+ 23271 string characters out of 71995
+ 77722 words of memory out of 700001
+ 4933 multiletter control sequences out of 10000+0
+ 16329 words of font info for 63 fonts, out of 400000 for 1000
+ 14 hyphenation exceptions out of 1000
+ 29i,12n,23p,287b,372s stack positions out of 300i,100n,500p,50000b,4000s
+
+Output written on ut-thesis.dvi (71 pages, 207416 bytes).

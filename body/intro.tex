@@ -1,0 +1,399 @@
+\chapter{Introduction}
+\label{CH:Introduction}
+%\section{Modern Cryptography and the Random Oracle Model}
+Modern cryptography has computational complexity at its foundation. In order
+to gain confidence in the security of a cryptographic construction, we show
+that {\it every} polynomially-bounded adversary which succeeds in ``breaking''
+it can be used to solve a computational problem widely believed to be ``hard
+on average'', say integer factorization (\cite{lenstra:factoring}) or the
+discrete logarithm problem (\cite{odlyzko:discretelog}). This means that no
+such ``breaker'' exists, provided the problem in question is indeed ``hard''. 
+
+%Our adversaries will typically be Turing Machines with access to a source of
+%unbiased random bits, called Probabilistic Turing Machines or PTMs for short
+%(in contrast to ordinary, deterministic Turing Machines, which we call DTMs).
+%Another class of adversaries we'll sometimes consider is non-uniform boolean
+%circuits, that is, infinite families $C = \ens{C}{n}$ where $C_i$ is a
+%circuit with $i$ input bits and a single output bit made up of $\wedge$
+%(fanin two), $\vee$ (fanin two) and $\neg$ (fanin one) gates. Such families
+%are non-uniform because inputs of different lengths are processed by
+%different, possibly unrelated, circuits $C_i$.
+
+%Let us state more precisely what it means for a problem to be tractable or
+%intractable.  We say that a PTM is {\it feasible} if its worst-case running
+%time (as a function of the input length) is polynomially bounded.  A circuit
+%family is {\it feasible} if its size (i.e. the number of gates as a function
+%of the number of inputs) is polynomially bounded.  A computational problem
+%$\Pi$ is {\it tractable} if there exists a polytime PTM $M$ which solves
+%$\Pi$ with probability ``non-negligible'' in $n$, where $n$ is some natural
+%``security parameter'' associated with $\Pi$ --- the length of an RSA
+%modulus, for example.  (where $n$ is some natural ``security parameter''
+%associated with the problem), Otherwise, $\Pi$ is said to be {\it
+%intractable}. $M$ is {\it polytime} if its worst-case running time is bounded
+%above by some polynomial in $n$. A function $\func{\mu}{\nats}{\reals}$ is
+%{\it negligible} if $\mu(n)$ goes to zero faster than any inverse polynomial
+%in $n$, and {\it non-negligible} otherwise.  Since any polytime PTM which
+%solves $\Pi$ with non-negligible probability can be converted into a PTM
+%which solves $\Pi$ with probability exponentially close to one (i.e. whose
+%success probability is bounded below by $1 - \frac{1}{2^n}$),
+%``non-negligibility'' is an appropriate choice for formalizing
+%``significant'' probability in this context.  Here the probability is taken
+%over all instances of size $n$ and the random bits of $M$. 
+
+%The above notion of intractability is meant to capture our intuition about
+%problems which are ``hard on average for every efficient randomized
+%algorithm''. We are sometimes also interested in problems which can't be
+%solved with non-negligible probability even by ``polysize circuits'', meaning
+%non-uniform boolean circuit families whose size (i.e. the number of gates as
+%a function of the number of inputs) is polynomially bounded. Since every
+%problem solvable by polytime PTMs is also solvable by polysize circuits, but
+%not the other way around, this is a stronger notion of intractability.
+
+Cryptographers make two kinds of ``hardness'' assumptions: ones asserting the
+{\it difficulty} of specific (usually number-theoretic) problems, and ones
+asserting the {\it existence} of secure cryptographic primitives such as
+``one-way functions'' (see Chapter~\ref{CH:Preliminaries},
+Section~\ref{SEC:Oneway}) or ``trapdoor permutations'' (see
+Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:Trapdoor}).  Assumptions of
+the first kind enable us to prove the security of constructions which are
+efficient enough to be practical.  Unfortunately, the particular problem we
+assume to be ``hard'' might later turn out to be ``easy'', 
+%--- after all, its difficulty is only conjectured --- 
+rendering the protocol insecure.  Assumptions of the second kind (often called
+``general assumptions'')
+%, because they allege that ``hard'' problems of a certain form exist without
+%identifying any specific ``hard'' problems) identifying any specific
+%candidates) 
+often lead to constructions which are too inefficient to be of practical
+interest.  Although such constructions are in a sense mere ``proofs of
+concept'', their security is guaranteed as long as {\it any} secure primitives
+of the relevant kind exist. 
+%and won't be broken due to the unexpected discovery of an efficient
+%algorithm.  On the other hand, if $P=NP$ then {\it no} ``hard'' problems (in
+%the sense we're interested in, anyhow) exist, so even ``general assumptions''
+%are of no help.
+
+Broadly speaking, cryptographic problems fall into two categories:
+``public-key'' and ``private-key''. In both cases, two or more people wish to
+securely interact over an insecure channel, which is either controlled or
+monitored by the adversary.  
+
+In the private-key setting, the participants share a common secret $pri$,
+unknown to the adversary. The intuition is that they are ``friends who trust
+each other''. In contrast, in the public-key setting each person has
+associated with him both private information $pri$, known only to himself, and
+public information $pub$, known to everyone (including the adversary). Here
+the intuition is that the participants are ``mutually mistrustful strangers''.
+Many important cryptographic problems, including ``signature schemes'' (see
+Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:Signatures}) and ``encryption
+schemes'' (see Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:PKEPs}), come
+in both public-key and private-key flavours. 
+
+%In the {\it encryption} problem, two people, call them $A$ and $B$, wish to
+%have a private conversation in the presence of an adversary $ADV$ who,
+%depending on the kind of security we are interested in, either taps the
+%communication channel and eavesdrops passively or has complete control over
+%the channel and actively interferes with it. Since a two-way conversation may
+%be viewed as two interleaved one-way conversations, we lose no generality in
+%limiting our attention to the case where $A$ only talks and $B$ only listens.
+%In the private-key version of this problem (sometimes called ``symmetric
+%encryption''), $A$ and $B$ share a secret $pri$ unknown to $ADV$. In its
+%public-key version (sometimes called ``asymmetric encryption''), all three
+%participants have access to some public information $pub$ associated with
+%$B$, but only $B$ himself knows the secret key $pri$. 
+
+%What exactly does it mean for the conversation between $A$ and $B$ to be
+%``private''? Informally, given an encryption $e$ (the ``ciphertext'') of a
+%message $m$ (the ``plaintext'' or ``cleartext'') sent by $A$ to $B$, the
+%adversary $ADV$ shouldn't be able to ``learn'' even a single bit of
+%information about $m$. Although we are being deliberately vague here, there
+%are nice ways of formalizing this kind of security, which we will discuss
+%later. 
+
+%A secure {\it cryptosystem} or ``encryption scheme'' is essentially a
+%protocol specifying how messages should be encrypted by $A$ and decrypted by
+%$B$ so that the above privacy requirement is satisfied. In the public key
+%setting, the protocol also needs to specify an algorithm $G$ for generating
+%matching key pairs $(pub,pri)$.
+
+%In the {\it signatures} problem, the {\it verifier} $V$ is given a message
+%$m$ together with a putative signature of $m$. The signature was supposedly
+%obtained by running the {\it signer} $S$ on $m$, but in fact may have been
+%produced by the {\it forger} $F$ after having seen legitimate signatures of
+%polynomially many (in some appropriate security parameter $n$) messages of
+%his choice.  A secure {\it signature scheme} is a protocol specifying how
+%messages are signed by $S$ and verified by $V$ so that no polytime PTM forger
+%$F$ has a non-negligible probability of producing a valid signature of a
+%message whose signature he hasn't already seen. 
+
+%In the private-key version of the signatures problem, $S$ and $V$ share a
+%secret $pri$, unknown to $F$. Private-key signature schemes are more commonly
+%referred to as ``message-authentification codes'' or MACs. 
+
+%In the public-key version of the signatures problem, all three participants
+%have access to some public information $pub$ associated with $S$, but only
+%$S$ himself knows the private key $pri$. The protocol must also specify an
+%algorithm $G$ for generating matching key pairs $(pub,pri)$. Public-key
+%signature schemes are usually called simply ``signature schemes''.
+
+%A function $f$ mapping strings to strings is {\it efficiently-evaluable} if
+%there is a polytime DTM $M_f$ which outputs $f(x)$ on input $x$. Such an $f$
+%is {\it one-way} if, for every polytime PTM $ADV$, the probability that on
+%input $y$ $ADV$ outputs an $x$ such that $f(x) = y$ is negligible in $|x|$.
+%The probability here is taken over the choice of $y$ and the random bits of
+%$ADV$.  there is no polytime PTM $ADV$ which, given $y$, outputs an $x$ such
+%that $f(x) = y$ with probability non-negligible in $|x|$.   
+
+%Protocols for private-key cryptosystems and MACs which are provably secure if
+%one-way functions exist have been around for some time now. Unfortunately,
+%these protocols are of the ``proof of concept'' variety, too inefficient for
+%practical use.  Moreover, although one-way functions are universally believed
+%to exist in the cryptographic community, a {\it proof} they do would imply
+%that $P\neq NP$, and therefore constitute a fundamental breakthrough in
+%computational complexity theory.
+
+%An efficiently-evaluable function $\func{f}{\strs{*}}{\strs{*}}$ is a {\it
+%pseudorandom number generator} if $|f(x)| > |x|$, $|f(x)| = \ell(|x|)$ say,
+%and, for every polytime PTM $ADV$, the difference in the acceptance
+%probabilities of $ADV$ on input $f(x)$ for a random $x$ and $y \in
+%\strs{\ell(|x|)}$ for a random $y$ is negligible in $|x|$.  One-way functions
+%can be used to construct ``pseudorandom number generators''. Informally, {\it
+%pseudorandom number generators} are efficiently-evaluable functions which
+%expand short ``random seeds'' into strings that ``look random'' to polytime
+%PTMs. As it turns out, pseudorandom number generators are sufficient for
+%secure private-key cryptography.  Perhaps more importantly, from a practical
+%perspective at least, is that pseudorandom number generators are easily
+%obtainable from pseudorandom functions. 
+
+%Informally, an efficiently-evaluable function $\func{f}{\strs{*}}{\strs{*}}$ is 
+%{\it pseudorandom} if no polytime PTM with ``black-box'' or oracle access 
+%to $f$ can distinguish it from a ``truly random function'' with 
+%non-negligible probability. In order to make this definition more precise, 
+%we need to introduce the notion of a pseudorandom function generator,
+%more on which later. 
+%In practice, private-key cryptosystems and MACs are implemented with the aid
+%of extremely efficient ``block ciphers'' such as DES or AES. Here the 
+%assumption required to prove security is that DES and AES are ``pseudorandom''.
+%(although they are only defined for a few values of $n$ and thus don't quite fit the above
+%paradigm). 
+%A proof that some appropriate generalization of $AES$ defined for
+%all $n$ is pseudorandom would imply that $P \neq NP$, 
+
+%Unfortunately, one-way functions alone are {\it not} 
+%sufficient for secure public-key cryptography; although we're not being
+%formal, when stated precisely this becomes a theorem. Another primitive,
+%called ``one-way trapdoor permutations'' or simply ``trapdoor permutations'', 
+
+Today we have extremely efficient private-key constructions which
+are secure if ``block ciphers'' such as DES (\cite{nist:des}) and AES
+(\cite{nist:aes}) are ``pseudorandom'', as well as fairly inefficient
+private-key constructions which are secure if ``one-way functions'' exist
+(\cite{goldreich:pseudorandom1}, \cite{goldreich:pseudorandom2},
+\cite{goldreich:pseudorandom3}, \cite{hastad:1waytopseudorandom}). It could
+therefore be argued that private-key cryptography is now largely ``an
+engineering problem''. Unfortunately, that is not yet the case for public-key
+cryptography. 
+
+Beginning in the late eighties, much work was done on formulating the
+``right'' definitions of public-key security
+%of security for public-key signatures and encryption
+and showing that constructions which are secure according to these definitions
+can be obtained from ``trapdoor permutations''. Such constructions were
+available by the early nineties (\cite{goldwasser:signatures2},
+\cite{rompel:1waysigs}, \cite{naor:cca1}, \cite{rackoff:cca2}), but from a
+practical standpoint their efficiency left a lot to be desired. Numerous
+attempts were also made to come up with efficient constructions which are
+secure under some variant of the popular ``RSA'' (factoring-related) and
+``Diffie-Hellman'' (discrete log-related) assumptions
+(\cite{boneh:rsaattacks},\cite{maurer:diffiehellman}), but they were not
+successful.  Lacking viable alternatives, practitioners mostly relied on ad
+hoc approaches of dubious security, many of which 
+%have since been 
+were eventually broken (\cite{brickell:iterknapsackbroken},
+\cite{bleichenbacher:pkcsbroken}). 
+
+In \cite{bellare:rompractical}, Mihir Bellare and Phillip Rogaway introduced
+the ``Random Oracle Methodology'' in an effort to bridge the gap between
+cryptographic theory and practice. Informally, the Random Oracle Model, or ROM
+for short, is a setting where all parties (including the adversary) have
+black-box access to a ``truly random function'' (the random oracle). Although
+it has other applications in complexity theory, notably to Micali's
+non-interactive ``CS proofs'' (\cite{micali:csproofs2},
+\cite{micali:csproofs1}), the ROM is usually encountered in the context of
+public-key cryptography. 
+
+The Random Oracle Methodology is a two-step procedure for
+obtaining practical public-key constructions.
+%; it makes use of the ROM 
+%in an intermediate step
+%and works as follows.
+In the first step, one designs an efficient construction which is secure in
+the ROM under some standard hardness assumption, say the ``Computational
+Diffie-Hellman'' assumption. Because of the many nice properties enjoyed by
+random oracles, this generally isn't too difficult.  In the second step, one
+``instantiates'' the random oracle $\fanr$ using a ``cryptographic hash
+function'' $h$; a reasonable choice for $h$ might be SHA-256
+(\cite{nist:sha1}). Thereafter, whenever $\fanr$ is queried on a string $s$,
+the answer is $h(s)$. A heuristic justification for this step is that good
+cryptographic hash functions hopefully behave ``a lot like'' random oracles.
+However, as we will see in
+%Section~\ref{SEC:Methodology} of 
+Chapter~\ref{CH:Uninstantiability}, $\fanr$ should strictly speaking be
+instantiated using an {\it ensemble} $\fanh = \ens{\fanh}{n}$ of hash function
+families (see Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:Hash}) rather
+than a single function $h$. 
+
+Because in the first step 
+%we are working in the ROM, and hence 
+we have the powerful random oracle primitive at our disposal, 
+%one might naturally wonder why we 
+it is natural to question the need to make any hardness assumptions at all.
+However, as shown in \cite{impagliazzo:nooneway}, if a ``key exchange
+protocol'' which is secure in the ROM exists then $P \neq NP$. Since it is
+easy to securely exchange a key using a secure public-key encryption scheme,
+%One reason is
+%that, if no additional assumptions are made, then no ``key exchange protocol''
+%which is secure in the ROM exists unless $P=NP$.
+proving that such a scheme is secure in the ROM without making any additional
+assumptions is therefore prohibitively difficult.  But if we are willing to
+make additional assumptions, why not simply make one strong enough to
+eliminate the need for the random oracle altogether?  Ronald Cramer and Victor
+Shoup developed a fairly efficient public-key encryption scheme
+(\cite{cramer:cca2secure}) which is secure in the ``real world'' under just
+such a ``non-standard-yet-plausible'' hardness assumption, namely the
+``Decisional Diffie-Hellman assumption''.
+
+On the other hand, no hardness assumptions are necessary in order to show that
+signature schemes which are secure in the ROM exist. Since random oracles are
+one-way (see Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:ROM}), we can
+replace the one-way function evaluations in Rompel's construction
+(\cite{rompel:1waysigs}) with $\fanr$ queries. 
+%with no loss of security. 
+While the resulting construction is admittedly quite inefficient (in the sense
+that it requires many random oracle queries), it appears that one can't do
+much better without making hardness assumptions.
+
+As for signature schemes which are secure in the ROM under standard hardness
+assumptions such as the ``RSA assumption'', for example the schemes presented
+in \cite{bellare:rompractical} and \cite{bellare:oaep}, their benefits are
+less clear today. Although they are considerably more efficient than both
+constructions which are secure in the ``real world'' under standard
+assumptions (\cite{dwork:fastsigs},\cite{cramer:fastsigs}) and constructions
+which are secure in the ROM unconditionally, we now have constructions of
+comparable efficiency which are secure in the ``real world'' under
+``non-standard-yet-plausible'' assumptions like the ``Strong RSA assumption''
+(\cite{cramer:signatures2}, \cite{gennaro:fastsigs},
+\cite{fischlin:cramershoup}).
+
+%How secure are constructions designed according to the RO Methodology? 
+What sort of security does the Random Oracle Methodology guarantee?
+Informally, hash functions are efficiently evaluable and thus have a short
+description, which means that they cannot be ``truly random''. It is therefore
+unclear why security should be preserved when the random oracle is
+``instantiated'' using a hash function. Nonetheless, security in the ROM was
+at first believed to provide ``strong evidence'' of real-world security.
+However, in \cite{canetti:romfails} Canetti, Goldreich and Halevi exhibited a
+signature scheme and a public-key encryption scheme which are secure in the
+ROM yet insecure in the ``real world'', {\it no matter what hash function is
+used to ``instantiate'' the random oracle}; such schemes are said to be
+``uninstantiable'' (see Chapter~\ref{CH:Uninstantiability}).  From a
+theoretical standpoint, this result conclusively demonstrated that security in
+the ROM {\it does not} imply real-world security. However, since Canetti et
+al.'s constructions were rather contrived 
+%(Micali's CS proofs were used extensively) 
+and quite inefficient, practitioners remained unconvinced.
+
+Several additional uninstantiability results have emerged since, arguably the
+most significant being Goldwasser and Tauman-Kalai's proof
+(\cite{goldwasser:fsparadigmfails}) that there exist uninstantiable
+``Fiat-Shamir signature schemes'' (see Chapter~\ref{CH:Fiatshamir},
+Section~\ref{SEC:Overview} for an overview of Fiat-Shamir signature
+schemes). Like Canetti et al.'s, Goldwasser and Tauman-Kalai's constructions
+are contrived and inefficient. Worse still, their actual proof has a
+somewhat non-constructive flavour (see Chapter~\ref{CH:Uninstantiability},
+Section~\ref{SEC:FiatShamir}). 
+%(this time around, the role of CS proofs is played by Barak and Goldreich's
+%``Universal Arguments'', introduced in \cite{barak:universalarguments}), 
+However, since Fiat-Shamir signature schemes are widely used in practice,
+Goldwasser and Tauman-Kalai's result can be viewed as dealing the Random
+Oracle Methodology a more severe blow than Cenetti et al.'s. 
+%Their result therefore deals the validity of the
+%Random Oracle Methodology in general and the ``Fiat-Shamir paradigm'' (see
+%Chapter~\ref{CH:Fiatshamir}, Section~\ref{SEC:Overview}) in
+%particular a severe blow.
+%We are therefore one step closer to the sort of
+%result we would ideally like to have, namely a proof that some efficient,
+%practical construction is ``uninstantiable''.
+
+%The ``real world'' is sometimes 
+%referred to as the ``standard model'' to contrast it with the ROM.
+
+%In this thesis, we present two new results concerning security in the ROM.
+%First, we show that, for every secure ``canonical identification scheme'',
+%the corresponding ``Fiat-Shamir signature scheme'' is secure in the ROM.
+%Previously, only ``non-trivial'' canonical identification schemes were known
+%to yield Fiat-Shamir signature schemes which are secure in the ROM. Second,
+%we show how to modify a certain public-key encryption scheme, known to be
+%``semantically secure'' in the ROM, so that it becomes ``CCA2-secure'' in the
+%ROM.  This thesis concerns the security of public-key encryption schemes and
+%signature schemes in the ROM. It is organized as follows.
+
+\section*{Chapter Outline}
+
+{\bf Chapter~\ref{CH:Introduction}} is this introduction.
+
+\medskip\noindent
+{\bf Chapter~\ref{CH:Preliminaries}} contains definitions of the relevant
+cryptographic primitives, including one-way functions, signature schemes,
+identification schemes, trapdoor permutations and public-key encryption schemes. 
+
+\medskip\noindent
+{\bf Chapter~\ref{CH:Fiatshamir}} concerns the security of Fiat-Shamir
+signature schemes in the ROM.  We first present an earlier result
+(\cite{abdalla:fiatshamirrom}) 
+%due to Abdalla, An, Bellare and Namprempre,
+demonstrating that every ``passively secure non-trivial canonical
+identification scheme'' yields a ``Fiat-Shamir signature scheme'' which is
+secure in the ROM. We then show that, for ``actively secure'' schemes, the
+``non-triviality'' assumption is not necessary.  Namely, we prove that, for
+every ``actively secure canonical identification scheme'' (non-trivial or
+not), the corresponding Fiat-Shamir signature scheme is secure in the ROM.
+
+\medskip\noindent
+{\bf Chapter~\ref{CH:Encryption}} describes a certain public-key encryption
+scheme which is ``CCA2-secure'' in the ROM. We first present an earlier
+version of the scheme, proposed in \cite{bellare:minroms}, which was initially
+claimed to be CCA2-secure in the ROM under the ``Computational Diffie-Hellman
+assumption''. It was later pointed out in \cite{abdalla:dhies2} that the
+original proof of security was flawed.
+%, and proposed a non-standard Diffie-Hellman-type assumption under which the
+%cryptosystem is secure in the ``real world''. 
+We then show how to modify the scheme so that it is indeed CCA2-secure in the
+ROM under the ``Computational Diffie-Hellman'' assumption.
+
+\medskip\noindent
+{\bf Chapter~\ref{CH:Uninstantiability}} sketches Canetti, Goldreich and
+Halevi's seminal result that ``uninstantiable'' signature and public-key
+encryption schemes exist (\cite{canetti:romfails}) and presents Maurer, Renner
+and Holenstein's recent simple proof thereof (\cite{maurer:indiffability}).
+%, as well as several more recent results including , ,
+%\cite{canetti:lengthromfails} and \cite{bellare:noromsig}. 
+Goldwasser and Tauman-Kalai's proof that there exist uninstantiable
+Fiat-Shamir signature schemes (\cite{goldwasser:fsparadigmfails}) is also
+discussed.
+
+\medskip\noindent
+{\bf Chapter~\ref{CH:Realworld}} briefly surveys a number of practical
+signature and public-key encryption schemes which are secure in the ``real
+world'' under either standard or non-standard-yet-quite-plausible hardness
+assumptions.
+
+%These lead to efficient, practical constructions, but  whereas assumptions of
+%the second kind, often called ``general assumptions'',  These lead to
+%constructions whose security, but they are 
+% These are called , and are meant to capture our intuition about ``feasible
+% randomized algorithms''. 
+%When the PTMs in question are restricted to run in time
+%polynomial in some \emph{security parameter} $n$, which might be the
+%length (in bits) of a secret key for example, the corresponding tractability
+%notion is solvability in polynomial time.

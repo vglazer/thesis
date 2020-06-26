@@ -1,0 +1,41 @@
+\documentclass[12pt,twoside]{article}
+
+% Standard packages
+\input{$THESISDIR/share/packages.tex}
+
+% Narrow Margins
+\input{$THESISDIR/share/narrow.tex}
+
+% Macros
+\input{$THESISDIR/share/macros.tex}
+
+% Definitions
+\input{$THESISDIR/share/defs.tex}
+
+% Author and title
+\title{Optimal Assymetric Encryption Padding (OAEP):\\ an overview}
+\author{Victor Glazer}
+
+\begin{document}
+
+\maketitle
+
+\section{A Historical Overview}
+When {\it chosen-ciphertext security} (or, equivalently, {\it
+non-malleability}), now recognized as the ``right'' notion of
+security for public-key cryptosytems, was first introduced in 
+\cite{rackoff:chosenciphertext} and \cite{dolev:nonmalleable}, 
+the ``proof-of-concept'' cryptosystems presented in both papers were hopelessly 
+inefficient. A practical, efficient public key cryptosystem provably secure 
+against chosen-ciphertext attack under standard hardness assumptions (in this 
+case, the Decisional Deiffie-Hellman assumption) wasn't presented in 
+\cite{cramer:cca2secure}. In the meantime several ad hoc, supposedly 
+chosen-ciphertext secure cryptosystems (which we won't enumerate here) were 
+proposed, some of them later broken.
+
+% References
+\bibliographystyle{alpha}
+\bibliography{$THESISDIR/share/random_oracles}
+
+\end{document}
+

@@ -1,0 +1,30 @@
+\chapter{Other Signature Schemes Secure in the ROM}
+\label{signatures}
+
+\begin{itemize}
+
+\item \cite{bellare:rompractical} (1993): In their seminal 1993 paper, Bellare
+and Rogaway pointed out that the ``hash-then-decrypt'' approach popular among
+practitioners yields signature schemes secure in the random oracle model,
+provided the undelying trapdoor permutation is one-way. Given a trapdoor
+permutation $(f,f^{-1})$ and a random oracle $\fanr$, set the signature
+of message $m$ to $\sigma = f^{-1}(\fanr(m))$. To verify that $\sigma$ is
+a valid signature of $m$, check whether $f(\sigma) = \fanr(m)$.
+
+\item \cite{bellare:signrsa} (1996): Bellare and Rogaway show how to
+probabilistically ``pad'' messages with the aid of a random oracle to obtain a 
+signature scheme which is secure in the random oracle model if the RSA
+function (or, correspondingly, the Rabin function) is one-way. Since RSA is
+typically assumed to be a one-way trapdoor permutation, this result is closely
+related to \cite{bellare:rompractical}. However, the new signature scheme
+has better ``exact security''. In other words, the reduction between breaking 
+the scheme and inverting RSA (or Rabin) is ``tighter'', i.e. more
+efficient.
+
+\item \cite{boneh:shortsigs} (2001): Boneh, Lynn and Shacham describe a
+signature scheme based on the Tate and Weil pairings which is secure in the random
+oracle model provided an analogue of the \emph{computational} Diffie-Hellman
+problem is hard for certain elliptic and hyper-elliptic curves. Their scheme is reasonably efficient and
+yields signatures twice as short as DSS for a similar level of security.
+
+\end{itemize}

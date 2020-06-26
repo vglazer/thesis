@@ -1,0 +1,10 @@
+The four streams
+----------------
+Metaresults: Canetti, Goldreich and Halevi, etc.
+Signature Schemes, including the Fiat-Shamir paradigm
+Public Key Encryption Schemes, OAEP in particular.
+Micali's CS proofs and reduced interaction in general.
+
+Our contribution:
+Improved version of Bellare et al result about FS sigs.
+Fixed Bellare and Rogaway's PKEP proposal.

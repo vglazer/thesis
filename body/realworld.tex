@@ -1,0 +1,246 @@
+%\chapter{Practical signature and encryption schemes secure in the ``real word''}
+\chapter{A taste of ``real-word'' security}
+\label{CH:Realworld}
+
+In the following two sections, we briefly survey a number of practical
+signature schemes and public-key encryption schemes which are  secure in the
+``real world'' (as opposed to in the ROM) under either standard or
+nonstandard-yet-quite-plausible hardness assumptions.
+
+\section{Signature schemes}
+\label{SEC:SigSchemes}
+
+\begin{itemize}
+
+\item In \cite{dwork:fastsigs}, Dwork and Naor proposed a practical signature
+scheme which is secure --- that is, secure against existential forgery under
+adaptive chosen-message attack (see Chapter~\ref{CH:Preliminaries},
+Section~\ref{SEC:Signatures}) --- under the standard ``RSA assumption''.
+%provided that ``claw-free trapdoor permutations'' exist (they do if factoring
+%is hard). 
+Informally, the RSA assumption says that the following problem is
+hard: given a modulus $n = pq$ where $p$ and $q$
+are random primes, a random $y \in \fanz_n^*$ and a random exponent $e$  
+%chosen randomly from among all integers
+%between $0$ and $n-1$ which are 
+relatively prime to $(p-1)(q-1)$, find an $x \in \fanz_n^*$ such that $x^e
+\equiv y \mod n$. Although it can be shown that this problem would be easy if
+$p$ and $q$ were given explicitly, 
+%as opposed to just their product $n$, 
+it is not known whether factoring $n$ can be reduced to finding $x$. While their
+construction is conceptually similar to the ``authentification trees'' of
+\cite{goldwasser:signatures2}, Dwork and Naor's use of ``bushy trees'' of high
+degree and small depth rather than binary trees significantly improves
+efficiency: for some reasonable settings of the security parameters, signing
+requires only four tree authentications.  A significant drawback of their
+construction is that all signers and verifiers must share two lists, one
+consisting of random integers and the other of random primes.
+
+\item In \cite{cramer:fastsigs}, Cramer and Damg\aa rd described an improved
+version of Dwork and Naor's signature scheme (\cite{dwork:fastsigs}), secure
+under the same assumptions. In this new version, signers and verifiers need
+only share a single list consisting of random primes. 
+
+\item In \cite{gennaro:fastsigs}, Gennaro, Halevi and Rabin presented a rather
+efficient ``hash-and-invert'' signature scheme secure under the
+nonstandard-yet-quite-plausible ``strong RSA assumption''. Informally, the
+strong RSA assumption says that the following problem is hard: given a modulus
+$n = pq$ where $p$ and $q$ are random primes and a random $y \in \fanz_n^*$,
+find an $x \in \fanz_n^*$ and an exponent $1 < e < n$ relatively prime to
+$(p-1)(q-1)$ such that $x^e \equiv y \mod n$; notice that, unlike in the RSA
+problem, here $e$ is allowed to depend on $y$. Gennaro, Halevi and Rabin's
+scheme makes use of ``collision-resistant chameleon hash functions'', which
+exist if factoring is hard. For typical settings of the security parameters,
+it is more than twice as efficient as Cramer and Damg\aa rd's scheme
+(\cite{cramer:fastsigs}). 
+%One interesting aspect of GHR's construction is that
+%security is proven in two stages. First, the construction is shown to be
+%secure in the random oracle model. Next, the random oracle is ``instantiated''
+%using a hash function ensemble, and a reasonable (if non-standard)
+%security-preserving assumption on the ensemble is identified. This is
+%precisely the approach to eliminating random oracles suggested by Canetti in
+%\cite{canetti:hideinfo} and refined by Canetti, Micciancio and Reingold in
+%\cite{canetti:perfecthash}.
+%(in 1997 and 1998, respectively).
+
+\item In \cite{cramer:signatures2}, Cramer and Shoup presented another
+efficient ``hash-and-invert'' signature scheme secure under the ``strong RSA
+assumption''. Their scheme builds on that of Cramer and Damg\aa rd
+(\cite{cramer:fastsigs}) and is considerably simpler and potentially more
+efficient than Gennaro, Halevi and Rabin's (\cite{gennaro:fastsigs}). Instead
+of ``collision-resistant chameleon hash functions'', it makes use of
+``universal one-way hash functions'' (\cite{naor:universal}), which exist if
+one-way functions do.
+%(recall from Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:Signatures} that 
+%if one-way functions do not exist, then %neither do secure signature schemes).  
+Interestingly, a slight modification of the scheme can be shown to be secure
+in the ROM under the ordinary RSA assumption.
+
+%Note
+%that if one-way functions do not exist then neither do secure signature
+%schemes, since any secure signature scheme gives rise to a corresponding
+%one-way function.
+
+\item In \cite{fischlin:cramershoup}, Fischlin described an improved version
+of Cramer and Shoup's signature scheme (\cite{cramer:signatures2}), again
+secure under the ``strong RSA assumption''. Signing is about thirty percent
+faster in this new version, and verification is somewhat faster as well.
+Also, the length of the signatures is nearly halved. 
+%whereas public keys are slightly longer. 
+
+%\item In \cite{boneh:shortsigsnorom}, Boneh and Boyen exhibited an efficient
+%signature scheme secure under the nonstandard-yet-quite-plausible ``strong
+%Computational Diffie-Hellman assumption'', which may be viewed as a 
+%discrete logarithm analogue of the ``strong RSA assumption''. 
+%%used to prove the security of
+%%\cite{gennaro:fastsigs} and \cite{cramer:signatures2}.  
+%Their scheme is related to the one presented in \cite{boneh:shortsigs}, and
+%similarly yields signatures which are almost half the size of DSS signatures
+%with the same level of security.
+%%though not quite as short as the ones in \cite{boneh:shortsigs}.  
+%Boneh and Boyen also describe a very efficient modification of the current
+%scheme with greatly reduced signature length which is secure in the random
+%oracle model (under the same strong assumption).
+
+\end{itemize}
+
+\section{Public-key encryption schemes}
+\label{SEC:EncSchemes}
+
+\begin{itemize}
+\item In \cite{cramer:cca2secure}, Ronald Cramer and Victor Shoup proposed the
+first practical public-key encryption scheme which is secure --- that is,
+secure against adaptive chosen-ciphertext attack or CCA2-secure (see
+Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:PKEPs}) --- under a fairly
+standard hardness assumption, namely the ``Decisional Diffie-Hellman
+assumption''. Informally, the Decisional Diffie-Hellman assumption (often
+abbreviated as the DDH assumption) holds for a cyclic multiplicative group $G$
+of prime order $q$ (say a subgroup of $\fanz_p^*$, where $p > q$ is some
+prime) if, given $g^u \in G$ and $g^v \in G$ for randomly chosen $u,v \in
+\{1,\ldots,q\}$ (where $g \in G$ is some fixed generator of $G$), it is hard
+to distinguish $g^{uv} \in G$ from $g^r \in G$ for a randomly chosen $r \in
+\{1,\ldots,q\}$. While the Computational Diffie-Hellman or CDH assumption (see
+Chapter~\ref{CH:Encryption}, Section~\ref{SEC:DHIES}) asserts that it is hard
+to compute {\it all of} $g^{uv}$, the DDH assumption effectively asserts that
+it is hard to compute {\it any bit of} $g^{uv}$.
+%Recall that the {\it Computational}
+%Diffie-Hellman assumption says that $g^{xy}$ is hard to compute from $g^x$ and
+%$g^y$, where $g$ is some fixed generator of $\fanz_p^*$ and $x, y \in
+%\{0,\ldots,p-1\}$ are chosen randomly (see Chapter~\ref{CH:Encryption},
+%Section~\ref{SEC:EncOverview}).
+
+\item In \cite{shoup:hedge}, Victor Shoup presented a ``hybrid'' encryption
+scheme which makes use of a ``pseudorandom number generator'', a
+collision-resistant hash function (see Chapter~\ref{CH:Preliminaries},
+Section~\ref{SEC:Hash})
+and a ``key encapsulation scheme''; the latter is based on the Cramer-Shoup
+encryption scheme (\cite{cramer:cca2secure}). A key encapsulation scheme is
+essentially just a public-key encryption scheme whose security is only
+guaranteed when the messages being encrypted are random (private keys, for
+example).  The new scheme is somewhat more efficient than
+\cite{cramer:cca2secure} and is secure under the fairly standard DDH
+assumption.  Interestingly, it is also secure in the ROM under the standard
+CDH assumption. 
+%This new cryptosystem is no less efficient than
+%the original Cramer-Shoup one; in fact, it is slightly more efficient.
+
+
+%\item In \cite{cramer:hashproofs}, Cramer and Shoup introduce the notion
+%of a universal hash proof system for NP-languages (this is essentially a special kind
+%of non-interactive zero-knowledge proof system), and show how they can be used
+%to construct CCA2-secure public key cryptosystems. They construct universal
+%hash proof systems for languages related both to Pallier's Decisional Quadratic
+%Residuosity assumption (\cite{paillier:decisionqr}) and the classical Quadratic Residuosity assumption.
+%These yield two new public key cryptosystems secure in the standard model, the
+%first (based on DQR) fairly practical while the second (based on QR) less so.
+%They also show that the original Cramer-Shoup scheme can be viewed as being
+%based on a DDH-related hash proof system.
+
+%\item In \cite{camenisch:verifiable1}, Camenisch and Shoup modify the
+%decisional QR cryptosystem from \cite{cramer:hashproofs} in order to
+%accomodate an efficient protocol for verifiable encryption of discrete
+%logarithms (while still preserving CCA2 security). This is the ``full''
+%version; see \cite{camenisch:verifiable2} for the conference version.
+
+%\item In \cite{elkind:unified}, Elkind and Sahai present a framework,
+%called the ``oblivious decryptors model'', which unifies two-key, Naor-Yung-type
+%(\cite{naor:cca1}) and ``universal hash proofs''-based, Cramer-Shoup-type
+%(\cite{cramer:cca2secure}) practical CCA2-secure cryptosystems using Sahai's 
+%simulation-sound NIZKs (\cite{sahai:nizkcca}).
+
+%\item In \cite{gennaro:framework1}, Gennaro and Lindell show how to use
+%``smooth projective hash functions'' (\cite{cramer:hashproofs}) in order to implement secure
+%password-based authenticated key exchange. The hardness assumptions here are
+%either the DDH or the quadratic (and, more generally n)-residuosity assumption.
+%The setting is as follows: a bunch of people want to communicate securely, and
+%each \emph{pair} shares a ``low-entropy'' password, i.e. a string randomly
+%chosen from some small (say of size polynomial in the security parameter) set.
+%They want to somehow agree on a high-entropy session key that would enable
+%them to communicate using highly-efficient symmetric encryption protocols, but
+%the network is under the complete control of the adversary. All parties also
+%share a ``common reference string''. This is the ``full'' version. See
+%\cite{gennaro:framework2} for the conference version.
+
+%\item In \cite{canetti:semanticibe}, Canetti, Halevi and Katz exhibit a
+%practical identity-based public-key cryptosystem which is \emph{semantically} secure in the
+%standard model under the bilinear Decisional Diffie-Hellman assumption. In
+%fact, it also have some forward security properties, but we don't care about
+%these.
+
+\item In \cite{kurosawa:newparadigm}, Kurosawa and Desmedt described a new
+hybrid encryption scheme based on \cite{shoup:hedge}. The scheme is somewhat
+more efficient (it saves one exponentiation and produces shorter encryptions)
+and is again secure under the DDH assumption.  Kurosawa and Desmedt's key
+insight was to notice that the underlying key encapsulation scheme need not be
+CCA2-secure in order for the overall hybrid scheme to be CCA2-secure. However,
+their proof requires the additional assumption that both the ``key derivation
+function'' and the MAC used by the hybrid scheme are secure in a strong,
+information-theoretic sense. In particular, the key to be exchanged must be
+statistically close to random, precluding the use of pseudorandom number
+generators.
+%They then exhibited a more efficient encapsulation
+%scheme which, although not itself CCA2-secure, possesses sufficient
+%security for the overall scheme to be CCA2-secure.
+
+\item In \cite{gennaro:noteonkd}, Shoup and Gennaro 
+%pointed out that Kurosawa
+%and Desmedt's (\cite{kurosawa:newparadigm}) proof of security introduced an
+%additional assumption that both the ``key derivation function'' and the MAC
+%used 
+%in the symmetric (private-key) stage of 
+%by the hybrid scheme are secure in a strong, information-theoretic sense. 
+%In particular, the shared private key $k$ is
+%required to be {\it statistically close} to random, and opposed to merely
+%computationally indistinguishable from random. 
+%Such strongly secure primitives
+%are both less efficient and uncommon in practice. 
+used the technique of ``deferred analysis'' to demonstrate that Kurosawa and
+Desmedt's hybrid scheme (\cite{kurosawa:newparadigm}) is in fact secure under
+the DDH assumption provided that both the ``key derivation function'' and the
+MAC are secure in the ordinary, computational sense.
+%security which uses ``deferred analysis'' to lift the additional security
+%requirements.
+%Additionally, SG's findings effectively improve the efficiency of the scheme,
+%since the key can be derived using PRGs.
+
+%\item In \cite{boneh:ibenorom}, Boneh and Boyen exhibit an identity-based
+%public-key encryption scheme which is CCA2-secure in the standard model under the
+%bilinear Diffie-Hellman assumption. Their construction is based on
+%\cite{boneh:selectid}. Unfortunately, BB's construction is \emph{not} practical. 
+
+%\item In \cite{canetti:cca2fromibe}, Canetti, Halevi and Katz show how to
+%efficiently convert semantically secure identity-based encryption schemes into
+%CCA2 secure ones. The resulting cryptosystem is somewhat less efficient than
+%the underlying IBE one, however, because of the use of one-time signatures.
+
+%\item In \cite{boneh:betterchk}, Boneh and Katz show that MACs (in
+%conjunction with ``key encapsulation'') can be used
+%to eliminate one-time signatures from CHK's construction
+%(\cite{canetti:cca2fromibe}), so that the efficiency of the resulting CCA2-secure scheme is 
+%roughly equivalent to that of the underlying IBE scheme. Very efficient
+%schemes (of roughly the same efficiency as the Cramer-Shoup-type scheme
+%described in \cite{kurosawa:newparadigm}) of this type are secure if the
+%bilinear decisional Diffie-Hellman problem is hard.
+
+\end{itemize}
+

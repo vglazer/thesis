@@ -1,0 +1,276 @@
+\documentclass[12pt,twoside]{article}
+
+% Standard packages
+\input{$THESISDIR/share/packages.tex}
+\usepackage{nopageno}
+
+% Narrow margins
+\input{$THESISDIR/share/narrow.tex}
+
+% Macros
+\input{$THESISDIR/share/macros.tex}
+
+% Definitions
+\input{$THESISDIR/share/defs.tex}
+
+\title{Secure canonical identification schemes yield Fiat-Shamir signature
+schemes secure in the random oracle model}
+\author{Victor Glazer}
+
+\begin{document}
+\maketitle
+\section*{Background}
+\begin{itemize}
+\item An identification scheme $ID = (G,P,V)$ is said to be \emph{canonical} 
+if it is a three-round, public-coin scheme. The prover $P$ goes first; his 
+move is called the \emph{commitment}, denoted by \textsc{Cmt}. The verifier 
+$V$ replies with a random \emph{challenge} \textsc{Ch}, consisting of his 
+random bits. $P$ then sends a \emph{response} \textsc{Rsp} to $V$, who either 
+accepts or rejects the transcript $(\textsc{Cmt},\textsc{Ch},\textsc{Rsp})$. 
+
+\begin{rem}
+To streamline the presentation, we assume throughout that $n \leq |pub| 
+\leq |pri|$ and $|\textsc{Ch}| = n$, where $n$ is the security parameter.
+\end{rem}
+
+\item The \emph{Fiat-Shamir transform} takes a canonical identification scheme 
+$ID = (G,P,V)$ and a hash function $h: \strs{*} \to \strs{n}$, and outputs the
+following signature scheme $SIG_h(ID) = (GEN, SIGN, VER)$. 
+
+\medskip\noindent
+The key generation algorithm, $GEN$, is identical to $G$\footnote{Strictly 
+speaking, the Fiat-Shamir transform should be defined with respect to an 
+ensemble $\ens{\fanh}{n}$ rather than an individual function $h$. This is 
+because, for any fixed $h$, it's easy to come up with (contrived) secure 
+canonical id schemes which yield insecure Fiat-Shamir signature schemes. In 
+this setting, $GEN$ randomly chooses a key $k \in \fanh_n$ and appends it 
+to $pub$ to form the public key $PK$. The private key $SK$ is simply set to 
+$pri$.}. 
+
+\medskip\noindent
+To sign a message $m \in \strs{*}$, $SIGN_{pri}$ obtains a commitment
+\textsc{Cmt} by running $P$ on $pri$, computes $y = h(\textsc{Cmt},m)$ and 
+gives $y$ to $P$ as the challenge \textsc{Ch}. $P$ responds with \textsc{Rsp}
+(recall that the \emph{completeness} property of $ID$ ensures that $P$ can
+correctly answer any challenge \textsc{Ch}). $SIGN_{pri}$ then outputs 
+$\sigma = (\textsc{Cmt},\textsc{Rsp})$ as the signature of $m$. 
+
+\medskip\noindent
+To determine whether $\sigma = (\textsc{Cmt},\textsc{Rsp})$ 
+is a legitimate signature of $m$, $VER_{pub}$ computes 
+$y = h(\textsc{Cmt},m)$ and runs $V_{pub}$ on $(\textsc{Cmt},y,\textsc{Rsp})$. 
+
+\item The random oracle model is a popular approach to analyzing the security
+of cryptographic protocols involving hash functions. Let $h: \strs{*} \to
+\strs{n}$ be a hash function and $\pi(h)$ be a protocol which utilizes $h$.
+To prove that $\pi(h)$ is secure in 
+the random oracle model, we proceed as follows. All parties --- including the 
+adversary --- are equipped with a random oracle $\fanr : \strs{*} \to 
+\strs{n}$, and evaluations of $h$ are replaced with queries to $\fanr$. The 
+adversary's success probability, now also taken over the randomness of $\fanr$,
+is then shown to be negligible in $n$ under plausible hardness assumptions.
+\end{itemize}
+
+\section*{Results}
+
+\begin{thm}
+Let $ID = (G,P,V)$ be a secure canonical identification scheme and $h:
+\strs{*} \to \strs{n}$ be a hash function. Then the signature scheme 
+$\fs{ID}{h} = (GEN,SIGN,VER)$ is secure in the random oracle model.
+\end{thm}
+\begin{proof}
+Let $F$ be a forger that breaks the security of $\fs{ID}{h}$ in the random
+oracle model. $F$ has access to a random oracle $\fanr : \strs{*} \to \strs{n}$
+and a signature oracle $\fans$. 
+
+\medskip\noindent
+When queried on a string $s$ for the first time, $\fanr$ chooses $r \in
+\strs{n}$ uniformly at random and sets $\fanr(s) = r$. Subsequently, $\fanr$
+responds with $r$ whenever queried on $s$. To produce a signature 
+$\sigma = (\textsc{Cmt},\textsc{Rsp})$ of message $m$, $\fans$ first obtains a 
+commitment \textsc{Cmt} from $P_{pri}$ and then gives him 
+a challenge $\fanr(\textsc{Cmt},m)$, to which $P_{pri}$ responds with 
+\textsc{Rsp}. Observe that $\fanr$'s replies must be consistent with 
+those of $\fans$. For instance, if $\fans(m) = 
+(\textsc{Cmt},\textsc{Rsp})$ it should be the case that 
+$V_{pub}(\textsc{Cmt},\fanr(\textsc{Cmt},m),\textsc{Rsp}) = 1$.
+
+\medskip\noindent
+Let $\varnothing \subset \fanc \subset \strs{*}$ be the space $P$ draws his 
+commitments from. We make no additional assumptions about $\fanc$, so that 
+$\fanc = \strs{n}$ and $\fanc = \{\lambda\}$ are equally legitimate choices. 
+Also, denote the message whose signature $F$ tries to forge by $m^*$, and its 
+supposed signature by $\sigma^* = (\textsc{Cmt}^*, \textsc{Rsp}^*)$.
+
+\medskip\noindent
+We make a few simplifying assumptions about $F$, insisting that 
+he have the following ``normal form'': 
+\begin{enumerate}[$(i)$]
+\item $F$ never queries $\fanr$ on the same string more than once. 
+
+\item All of $F$'s random oracle queries are of the form
+$\fanr(\textsc{Cmt},m)$, where $\textsc{Cmt} \in \fanc$ and $m \in \strs{*}$.
+
+\item $F$ queries $\fanr$ on $(\textsc{Cmt}^*,m^*)$ at some point. This 
+special query is called the ``crucial query''. 
+\end{enumerate}
+It isn't too hard to show that if a successful forger 
+exists, then there exists one satisfying the above three properties. 
+
+\medskip\noindent
+Suppose that $F$ fails to have property $(i)$, so that he queries $\fanr$ on 
+some string $s$ multiple times. Let $F'$ be the same as $F$, except that $F'$ 
+writes $ans = \fanr(s)$ down on an unused portion of his working tape the first
+time $\fanr$ is queried on $s$, and all subsequent random oracle queries about 
+$s$ are answered by looking $ans$ up. Since $\fanr$ is a function, $F'$'s 
+success probability is unchanged, yet he only queries $\fanr$ on $s$ once. 
+If there is another string $s'$ on which $F'$ queries $\fanr$ multiple times, 
+we can repeat the above process to get a new forger $F''$ which queries $\fanr$
+on $s'$ once. Proceeding in this fashion, we eventually obtain a forger 
+who doesn't query $\fanr$ on any string more than once, and whose success 
+probability is identical to that of $F$. This assumption guarantees that $F$
+doesn't repeat random oracle queries, so that $\fanr$'s answers are always 
+random.
+
+\medskip\noindent
+Now suppose that $F$ fails to have property $(ii)$, so that at least one of his 
+random oracle queries is not of the form $\fanr(\textsc{Cmt},m)$. Let $F'$ be 
+the same as $F$, except that all malformed $\fanr$ queries are answered 
+randomly. Since $\fanr$'s replies are also random, these answers have exactly 
+the right distribution. Notice that there is no interplay between answers to 
+$\fans$ queries and malformed $\fanr$ queries, so no inconsistencies are 
+introduced. The new forger's success probability is therefore identical to 
+that of $F$, and all of his $\fanr$ queries are well-formed. 
+
+\medskip\noindent
+Finally, suppose that $F$ fails to have property $(iii)$, namely that he never 
+queries $\fanr$ on $(\textsc{Cmt}^*,m^*)$. Let $F'$ be the same as $F$, except
+that instead of outputting $(m^*,\sigma^*)$ right away, $F'$ first queries
+$\fanr$ on $(\textsc{Cmt}^*,m^*)$. $F'$'s success probability is 
+identical to that of $F$, since the extra $\fanr$ query does not affect his 
+output. It is also worth noting that the new forger doesn't violate
+assumptions $(i)$ and $(ii)$, because the extra $\fanr$ query is both
+new and well-formed.
+
+\medskip\noindent
+We are now ready to describe an impersonator $I$ which breaks the security of 
+$ID$. Recall that $I$'s goal is to get the verifier $V$ to 
+accept by interacting with him in the role of the prover $P$. $I$ is allowed
+to first interact with $P$ in the role of $V$ polynomially many times. Since 
+$I$ is trying to break the \emph{active} security of $ID$, he can send $P$ 
+whatever messages he likes.
+
+\medskip\noindent
+Consider the experiment where a pair of keys $(pub,pri)$ is generated by
+running $G$ on $1^n$, and $I$ is given the public key $pub$.
+
+\medskip\noindent
+Let $q_\fanr(n)$ and $q_\fans(n)$ denote the number of times $F$ queries 
+$\fanr$ and $\fans$, respectively, and set $q(n) = q_\fanr(n) + q_\fans(n)$. 
+$I$ first interacts with $P_{pri}$ $q(n)\cdot q_\fans(n)$ times in order to 
+construct ``transcript blocks'' $\fanb_1,\ldots,\fanb_{q(n)}$. Each 
+block is made up of $q_\fans(n)$ transcripts of the form 
+$(\textsc{Cmt},r,\textsc{Rsp})$, obtained as follows. $I$ first receives a 
+commitment $\textsc{Cmt} \in \fanc$ from $P_{pri}$. Next, $I$ sends a 
+challenge $r \in \strs{n}$ to $P_{pri}$. If \textsc{Cmt} does not 
+appear in any of the transcripts added to the block so far, $r$ is chosen 
+randomly. Otherwise, $r$ is set to the challenge associated with \textsc{Cmt}. 
+$P_{pri}$ responds with \textsc{Rsp}, and the transcript 
+$(\textsc{Cmt},r,\textsc{Rsp})$ is added to the block.
+
+\medskip\noindent
+$I$ next guesses the index of $F$'s ``crucial query'' by randomly choosing
+$k \in \{1,\ldots,q_\fanr(n)\}$. 
+
+\medskip\noindent
+$I$ now begins to simulate $F$. Note that assumption $(ii)$ above
+enables us to associate a unique message with every $\fanr$ query 
+$F$ makes. Since $\fans$ queries explicitly reference a message, every oracle
+query made by $F$ therefore has a message unambiguously associated with it. 
+
+\medskip\noindent
+Let $m_1,m_2,m_3,\ldots$ be the \emph{distinct} messages associated with $F$'s
+oracle queries. There are at most $q(n)$ of these, since in the worst case 
+every query concerns a different message. $I$ answers queries associated with 
+$m_i$ using transcripts stored in block $\fanb_i$. The answer to the 
+$j^{th}$ $S(m_i)$ query is $(\textsc{Cmt},\textsc{Rsp})$, 
+where $(\textsc{Cmt},r,\textsc{Rsp})$ is the $j^{th}$ transcript in 
+$\fanb_i$. If \textsc{Cmt} appears in any of the transcripts stored in 
+$\fanb_i$, then the answer to $\fanr(\textsc{Cmt},m_i)$ is $r$, the 
+challenge associated with \textsc{Cmt}. Otherwise, $\fanr(\textsc{Cmt},m_i)$ 
+is answered randomly. 
+
+\medskip\noindent
+The $k^{th}$ random oracle query, $\fanr(\textsc{Cmt}',m')$, is handled 
+specially. $I$ sends $\textsc{Cmt}'$ to $V_{pub}$, receives a challenge 
+\textsc{Ch} in reply and gives \textsc{Ch} to $F$ as the answer to 
+$\fanr(\textsc{Cmt}',m')$. Let $k^*$ denote
+the \emph{true} index of the ``crucial query''. Observe that if  
+$k \neq k^*$, then $I$'s simulation of $F$ may break down. What if 
+$F$ requests to see some signatures of $m'$? One of these could well  
+involve $\textsc{Cmt}'$.
+In that case, the correct answer to $\fanr(\textsc{Cmt}',m')$ is the 
+corresponding challenge, $r$, which almost certainly differs from \textsc{Ch}. 
+On the other hand, if $k = k^*$ then $m' = m^*$ and $\textsc{Cmt}' =
+\textsc{Cmt}^*$. $F$ won't query $\fans$ on $m^*$ since that is the message
+whose signature he is trying to forge, and $I$'s simulation of $F$ is perfect.
+
+\medskip\noindent
+Eventually, $F$ outputs a message $m^*$ together with an alleged signature
+$\sigma^* = (\textsc{Cmt}^*,\textsc{Rsp}^*)$ of $m^*$. $I$ then sends
+$\textsc{Rsp}^*$ to $V_{pub}$, who either accepts or rejects the transcript
+$(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*)$.
+
+\medskip\noindent
+Let $p_F(n)$ and $p_I(n)$ denote the success probabilities of $F$ and $I$,
+respectively. Note that $q_\fanr(n) \leq q(n) \leq t_F(n) \leq n^c$ for some
+$c$, where $t_F(n)$ is the running time of $F$. Also observe that 
+$p_F(n) \geq \frac{1}{n^d}$ for some $d$ and infinitely many $n$, because $F$ 
+breaks the security of $\fs{ID}{h}$ in the random oracle model.
+%We have
+%\begin{equation*}
+%p_F(n) = \text{Pr}\left[
+%\begin{aligned} 
+%& (pub,pri) \gets GEN^\fanr(1^n); (m^*,\textsc{Cmt}^*,
+%\textsc{Rsp}^*) \gets F^{\fanr,\fans}_{pub}; \\ 
+%& VER^\fanr_{pub}(m^*,\textsc{Cmt}^*,\textsc{Rsp}^*) = 
+%V_{pub}(\textsc{Cmt}^*,\fanr(\textsc{Cmt}^*,m^*),\textsc{Rsp}^*) = 1
+%\end{aligned}
+%\right], 
+%\end{equation*}
+%where the probability is taken over the coins of $GEN$ and $F$, as well as the
+%randomness of $\fanr$ and $\fans$. We also have
+%\begin{equation*}
+%p_I(n) = \text{Pr}\left[
+%\begin{aligned}
+%(pub,pri) \gets G(& 1^n); \textsc{Ch} \gets \strs{n};
+%(\textsc{Cmt}',\textsc{Rsp}^*) \gets I^{P_{pri}}_{pub};\\ 
+%& V_{pub}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*) = 1
+%\end{aligned}
+%\right],
+%\end{equation*}
+%where the probability is taken over the coins of $G$, $I$ and $P_{pri}$, as
+%well as the choice of $\textsc{Ch}$.
+
+\medskip\noindent 
+Since $I$'s simulation of $F$ is perfect provided he correctly guesses the
+index of the ``crucial query'', we have:
+\begin{align*}
+p_I(n) & = \text{Pr}[V_{pub}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*) = 1] \\
+& = \text{Pr}[V_{pub}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*) = 1 
+\wedge k' = k^*] + \text{Pr}[V_{pub}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*)
+= 1 \wedge k' \neq k^*] \\
+& \geq \text{Pr}[V_{pub}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*) = 1 
+\wedge k' = k^*] \\
+& = \text{Pr}[V_{pub}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*) 
+= 1 | k = k^*] \cdot \text{Pr}[k' = k^*] \\
+& = p_F(n) 
+\cdot \frac{1}{q_\fanr(n)} \geq \frac{p_F(n)}{n^c}
+\geq \frac{1}{n^{c+d}} \text{ for infinitely many } n.
+\end{align*}
+This shows that $p_I(n)$ is non-negligible in $n$, so $I$ breaks the 
+security of $ID$.
+\end{proof}
+
+\end{document}
+

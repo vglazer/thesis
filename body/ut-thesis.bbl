@@ -1,0 +1,392 @@
+\begin{thebibliography}{GGM84b}
+
+\bibitem[AABN02]{abdalla:fiatshamirrom}
+Michel Abdalla, Jee~Hea An, Mihir Bellare, and Chanathip Namprempre.
+\newblock From identification to signatures via the {F}iat-{S}hamir transform:
+  Minimizing assumptions for security and forward-security.
+\newblock In {\em Proceedings of the International Conference on the Theory and
+  Applications of Cryptographic Techniques}, pages 418--433. Springer-Verlag,
+  2002.
+
+\bibitem[ABR01a]{abdalla:dhies2}
+Michel Abdalla, Mihir Bellare, and Phillip Rogaway.
+\newblock {DHIES}: An encryption scheme based on the {D}iffie-{H}ellman
+  problem.
+\newblock Available online at
+  \url{http://www.cs.ucsd.edu/users/mihir/papers/dhies.html}, 2001.
+
+\bibitem[ABR01b]{abdalla:dhies1}
+Michel Abdalla, Mihir Bellare, and Phillip Rogaway.
+\newblock The oracle {D}iffie-{H}ellman assumptions and an analysis of {DHIES}.
+\newblock In {\em Proceedings of Topics in Cryptology - CT-RSA 2001, The
+  Cryptographer's Track at RSA Conference}, volume 2020 of {\em Lecture Notes
+  in Computer Science}, pages 143--158. Springer-Verlag, 2001.
+
+\bibitem[BB04]{boneh:shortsigsnorom}
+Dan Boneh and Xavier Boyen.
+\newblock Short signatures without random oracles.
+\newblock In {\em Proceedings of Advances in Cryptology -- EUROCRYPT 2004,
+  International Conference on the Theory and Applications of Cryptographic
+  Techniques}, volume 3027 of {\em Lecture Notes in Computer Science}, pages
+  56--73. Springer-Verlag, 2004.
+
+\bibitem[BG02]{barak:universalarguments}
+Boaz Barak and Oded Goldreich.
+\newblock Universal arguments and their applications.
+\newblock In {\em Proceedings of the 17th IEEE Annual Conference on
+  Computational Complexity---CCC '02}, pages 162--171. IEEE Computer Society,
+  2002.
+
+\bibitem[Ble98]{bleichenbacher:pkcsbroken}
+Daniel Bleichenbacher.
+\newblock Chosen ciphertext attacks against protocols based on the {RSA}
+  encryption standard {PKCS} \#1.
+\newblock In {\em Proceedings of Advances in Cryptology--CRYPTO '98, 18th
+  Annual International Cryptology Conference}, volume 1462 of {\em Lecture
+  Notes in Computer Science}, pages 1--12. Springer-Verlag, 1998.
+
+\bibitem[BM88]{bellare:trapdoorsigs1}
+Mihir Bellare and Silvio Micali.
+\newblock How to sign given any trapdoor function.
+\newblock In {\em Proceedings of STOC '88: Twentieth Annual ACM Symposium on
+  Theory of computing}, pages 32--42. ACM Press, 1988.
+
+\bibitem[Bon99]{boneh:rsaattacks}
+Dan Boneh.
+\newblock Twenty years of attacks on the {RSA} cryptosystem.
+\newblock {\em Notices of the American Mathematical Society ({AMS})},
+  46(2):203--213, 1999.
+
+\bibitem[Bon01]{boneh:simpleoaep}
+Dan Boneh.
+\newblock Simplified {OAEP} for the {RSA} and {R}abin functions.
+\newblock In {\em CRYPTO '01: Proceedings of the 21st Annual International
+  Cryptology Conference on Advances in Cryptology}, volume 2139 of {\em Lecture
+  Notes in Computer Science}, pages 275--291. Springer-Verlag, 2001.
+
+\bibitem[BR93]{bellare:rompractical}
+Mihir Bellare and Phillip Rogaway.
+\newblock Random oracles are practical: a paradigm for designing efficient
+  protocols.
+\newblock In {\em Proceedings of the 1st ACM conference on Computer and
+  communications security---CCS '93}, pages 62--73. ACM Press, 1993.
+
+\bibitem[BR94]{bellare:oaep}
+Mihir Bellare and Phillip Rogaway.
+\newblock Optimal assymetric encryption.
+\newblock In {\em Proceedings of Advances in Cryptology---EUROCRYPT '94,
+  Workshop on the Theory and Application of Cryptographic Techniques}, volume
+  950 of {\em Lecture Notes in Computer Science}, pages 92--111.
+  Springer-Verlag, 1994.
+
+\bibitem[BR97]{bellare:minroms}
+Mihir Bellare and Phillip Rogaway.
+\newblock Minimizing the use of random oracles in authenticated encryption
+  schemes.
+\newblock In {\em ICICS '97: International Conference on Information and
+  Communications Security}, volume 1334 of {\em Lecture Notes in Computer
+  Science}, pages 1--16. Springer-Verlag, 1997.
+
+\bibitem[Bri85]{brickell:iterknapsackbroken}
+Ernest~F. Brickell.
+\newblock Breaking iterated knapsacks.
+\newblock In {\em Proceedings of Advances in Cryptology--CRYPTO '84}, volume
+  196 of {\em Lecture Notes in Computer Science}, pages 342--358.
+  Springer-Verlag, 1985.
+
+\bibitem[CGH98]{canetti:romfails}
+Ran Canetti, Oded Goldreich, and Shai Halevi.
+\newblock The random oracle methodology, revisited (preliminary version).
+\newblock In {\em Proceedings of STOC '98: Thirtieth Annual ACM Symposium on
+  Theory of Computing}, pages 209--218. ACM Press, 1998.
+
+\bibitem[Cr96]{cramer:fastsigs}
+Ronald Cramer and Ivan~Damg\aa rd.
+\newblock New generation of secure and practical {RSA}-based signatures.
+\newblock In {\em Proceedings of the 16th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '96}, volume 1109 of {\em
+  Lecture Notes in Computer Science}, pages 173--185. Springer-Verlag, 1996.
+
+\bibitem[CS98]{cramer:cca2secure}
+Ronald Cramer and Victor Shoup.
+\newblock A practical public key cryptosystem provably secure against adaptive
+  chosen ciphertext attack.
+\newblock In {\em Proceedings of the 18th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '98}, volume 1462 of {\em
+  Lecture Notes in Computer Science}, pages 13--25. Springer-Verlag, 1998.
+
+\bibitem[CS99]{cramer:signatures2}
+Ronald Cramer and Victor Shoup.
+\newblock Signature schemes based on the strong {RSA} assumption.
+\newblock In {\em Proceedings of the 6th {ACM} conference on Computer and
+  Communications Cecurity---CCS '99}, pages 46--51. ACM Press, 1999.
+
+\bibitem[DN94]{dwork:fastsigs}
+Cynthia Dwork and Moni Naor.
+\newblock An efficient existentially unforgeable signature scheme and its
+  applications.
+\newblock In {\em CRYPTO '94: Proceedings of the 14th Annual International
+  Cryptology Conference on Advances in Cryptology}, volume 839 of {\em Lecture
+  Notes in Computer Science}, pages 234--246. Springer-Verlag, 1994.
+
+\bibitem[Fis03]{fischlin:cramershoup}
+Marc Fischlin.
+\newblock The cramer-shoup strong-{RSA} signature scheme revisited.
+\newblock In {\em Proceedings of Public Key Cryptography - PKC 2003, 6th
+  International Workshop on Theory and Practice in Public Key Cryptography},
+  volume 2567 of {\em Lecture Notes in Computer Science}, pages 116--129.
+  Springer-Verlag, 2003.
+
+\bibitem[FMR96]{fischer:obtransfer}
+Michael~J. Fischer, Silvio Micali, and Charles Rackoff.
+\newblock A secure protocol for the oblivious transfer (extended abstract).
+\newblock {\em Journal of Cryptology}, 9(3):191--195, 1996.
+
+\bibitem[FOPS01]{fujisaki:rsaoaepok1}
+Eiichiro Fujisaki, Tatsuaki Okamoto, David Pointcheval, and Jacques Stern.
+\newblock {RSA-OAEP} is secure under the {RSA} assumption.
+\newblock In {\em CRYPTO '01: Proceedings of the 21st Annual International
+  Cryptology Conference on Advances in Cryptology}, volume 2139 of {\em Lecture
+  Notes in Computer Science}, pages 260--274. Springer-Verlag, 2001.
+
+\bibitem[FOPS04]{fujisaki:rsaoaepok2}
+Eiichiro Fujisaki, Tatsuaki Okamoto, David Pointcheval, and Jacques Stern.
+\newblock {RSA-OAEP} is secure under the {RSA} assumption.
+\newblock {\em Journal of Cryptology}, 17(2):81--104, 2004.
+
+\bibitem[FS87]{fiat:fsparadigm}
+Amos Fiat and Adi Shamir.
+\newblock How to prove yourself: practical solutions to identification and
+  signature problems.
+\newblock In {\em Proceedings of Advances in cryptology---CRYPTO '86}, volume
+  263 of {\em Lecture Notes in Computer Science}, pages 186--194.
+  Springer-Verlag, 1987.
+
+\bibitem[GaJ03]{goh:romcdh}
+Eu-Jin Goh and Stanis\l aw~Jarecki.
+\newblock A signature scheme as secure as the {D}iffie-{H}ellman problem.
+\newblock In {\em Eurocrypt 2003: Proceedings of the International Conference
+  on the Theory and Applications of Cryptographic Techniques`}, volume 2656 of
+  {\em Lecture Notes in Computer Science}, pages 401--415. Springer-Verlag,
+  2003.
+
+\bibitem[GGM84a]{goldreich:pseudorandom1}
+Oded Goldreich, Shafi Goldwasser, and Silvio Micali.
+\newblock How to construct random functions.
+\newblock In {\em Proceedings of FOCS '84: 25th Annual IEEE Symposium on
+  Foundations of Computer Science}. IEEE Computer Society, 1984.
+
+\bibitem[GGM84b]{goldreich:pseudorandom2}
+Oded Goldreich, Shafi Goldwasser, and Silvio Micali.
+\newblock On the cryptographic applications of random functions.
+\newblock In {\em Proceedings of CRYPTO '84: Advances in Cryptology}, volume
+  196 of {\em Lecture Notes in Computer Science}, pages 276--288.
+  Springer-Verlag, 1984.
+
+\bibitem[GGM86]{goldreich:pseudorandom3}
+Oded Goldreich, Shafi Goldwasser, and Silvio Micali.
+\newblock How to construct random functions.
+\newblock {\em Journal of the ACM}, 33(4):792--807, 1986.
+
+\bibitem[GHR99]{gennaro:fastsigs}
+Rosario Gennaro, Shai Halevi, and Tal Rabin.
+\newblock Secure hash-and-sign signatures without the random oracle.
+\newblock In {\em Proceedings of Advances in Cryptology---EUROCRYPT'99:
+  International Conference on the Theory and Application of Cryptographic
+  Techniques}, volume 1592 of {\em Lecture Notes in Computer Science}, pages
+  123--139. Springer-Verlag, 1999.
+
+\bibitem[GM84]{goldwasser:probenc2}
+Shafi Goldwasser and Silvio Micali.
+\newblock Probabilistic encryption.
+\newblock {\em Journal of Computer and System Sciences}, 28(2):270--299, 1984.
+
+\bibitem[GMR85]{goldwasser:ips1}
+Shafi Goldwasser, Silvio Micali, and Charles Rackoff.
+\newblock The knowledge complexity of interactive proof-systems.
+\newblock In {\em Proceedings of STOC '85: Seventeenth annual ACM Symposium on
+  Theory of computing}, pages 291--304. ACM Press, 1985.
+
+\bibitem[GMR88]{goldwasser:signatures2}
+Shafi Goldwasser, Silvio Micali, and Ron~L. Rivest.
+\newblock A digital signature scheme secure against adaptive chosen-message
+  attacks.
+\newblock {\em SIAM Journal on Computing}, 17(2):281--308, 1988.
+
+\bibitem[GS04]{gennaro:noteonkd}
+Rosario Gennaro and Victor Shoup.
+\newblock A note on an encryption scheme of {K}urosawa and {D}esmedt.
+\newblock Unpublished manuscript, 2004.
+\newblock Available online at \url{http://shoup.net/papers/kdnote.pdf}.
+
+\bibitem[GTK03]{goldwasser:fsparadigmfails}
+Shafi Goldwasser and Yael Tauman~Kalai.
+\newblock On the (in)security of the {F}iat-{S}hamir paradigm.
+\newblock In {\em Proceedings of FOCS '03: 44th Annual IEEE Symposium on
+  Foundations of Computer Science}, pages 102--113. IEEE Computer Society,
+  2003.
+
+\bibitem[HILL99]{hastad:1waytopseudorandom}
+Johan Hastad, Russell Impagliazzo, Leonid~A. Levin, and Michael Luby.
+\newblock A pseudorandom generator from any one-way function.
+\newblock {\em SIAM Journal on Computing}, 28(4):1364--1396, 1999.
+
+\bibitem[IEE00]{ieee:p1363}
+IEEE.
+\newblock Standard specifications for public-key cryptography, 2000.
+\newblock Available online at
+  \url{http://grouper.ieee.org/groups/1363/P1363/index.html}.
+
+\bibitem[IR89]{impagliazzo:nooneway}
+Russel Impagliazzo and S.~Rudich.
+\newblock Limits on the provable consequences of one-way permutations.
+\newblock In {\em Proceedings of STOC '89: Twenty-first Annual ACM Symposium on
+  Theory of Computing}, pages 44--61. ACM Press, 1989.
+
+\bibitem[KD04]{kurosawa:newparadigm}
+Kaoru Kurosawa and Yvo Desmedt.
+\newblock A new paradigm of hybrid encryption scheme.
+\newblock In {\em Proceedings of Advances in Cryptology -- CRYPTO 2004: 24th
+  Annual International Cryptology Conference}, volume 3152 of {\em Lecture
+  Notes in Computer Science}, pages 426--442. Springer-Verlag, 2004.
+
+\bibitem[Len00]{lenstra:factoring}
+Arjen~K. Lenstra.
+\newblock Integer factoring.
+\newblock {\em Designs, Codes and Cryptography}, 19(2/3):101--128, 2000.
+
+\bibitem[Mer90]{merkle:tree}
+Ralph~C. Merkle.
+\newblock A certified digital signature: That antique paper from 1979.
+\newblock In {\em Proceedings of Advances in Cryptology---CRYPTO '89, 9th
+  Annual International Cryptology Conference}, volume 435 of {\em Lecture Notes
+  in Computer Science}, pages 218--238. Springer-Verlag, 1990.
+
+\bibitem[Mic94]{micali:csproofs2}
+Silvio Micali.
+\newblock {CS} proofs.
+\newblock In {\em Proceedings of FOCS '94: 35th Annual IEEE Symposium on
+  Foundations of Computer Science}, pages 436--453. IEEE Computer Society,
+  1994.
+
+\bibitem[Mic00]{micali:csproofs1}
+Silvio Micali.
+\newblock Computationally sound proofs.
+\newblock {\em SIAM Journal on Computing}, 30(4):1253--1298, 2000.
+
+\bibitem[MRH04]{maurer:indiffability}
+Ueli~M. Maurer, Renato Renner, and Clemens Holenstein.
+\newblock Indifferentiability, impossibility results on reductions, and
+  applications to the random oracle methodology.
+\newblock In {\em Proceedings of TCC '04: Theory of Cryptography, First Theory
+  of Cryptography Conference}, volume 2951 of {\em Lecture Notes in Computer
+  Science}, pages 21--39. Springer-Verlag, 2004.
+
+\bibitem[MS90]{micali:betterfs}
+Silvio Micali and Adi Shamir.
+\newblock An improvement of the {F}iat-{S}hamir identification and signature
+  scheme.
+\newblock In {\em Proceedings of Advances in Cryptology - CRYPTO '88, 8th
+  Annual International Cryptology Conference}, volume 403 of {\em Lecture Notes
+  in Computer Science}, pages 244--247. Springer-Verlag, 1990.
+
+\bibitem[MW00]{maurer:diffiehellman}
+Ueli~M. Maurer and Stefan Wolf.
+\newblock The {D}iffie-{H}ellman protocol.
+\newblock {\em Designs, Codes and Cryptography}, 19(2/3):147--171, 2000.
+
+\bibitem[NIS99]{nist:des}
+NIST.
+\newblock {FIPS} 46-3, {D}ata {E}ncryption {S}tandard ({DES}), 1999.
+\newblock Available online at
+  \url{http://csrc.nist.gov/publications/fips/fips46-3/fips46-3.pdf}.
+
+\bibitem[NIS01]{nist:aes}
+NIST.
+\newblock {FIPS} 197, {A}dvanced {E}ncryption {S}tandard ({AES}), 2001.
+\newblock Available online at
+  \url{http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf}.
+
+\bibitem[NIS04]{nist:sha1}
+NIST.
+\newblock {FIPS} 180-2, {S}ecure {H}ash {S}tandard ({SHS}), 2004.
+\newblock Available online at \url{http://csrc.nist.gov/publications/fips/
+  fips180-2/fips180-2withchangenotice.pdf}; also see
+  \url{http://csrc.nist.gov/hash_standards_comments.pdf}.
+
+\bibitem[NY89]{naor:universal}
+M.~Naor and M.~Yung.
+\newblock Universal one-way hash functions and their cryptographic
+  applications.
+\newblock In {\em Proceedings of STOC '89: Twenty-first Annual ACM Symposium on
+  Theory of Computing}, pages 33--43. ACM Press, 1989.
+
+\bibitem[NY90]{naor:cca1}
+M.~Naor and M.~Yung.
+\newblock Public-key cryptosystems provably secure against chosen ciphertext
+  attacks.
+\newblock In {\em Proceedings of STOC '90: Twenty-second Annual ACM Symposium
+  on Theory of Computing}, pages 427--437. ACM Press, 1990.
+
+\bibitem[Odl00]{odlyzko:discretelog}
+Andrew~M. Odlyzko.
+\newblock Discrete logarithms: The past and the future.
+\newblock {\em Designs, Codes and Cryptography}, 19(2/3):129--145, 2000.
+
+\bibitem[Oka93]{okamoto:discretelogfs}
+Tatsuaki Okamoto.
+\newblock Provably secure and practical identification schemes and
+  corresponding signature schemes.
+\newblock In {\em Proceedings of the 12th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '92}, volume 740 of {\em
+  Lecture Notes in Computer Science}, pages 31--53. Springer-Verlag, 1993.
+
+\bibitem[Rom90]{rompel:1waysigs}
+J.~Rompel.
+\newblock One-way functions are necessary and sufficient for secure signatures.
+\newblock In {\em Proceedings of STOC '90: Twenty-second Annual ACM Symposium
+  on Theory of Computing}, pages 387--394. ACM Press, 1990.
+
+\bibitem[RS92]{rackoff:cca2}
+Charles Rackoff and Daniel~R. Simon.
+\newblock Non-interactive zero-knowledge proof of knowledge and chosen
+  ciphertext attack.
+\newblock In {\em Proceedings of the 11th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '91}, volume 576 of {\em
+  Lecture Notes in Computer Science}, pages 433--444. Springer-Verlag, 1992.
+
+\bibitem[{RSA}93]{rsa:pkcs15}
+{RSA Security Inc.}
+\newblock {PKCS}\#1 {RSA} cryptography standard, version 2.0, 1993.
+\newblock Available online at
+  \url{ftp://ftp.rsasecurity.com/pub/pkcs/ps/pkcs-1.ps}.
+
+\bibitem[{RSA}98]{rsa:pkcs20}
+{RSA Security Inc.}
+\newblock {PKCS}\#1 {RSA} encryption standard, version 1.5, 1998.
+\newblock Available online at
+  \url{ftp://ftp.rsasecurity.com/pub/pkcs/ascii/pkcs-1v2.asc}.
+
+\bibitem[Sho96]{shoup:practid}
+Victor Shoup.
+\newblock On the security of a practical identification scheme.
+\newblock In {\em Proceedings of Advances in Cryptology - EUROCRYPT '96,
+  International Conference on the Theory and Application of Cryptographic
+  Techniques}, volume 1070 of {\em Lecture Notes in Computer Science}, pages
+  344--353. Springer-Verlag, 1996.
+
+\bibitem[Sho00]{shoup:hedge}
+Victor Shoup.
+\newblock Using hash functions as a hedge against chosen ciphertext attack.
+\newblock In {\em EUROCRYPT '00--Proceedings of the International Conference on
+  the Theory and Application of Cryptographic Techniques}, volume 1807 of {\em
+  Lecture Notes in Computer Science}, pages 275--288. Springer-Verlag, 2000.
+
+\bibitem[Sho01]{shoup:oaepbad}
+Victor Shoup.
+\newblock {OAEP} reconsidered.
+\newblock In {\em CRYPTO '01: Proceedings of the 21st Annual International
+  Cryptology Conference on Advances in Cryptology}, volume 2139 of {\em Lecture
+  Notes in Computer Science}, pages 239--259. Springer-Verlag, 2001.
+
+\end{thebibliography}

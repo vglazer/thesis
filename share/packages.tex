@@ -1,0 +1,17 @@
+% standard packages
+\usepackage{enumerate,psfrag,amsfonts,amssymb,amsmath,amsthm,url,epic,eepic}
+\ifx\pdfoutput\undefined
+  \usepackage[dvips]{graphicx}
+\else
+  \usepackage[pdftex]{graphicx}
+\fi
+
+
+%% Define a new 'leo' style for the package that will use a smaller font.
+\makeatletter
+\def\url@smallstyle{\@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\ttfamily}}\Url@do
+}
+\makeatother
+
+%% Now actually use the newly defined style.
+\urlstyle{small}

@@ -1,0 +1,103 @@
+%*****************
+% Important Sets *
+%*****************
+
+% The naturals
+\newcommand{\nats}{\mathbb{N}}
+
+% The integers
+\newcommand{\ints}{\mathbb{Z}}
+
+% The positive positive integers
+\newcommand{\pints}{\mathbb{Z^+}}
+
+% The reals
+\newcommand{\reals}{\mathbb{R}}
+
+% The interval [0,1]
+\newcommand{\zone}{[0,1]}
+
+% Binary strings
+\newcommand{\strs}[1]{\{0,1\}^{#1}}
+
+
+%*****************
+% Script Letters *
+%*****************
+
+% script B
+\newcommand{\fanb}{\mathcal{B}}
+
+% script C
+\newcommand{\fanc}{\mathcal{C}}
+
+% script D
+\newcommand{\fand}{\mathcal{D}}
+
+% script E
+\newcommand{\fane}{\mathcal{E}}
+
+% script F
+\newcommand{\fanf}{\mathcal{F}}
+
+% script G
+\newcommand{\fang}{\mathcal{G}}
+
+% script H
+\newcommand{\fanh}{\mathcal{H}}
+
+% script M
+\newcommand{\fanm}{\mathcal{M}}
+
+% script O
+\newcommand{\fano}{\mathcal{O}}
+
+% script P
+\newcommand{\fanp}{\mathcal{P}}
+
+% script R
+\newcommand{\fanr}{\mathcal{R}}
+
+% script S 
+\newcommand{\fans}{\mathcal{S}}
+
+% script T 
+\newcommand{\fant}{\mathcal{T}}
+
+% script U 
+\newcommand{\fanu}{\mathcal{U}}
+
+% script Z
+\newcommand{\fanz}{\mathcal{Z}}
+
+%*********************
+% Special Constructs *
+%*********************
+
+% |x| over n
+\newcommand{\overn}[1]{\frac{|#1|}{n}}
+
+% ensembles and circuits
+\newcommand{\ens}[2]{\{#1_#2\}_{#2 \in \nats}}
+
+% probability
+\newcommand{\pr}[3]{\text{Pr}_{#2 \in #3}[#1]}
+
+% fiat-shamir signature scheme
+\newcommand{\fs}[2]{SIG_{#2}(#1)}
+
+% Merkle tree committment
+\newcommand{\merk}[2]{TC_{f_#2}(#1)}
+
+% ceiling
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+
+% floor
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+
+% encoding into strings
+\newcommand{\enc}[1]{\langle #1 \rangle}
+
+% function definition
+\newcommand{\func}[3]{#1 : #2 \to #3}
+

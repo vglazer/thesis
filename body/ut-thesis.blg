@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99c (Web2C 7.3.1)
+The top-level auxiliary file: ut-thesis.aux
+A level-1 auxiliary file: intro.aux
+A level-1 auxiliary file: preliminaries.aux
+A level-1 auxiliary file: fiatshamir.aux
+A level-1 auxiliary file: encryption.aux
+A level-1 auxiliary file: uninst.aux
+A level-1 auxiliary file: realworld.aux
+The style file: alpha.bst
+Database file #1: ../share/random_oracles.bib
+You've used 58 entries,
+            2543 wiz_defined-function locations,
+            872 strings with 14913 characters,
+and the built_in function-call counts, 27830 in all, are:
+= -- 2980
+> -- 985
+< -- 84
++ -- 338
+- -- 321
+* -- 1874
+:= -- 4067
+add.period$ -- 214
+call.type$ -- 58
+change.case$ -- 346
+chr.to.int$ -- 56
+cite$ -- 58
+duplicate$ -- 1257
+empty$ -- 2223
+format.name$ -- 400
+if$ -- 6152
+int.to.chr$ -- 3
+int.to.str$ -- 0
+missing$ -- 50
+newline$ -- 294
+num.names$ -- 174
+pop$ -- 379
+preamble$ -- 1
+purify$ -- 404
+quote$ -- 0
+skip$ -- 1106
+stack$ -- 0
+substring$ -- 1814
+swap$ -- 461
+text.length$ -- 84
+text.prefix$ -- 21
+top$ -- 0
+type$ -- 464
+warning$ -- 0
+while$ -- 288
+width$ -- 61
+write$ -- 813

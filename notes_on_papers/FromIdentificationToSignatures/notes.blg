@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99c (Web2C 7.3.1)
+The top-level auxiliary file: notes.aux
+The style file: alpha.bst
+Database file #1: $THESISDIR/share/random_oracles.bib
+I was expecting a `,' or a `}'---line 171 of file $THESISDIR/share/random_oracles.bib
+ :     
+ :     series = {Lecture Notes in Computer Science},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You've used 4 entries,
+            2543 wiz_defined-function locations,
+            586 strings with 5233 characters,
+and the built_in function-call counts, 1887 in all, are:
+= -- 201
+> -- 60
+< -- 5
++ -- 20
+- -- 19
+* -- 117
+:= -- 286
+add.period$ -- 15
+call.type$ -- 4
+change.case$ -- 23
+chr.to.int$ -- 4
+cite$ -- 4
+duplicate$ -- 90
+empty$ -- 153
+format.name$ -- 25
+if$ -- 418
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 4
+newline$ -- 23
+num.names$ -- 12
+pop$ -- 26
+preamble$ -- 1
+purify$ -- 27
+quote$ -- 0
+skip$ -- 76
+stack$ -- 0
+substring$ -- 122
+swap$ -- 30
+text.length$ -- 5
+text.prefix$ -- 2
+top$ -- 0
+type$ -- 32
+warning$ -- 0
+while$ -- 19
+width$ -- 6
+write$ -- 57
+(There was 1 error message)

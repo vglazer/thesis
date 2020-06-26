@@ -1,0 +1,31 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {chapter}{\numberline {2}Preliminaries}{7}
+\contentsline {section}{\numberline {1}Negligible and non-negligible functions}{7}
+\contentsline {section}{\numberline {2}One-way functions}{7}
+\contentsline {section}{\numberline {3}Hash function ensembles}{8}
+\contentsline {section}{\numberline {4}Trapdoor permutations}{9}
+\contentsline {section}{\numberline {5}Signature schemes and message authentification codes (MACs)}{10}
+\contentsline {section}{\numberline {6}Identification schemes}{12}
+\contentsline {section}{\numberline {7}Public-key encryption schemes}{16}
+\contentsline {section}{\numberline {8}The Random Oracle Model (ROM)}{21}
+\contentsline {chapter}{\numberline {3}On the security of Fiat-Shamir signature schemes in the ROM}{22}
+\contentsline {section}{\numberline {1}Fiat-Shamir signature schemes: an overview}{22}
+\contentsline {section}{\numberline {2}The Fiat-Shamir transform}{24}
+\contentsline {section}{\numberline {3}An earlier result}{25}
+\contentsline {section}{\numberline {4}The non-triviality assumption}{28}
+\contentsline {section}{\numberline {5}Our result}{31}
+\contentsline {chapter}{\numberline {4}A public-key encryption scheme CCA2-secure in the ROM}{35}
+\contentsline {section}{\numberline {1}Public-key encryption in the ROM: an overview}{35}
+\contentsline {section}{\numberline {2}The original scheme}{37}
+\contentsline {section}{\numberline {3}Our modification}{40}
+\contentsline {subsection}{\numberline {3.1}Semantic security}{42}
+\contentsline {subsection}{\numberline {3.2}Plaintext awareness}{43}
+\contentsline {chapter}{\numberline {5}Uninstantiability}{46}
+\contentsline {section}{\numberline {1}The random oracle methodology and ``uninstantiable'' schemes}{46}
+\contentsline {section}{\numberline {2}The first uninstantiability result}{48}
+\contentsline {section}{\numberline {3}A simple proof of the first result}{50}
+\contentsline {section}{\numberline {4}An uninstantiability result for Fiat-Shamir signature schemes}{51}
+\contentsline {chapter}{\numberline {6}A taste of ``real-word'' security}{53}
+\contentsline {section}{\numberline {1}Signature schemes}{53}
+\contentsline {section}{\numberline {2}Public-key encryption schemes}{55}
+\contentsline {chapter}{Bibliography}{57}

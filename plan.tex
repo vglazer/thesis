@@ -1,0 +1,199 @@
+\documentclass[12pt,twoside]{article}
+
+% Standard packages
+\input{$THESISDIR/share/packages.tex}
+
+% Formatting
+\input{$THESISDIR/share/format.tex}
+
+% Macros
+\input{$THESISDIR/share/macros.tex}
+
+% A basic theorem environment
+\theoremstyle{plain}
+\newtheorem*{thm}{Theorem}
+
+% Author and title
+\title{The rise and fall of the Random Oracle Methodology}
+\author{Victor Glazer}
+
+\begin{document}
+
+\maketitle
+\section*{Timeline}
+
+\begin{itemize}
+\item {\bf 1984:} Shafi Goldwasser, Silvio Micali and Ron Rivest describe in
+\cite{goldwasser:signatures1} (see \cite{goldwasser:signatures2} for the
+journal version) the first signature scheme which is provably secure against 
+adaptive chosen message attack under plausible complexity-theoretic 
+assumptions. The specific assumption required is that \emph{claw-free} 
+trapdoor permutations exist, which is the case if factoring is hard. Note, however, that
+claw-free trapdoor permutations may fail to exist even if ordinary
+permutations (ones not based on the difficulty of integer factorization, that
+is) do. Unfortunately, GMR's ``signature tree'' construction is too
+inefficient to be practical.
+
+\item {\bf 1987:} Amos Fiat and Adi Shamir construct a practical signature scheme in \cite{fiat:fsparadigm}
+by removing the interaction from a canonical (i.e. three-round, public-coin) identification scheme
+using a cryptographic hash function. They show that the resulting signature
+scheme is secure against chosen message attack if factoring is hard (which
+implies that the underlying identification scheme is secure), 
+{\it assuming that the hash function in question is truly random}. This
+approach to designing signature schemes later becomes known as the
+``Fiat-Shamir paradigm''.
+
+Merkle proposes a tree-like signature scheme based on one-way functions in
+\cite{merkle:signatures}, but does not provide a rigorous proof of security.
+
+\item {\bf 1988:} Mihir Bellare and Silvio Micali present a signature scheme
+based on trapdoor permutations which is secure if the underlying permutation is
+one-way.
+
+\item {\bf 1989:} Moni Naor and Moti Yung show in \cite{naor:signatures} how 
+to construct secure signature schemes from weakly collision-resistant hash
+functinos, and describe how to obtain such hash functions from one-way
+permutations (actually, injective one-way functions, which need not be onto).
+Their construction is still ``tree-like'', stateful and inefficient.
+
+\item {\bf 1991:} Charlie Rackoff and Dan Simon present the first 
+public-key encryption scheme secure against adaptive chosen ciphertext attack
+(i.e. CCA2-secure) in \cite{rackoff:cca2}. Danny Dolev, Cynthia
+Dwork and Moni Naor independently develop another CCA2-secure encryption
+scheme in \cite{dolev:nonmalleable1} (see \cite{dolev:nonmalleable2} for the
+journal version). However, both constructions are based on
+\cite{blum:noninterzerok}'s noninteractive zero-knowledge proofs of knowledge 
+and therefore aren't practical.
+
+\item {\bf 1992:} Tatsuaki Okamoto develops in \cite{okamoto:discretelogfs} a canonical identification scheme
+which is provably secure if discrete log is hard, with a view towards
+converting it into a practical signature scheme as per the Fiat-Shamir paradigm.
+
+\item {\bf 1993:} Based on ideas from \cite{fiat:fsparadigm}, Mihir Bellare and Phillip Rogaway propose in 
+\cite{bellare:rompractical} a new approach to designing practical public-key
+signature and encryption schemes, which later becomes known as the ``Random Oracle
+Methodology''. In particular, they exhibit a public-key encryption scheme and
+a ``hash-and-sign'' signature scheme which are secure (against
+adaptive chosen-ciphertext and chosen-message attacks, respectively) assuming that the
+hash functions involved are ``ideal'', i.e. truly random.
+
+%They point out that provably secure protocols (i.e. ones whose breaker
+%can be converted into an efficient solver for a problem widely believed to be
+%computationally intractable, such as integer factorization or discrete log)
+%tend to be prohibitively expensive from a practical standpoint. On the other
+%hand, many practical protocols involve the use of hash functions. Standard
+%complexity-theoretic assumptions about such functions, namely various flavours of
+%collision-resistance, aren't powerful enough to prove these protocols secure.
+%However, if one were to model hash functions as random oracles (that is, oracles
+%which answer new queries randomly) 
+
+\item {\bf 1994:} Bellare and Rogaway propose a template for practical (i.e.
+efficient)
+public-key encryption schemes in \cite{bellare:oaep}, called Optimal Assymetric Encryption Padding or
+OAEP, which they claim yields PKEPs CCA2-secure in the random
+oracle model if instantiated using a one-way trapdoor permutation. OAEP-RSA,
+an instantiation of OAEP where RSA is the underlying trapdoor permutation,
+is later incorporated into version 2.1 of RSA
+Security's PKCS\#1 cryptography standard, as well as IEEE's P1363-2000
+public-key cryptography standard.
+
+Cynthia Dwork and Moni Naor present a provably secure practical signature scheme in
+\cite{dwork:signatures}.
+
+\item {\bf 1996:} Damg\aa rd and Cramer practical signature
+scheme RSA provably secure under RSA assumption (which one?)
+\cite{cramer:signatures}.
+
+\item {\bf 1997:} Ran Canetti initiates program to develop hash functions which can
+implement random oracles under certain circumstances in
+\cite{canetti:hideinfo}. 
+
+Bellare and Rogaway submit a tech report on
+OAEP-type constructions to the P1363 standard committee. Charlie thinks their
+Diffie-Hellman construction might be wrong.
+
+\item {\bf 1998:} Ran Cenetti, Daniele Micciancio and Omer Reingold refine
+some of the definitions of \cite{canetti:hideinfo} in
+\cite{canetti:perfecthash}
+
+Ronald Cramer and Victor Shoup develop a practical public-key encryption scheme which
+is CCA2 secure (in the standard model) if
+the decisional Diffie-Hellman problem is hard in \cite{cramer:cca2secure}.
+Their scheme is only slightly less efficient than RSA-OAEP.
+
+Ran Canetti, Oded Goldreich and Shai Halevi exhibit  ``uninstantiable'' public key
+encryption and signature schemes in \cite{canetti:romfails}. That is, they
+construct public-key encryption and signature schemes which are
+secure in the random oracle model, yet insecure in the standard model 
+{\it no matter what hash function ensemble is used to implement the random 
+oracle}. However, both schemes use Silvio Micali's CS proofs 
+(\cite{micali:csproofs}) and are rather contrived and unrealistic. 
+
+\item {\bf 1999:} Cramer and Shoup signature scheme, secure under the ``strong
+RSA assumption'' \cite{cramer:signatures2}. A different signature scheme provably secure under the same
+assumption independently discovered by Gennaro, Halevi and Rabin
+\cite{gennaro:signatures}.
+
+\item {\bf 2001:} 
+
+\item {\bf 2003:} Shafi Goldwasser and Yael Tauman Kalai show in
+\cite{goldwasser:fsparadigmfails} that there exist uninstantiable Fiat-Shamir
+signature schemes. They exhibit three contrived canonical identification schemes, one of
+which must be secure yet yield insecure signature schemes, no matter what
+hash function is used to eliminate the verifier's random move. Unfortunately,
+their proof has a somewhat nonconstructive flavour and their 
+construction, which uses universal arguments (\cite{barak:universalarguments}) and tree committments (\cite{merkle:tree}), 
+is highly unrealistic.
+
+\end{itemize}
+
+\section*{In the beginning}
+\subsection*{Signature Schemes}
+In the late 80s, cryptographers agree that the ``right'' definition of security for
+signature schemes is ``security against adaptive chosen-message attack''.
+Several ``tree-like'' schemes that provably satisfy this strong
+requirement (under standard assumptions) are proposed, but they are
+inefficient and hence impractical. On the other hand,
+the widely-used ``hash-and-invert'' approach can't be proven secure under
+standard assumptions about hash functions (i.e. collision-resistance).
+
+Fiat and Shamir develop a signature scheme (involving a hash function) which is provably secure if
+factoring is hard, assuming that the hash function is truly random. Although
+hash functions obviously \emph{aren't} truly random (because they have short
+descriptions), the scheme is very efficient. 
+
+\subsection*{Public-key Encryption Schemes}
+In the early 90s, cryptographers agree that the ``right'' definition of
+security for public-key encryption schemes is ``securiy against adaptive
+chosen-ciphertext attack'' or, equivalently, ``non-malleability''.
+Schemes that provably satisfy this strong requirement (under standard
+assumptions) are proposed, but they use ``noninteractive zero knowledge proofs
+of knowledge'' and are too inefficient to be practical.
+
+\section*{The Random Oracle Methodology is born}
+The state of affairs in the early nineties is as follows: provably secure constructions are inefficient, whereas practical ones lack
+proofs of security. Bellare and Rogaway suggest a compromise: schemes
+(involving hash functions) which are efficient, yet secure only if the
+underlying hash functions 
+
+\section*{The ROM outlives its usefulness}
+We now have efficient signature schemes which are provably secure under standard
+assumptions (both factoring and discrete log). We also have an efficient public-key encryption
+scheme (Cramer-Shoup) which is provably secure if discrete log is hard.
+Unfortunately, we \emph{don't} have one
+which is secure assuming factoring is hard (i.e. one based on RSA or the Rabin
+function). This matters because discrete log may turn out to be easy. We also have RSA-OAEP, which is twice as fast (?) as Cramer-Shoup
+and ROM-secure under the standard RSA assumption. 
+
+Micali's computationally sound (CS) proofs are a nice tool widely used in
+theoretical cryptography, but they are only known to work in the random oracle
+model. Can we ``instantiate'' the oracle somehow, without losing the crucial
+``proof-of-knowledge'' property?
+
+
+
+% References
+\bibliography{$THESISDIR/share/references/random_oracles}
+
+\end{document}
+

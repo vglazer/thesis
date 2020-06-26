@@ -1,0 +1,947 @@
+\chapter{On the security of Fiat-Shamir signature schemes in the ROM}
+\label{CH:Fiatshamir}
+
+\section{Fiat-Shamir signature schemes: an overview} 
+\label{SEC:Overview}
+In their seminal 1986 paper (\cite{fiat:fsparadigm}), Amos Fiat and Adi Shamir
+proposed a new, highly efficient signature scheme based on a certain canonical
+identification scheme closely related to the protocols presented in
+\cite{goldwasser:ips1} and \cite{fischer:obtransfer} (for definitions of
+signature schemes and canonical identification schemes, see
+Sections~\ref{SEC:Signatures} and \ref{SEC:IDschemes} of
+Chapter~\ref{CH:Preliminaries}). Such signature schemes are now called
+``Fiat-Shamir signature schemes'', whereas Fiat and Shamir's approach itself
+is referred to as the ``Fiat-Shamir paradigm''. Essentially, their idea was as
+follows.
+%to eliminate the
+%verifier's random move using a ``cryptographic hash function'' $h$. 
+In order to sign a message $m$, simply simulate the prover, replacing the
+verifier's random challenge with $h(m)$, where $h$ is some ``cryptographic
+hash function'' (actually, this isn't quite right, as we'll see below). The
+resulting transcript then serves as a signature of $m$.
+%enabling valid transcripts to serve as signatures.  To sign a message $m$,
+%one first obtains a commitment \textsc{Cmt} by simulating the prover, then
+%computes a challenge $\textsc{Ch}_m = h(\textsc{Cmt},m)$ (here and below ','
+%doubles as the string concatenation operator), and finally obtains a response
+%\textsc{Rsp} by simulating the prover (who is assumed to ``remember''
+%\textsc{Cmt}) on $\textsc{Ch}_m$. The transcript $(\textsc{Ch},\textsc{Rsp})$
+%is then used a signature of $m$.
+
+Fiat and Shamir showed that the signature scheme in question is secure if $h$
+is ``truly random'', provided that taking square roots modulo $N = pq$, where
+$p$ and $q$ are unknown ``large'' primes, is hard (a standard hardness
+assumption). In modern terminology, Fiat and Shamir effectively showed that
+the signature scheme is secure in the Random Oracle Model, or ROM (see
+Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:ROM} for a discussion of the
+ROM), under a standard hardness assumption. Although this may strike one as a
+rather weak security guarantee, no practical signature schemes provably secure
+under standard hardness assumptions were known at the time.  Today, a number
+of highly efficient signature schemes provably secure under such
+``non-standard-yet-plausible'' hardness assumptions as the ``strong RSA
+assumption'' and the ``strong Computational Diffie-Hellman assumption'' are
+available (\cite{gennaro:fastsigs}, \cite{cramer:signatures2},
+\cite{fischlin:cramershoup}, \cite{boneh:shortsigsnorom}). 
+
+Various other Fiat-Shamir signature schemes which are provably secure in the
+ROM under standard hardness assumptions have been described over the years
+(\cite{micali:betterfs}, \cite{okamoto:discretelogfs}, \cite{shoup:practid},
+\cite{goh:romcdh}), but until fairly recently it was not known whether {\it
+every} (actively) secure canonical identification scheme yields a Fiat-Shamir
+signature scheme secure in the ROM. While Abdalla et al. showed in
+\cite{abdalla:fiatshamirrom} that secure ``non-trivial'' canonical
+identification schemes yield Fiat-Shamir signature schemes secure in the ROM
+(informally, a canonical identification scheme is ``non-trivial'' if the
+prover's commitment distribution has ``high entropy''), they left open the
+question of whether secure ``trivial'' canonical identification schemes do. In
+Section~\ref{SEC:OurResult}, we prove that every secure canonical
+identification scheme, trivial or not, does indeed yield a Fiat-Shamir
+signature scheme secure in the ROM.
+
+However, as we will see in Chapter~\ref{CH:Uninstantiability}, security in the
+ROM is no guarantee of real-world security. In
+\cite{goldwasser:fsparadigmfails}, Goldwasser and Tauman show that there exist
+Fiat-Shamir signature schemes which, although secure in the ROM, are
+``uninstantiable'' (see Chapter~\ref{CH:Uninstantiability},
+Section~\ref{SEC:FiatShamir}). Such schemes are not secure in the ``real
+world'', no matter what hash function ensemble is used to ``instantiate'' the
+random oracle.
+%
+%Given a canonical identification scheme $ID$ and a ``cryptographic hash
+%function'' $h$ (or, more properly, an ensemble $\{\fanh_n\}_{n \in \nats}$ of
+%such functions), denote the resulting Fiat-Shamir signature scheme by
+%$SIG_h(ID)$. A fundamental question is whether, for every (actively) secure
+%$ID$, there exists an $h$ such that $SIG_h(ID)$ is secure in the ``real
+%world'' (as opposed to merely in the ROM). Building on the pioneering work of
+%Canetti, Goldreich and Halevi (\cite{canetti:romfails}), Goldwasser and
+%Tauman gave a negative answer in \cite{goldwasser:fsparadigmfails}. Although
+%Goldwasser and Tauman's result does not imply that any of the Fiat-Shamir
+%signature schemes actually used in practice are insecure, it fatally
+%undermines the validity of the ``Fiat-Shamir paradigm''.
+
+\section{The Fiat-Shamir transform}
+\label{SEC:FiatShamirTransform}
+Let $ID = (G,P,V)$ be a canonical identification scheme and $h$ be a
+``cryptographic hash function''. The function mapping $ID$ and $h$ to the
+corresponding Fiat-Shamir signature scheme $SIG_h(ID)$ is sometimes called the
+``Fiat-Shamir transform''. Since this thesis is primarily concerned with
+security in the ROM, 
+%here 
+we will only present the transform's ROM version,
+which maps $ID$ to $SIG(ID) = (G,SIGN^\fanr,VER^\fanr)$.
+
+Given $1^n$, a private key $SK$ (generated by running $G$ on $1^n$ together
+with some random bits), a message $m \in \strs{*}$ and some random bits, the
+signer $SIGN^\fanr$ proceeds as follows. He first simulates $P_{SK}$ to obtain
+a commitment \textsc{Cmt} and computes a challenge $\textsc{Ch}_m =
+\fanr(\textsc{Cmt}, m)$ by querying $\fanr$;
+note that the challenge depends on the message to be signed.  $SIGN^\fanr$
+then simulates $P_{SK}$ on $\textsc{Ch}_m$ to obtain a response $\textsc{Rsp}$
+and outputs $\sigma_m = (\textsc{Cmt},\textsc{Rsp})$ as the signature of $m$.
+(Recall that $P_{SK}$ denotes the behaviour of $P$ when given $1^n$, $SK$ and
+some random bits $r$. Specifically, $P$ computes a commitment
+\textsc{Cmt} as a function of $1^n$, $SK$ and $r$, receives a challenge
+\textsc{Ch}, and then computes a response \textsc{Rsp} as a function of $1^n$,
+$SK$, $r$ and \textsc{Ch}).
+
+Given $1^n$, a public key $PK$ (generated by running $G$ on $1^n$ together
+with some random bits), a message $m \in \strs{*}$ and a supposed signature
+$(\alpha,\gamma)$ of $m$, the verifier $VER^\fanr$ simply computes $\beta =
+\fanr(\alpha,m)$ by querying $\fanr$ and outputs
+$V_{PK}(\alpha,\beta,\gamma)$ (Recall that $V_{PK}$ is a deterministic
+function of $(\alpha,\beta,\gamma)$).
+
+Our goal is to show that if $ID$ is secure then $SIG(ID)$ is secure in the
+ROM. By security in this setting we mean the ordinary security for signature
+schemes (that is, security against existential forgery under adaptive
+chosen-message attack), except that the forger $F$ now has access to
+the random oracle $\fanr$ in addition to the signature oracle $\fans$, and
+his success probability is also taken over the randomness of $\fanr$.
+
+\section{An earlier result}
+\label{SEC:OldResult}
+Abdalla, An, Bellare and Namprempre present several results concerning the
+Fiat-Shamir transform in \cite{abdalla:fiatshamirrom}, including a randomized
+version of the transform and applications to ``forward-secure signature
+schemes''. However, we are only interested in the following result of theirs:
+%the only result of interest to us is the following: 
+for every passively secure ``non-trivial'' canonical identification scheme
+$ID$, the corresponding Fiat-Shamir signature scheme $SIG(ID)$ is secure in
+the ROM. Since active security implies passive security for identification
+schemes, this means that every secure ``non-trivial'' canonical identification
+scheme yields a Fiat-Shamir signature scheme secure in the ROM. 
+
+Informally, $ID$ is ``non-trivial'' if the prover's commitment distribution
+has ``high entropy''. Formally, let $\fanp_{SK} = \{p_i\}_{i=0}^k$ denote
+$P_{SK}$'s commitment distribution and define the {\it min-entropy} of
+$\fanp_{SK}$ by $H_{\min}(\fanp_{SK}) = -\log_2(p_{\max})$, where
+$p_{\max} = \max\{p_i\}_{i=0}^k$ is the largest probability mass in
+$\fanp_{SK}$.  $ID$ is {\it non-trivial} if $\min\{H_{\min}(\fanp_{SK}) : SK
+\gets G(1^n)\} = \omega(\log n)$, meaning that the minimum min-entropy of
+$\fanp_{SK}$, taken over all private keys $SK$ (generated by running $G$ on
+$1^n$ and some random bits), is super-logarithmic in the security parameter
+$n$. It can be shown that in this case the probability of seeing the same
+commitment more than once in polynomially many trials is negligible, so that,
+for all practical purposes, $P_{SK}$'s commitments don't repeat. Canonical
+identification schemes which are not non-trivial are said to be {\it trivial}.
+
+Let $ID$ be a non-trivial canonical identification scheme. Suppose that
+$F^{\fanr,\fans}$ is a polynomial-time forger who breaks the security of
+$SIG(ID)$ in the ROM, and denote his (non-negligible) success probability by
+$p_F(n)$.  $F^{\fanr,\fans}_{PK}$ is given $1^n$, $PK$ and some random bits,
+and his goal is to output a new message $m^*$ (i.e. one he hasn't
+queried $\fans$ on) together with a valid signature $\sigma^* =
+(\textsc{Cmt}^*,\textsc{Rsp}^*)$ of $m^*$.
+
+We may assume, without loss of generality, that $F^{\fanr,\fans}_{PK}$ doesn't
+query $\fanr$ on any string more than once, since that would yield no new
+information (because $\fanr$'s responses would all be identical).  We may
+additionally assume, again wlog, that $F^{\fanr,\fans}_{PK}$ doesn't query
+$\fanr$ on strings whose length is less than $\ell(n)$; recall that all of
+$P_{SK}$'s commitments are of length $\ell(n)$.  $\fanr$ queries involving
+such ``short strings'' can safely be answered randomly, since there is no
+interplay between them and $\fans$ queries (more on this interplay later).
+This assumption ensures that every $s \in \strs{*}$ $F^{\fanr,\fans}_{PK}$
+queries $\fanr$ on can be parsed as $(\textsc{Cmt},m)$, where $\textsc{Cmt}
+\in \strs{\ell(n)}$ and $m \in \strs{*}$.  Finally, it will be convenient for
+us to assume that $F^{\fanr,\fans}_{PK}$ queries $\fanr$ on
+$(\textsc{Cmt}^*,m^*)$ at some point during his execution; following the
+terminology of \cite{abdalla:fiatshamirrom}, we refer to this special $\fanr$
+query as the ``crucial query''. There is no loss of generality in assuming
+that the forger makes the crucial query, since every $F^{\fanr,\fans}$ who
+doesn't can easily be converted into a corresponding forger
+$\hat{F}^{\fanr,\fans}$ who does: $\hat{F}^{\fanr,\fans}_{PK}$ obtains $m^*$
+and $\sigma^* = (\textsc{Cmt}^*,\textsc{Rsp}^*)$ by simulating
+$F^{\fanr,\fans}_{PK}$, queries $\fanr$ on $(\textsc{Cmt}^*,m^*)$ and then
+outputs $(m^*,\sigma^*)$.  Since the additional $\fanr$ query doesn't affect
+the choice of $m^*$ and $\sigma^*$, $\hat{F}^{\fanr,\fans}$'s success
+probability is identical to that of $F^{\fanr,\fans}$.
+%Observe that the
+%total number of queries asked by $F^{\fanr,\fans}$, and in particular the
+%number of his $\fanr$ queries, is bounded above by $n^c$ for some $c$ (where
+%$n$ is the security parameter), since $F^{\fanr,\fans}$ runs in (strict)
+%polynomial time.  
+%
+%Let $q_\fanr(n)$ denote the number of times $F^{\fanr,\fans}$ queries $\fanr$,
+%and consider the following passive impersonator $I^\fant$. Given $1^n$, $PK$
+%and some random bits, $I^\fant$ first guesses the index of $F^{\fanr,\fans}$'s
+%crucial query by randomly choosing $i \in \{1,\ldots,q_\fanr(n)\}$, and then
+%simulates $F^{\fanr, \fans}$ on $1^n$ and $PK$, answering all of his $\fanr$
+%queries but the $i^{th}$ randomly (the $i^{th}$ query is treated specially)
+%and his $\fans$ queries using $\fant$. Specifically, $I^\fant$ responds to all
+%
+%Whenever $F^{\fanr,\fans}$ queries $\fanr$ on some string $q$, $I^\fant$
+%randomly chooses a response $ans \in \strs{n}$ and gives it to
+%$F^{\fanr,\fans}$ (recall that $F^{\fanr,\fans}$ doesn't query $\fanr$ on the
+%same string more than once, by assumption). Whenever $F^{\fanr,\fans}$
+%queries $\fans$ on some message $m \in \strs{*}$, $I^\fant$ obtains a new
+%transcript $(\textsc{Cmt},\textsc{Ch},\textsc{Rsp})$ from $\fant$ and gives
+%$(\textsc{Cmt},\textsc{Rsp})$ to $F^{\fanr,\fans}$ as the signature of $m$.
+%
+%Denote $I^\fant$'s success probability (i.e. the probability that he breaks the
+%security of $ID$) by $p_I(n)$, and $F^{\fanr,\fans}$'s success probability
+%(i.e. the probability that he breaks the security of $SIG(ID)$) by
+%$p_F(n)$. We'll see below that, although $p_I(n)$ is not identical to
+%$p_F(n)$, the difference between the two is negligible. Since $p_F(n)$ is
+%non-negligible by assumption, this means that $p_I(n)$ is also non-negligible,
+%so that $I^\fant$ breaks the security of $ID$. 
+%
+%Recall that signing in $SIG(ID)$ is probabilistic, so it makes sense for
+%$F^{\fanr,\fans}$ to ask to see multiple signatures of the same message $m$.
+%Suppose that $F^{\fanr,\fans}$ queries  $\fans$ on $m$ twice, and $I^\fant$
+%responds to the first query using the transcript $T_1 =
+%(\textsc{Cmt},\textsc{Ch},\textsc{Rsp})$ and to the second using $T_2 =
+%(\textsc{Cmt}',\textsc{Ch}',\textsc{Rsp}')$. Since $T_1$ and $T_2$ are valid
+%transcripts, we have $V_{PK}(\textsc{Cmt},\textsc{Ch},\textsc{Rsp}) = 1$ and
+%$V_{PK}(\textsc{Cmt}',\textsc{Ch}',\textsc{Rsp}') = 1$. In order for both
+%$\sigma_1 = (\textsc{Cmt},\textsc{Rsp})$ and $\sigma_2 =
+%(\textsc{Cmt}',\textsc{Rsp}')$ to be legitimate signatures of $m$, 
+%
+%$ID$ is {\bf passively secure} and {\bf nontrivial} $\Rightarrow SIG(ID)$ is
+%{\bf secure in the ROM}
+%
+%\textsc{Proof Sketch}: The proof is by a standard black-box reducibility 
+%argument. We show how to convert a forger $F$ which breaks the security of
+%$SIG(ID)$ in the ROM into an impersonator $I$ which breaks the passive
+%security of $ID$.
+%Suppose that we are given a probabilistic polytime forger $F$ which breaks the
+%security of $SIG(ID)$ in the ROM. $F$ is given the public key $pub$ and has 
+%access to both a random oracle $\fanr$ and a signing oracle $\fans$: every time 
+%$\fans$ is queried on a message $m' \in \strs{*}$, it outputs a signature 
+%$\sigma' = (\textsc{Cmt}',\textsc{Rsp}')$ of $m'$ such that 
+%$V_{pub}(\textsc{Cmt}',\textsc{Ch}',\textsc{Rsp}') = 1$, where 
+%$\textsc{Ch}' = \fanr(\textsc{Cmt}',m')$. 
+%The probability that $F_{pub}^{\fanr,\fans}$ eventually outputs a new message 
+%$m$ together with a signature $\sigma = (\textsc{Cmt},\textsc{Rsp})$ 
+%such that $V_{pub}(\textsc{Cmt},\textsc{Ch},\textsc{Rsp}) = 1$, where 
+%$\textsc{Ch} = \fanr(\textsc{Cmt},m)$, taken over $(pub,pri) \gets G(1^n)$, 
+%the randomness of $\fanr$ and $\fans$ and the coins of $F_{pub}^{\fanr,\fans}$,
+%is non-negligible in $n$. 
+%Notice that signing in $SIG(ID)$ is probabilistic, so it makes sense for
+%$F^{\fanr,\fans}_{pub}$ to query $\fans$ on the same string multiple times. 
+%On the other hand, there's nothing to gain from querying $\fanr$ on the same
+%string more than once, so we may assume (wlog) that $F^{\fanr,\fans}_{pub}$ 
+%does no such thing. 
+%We can also safely assume that $F_{pub}^{\fanr,\fans}$ queries $\fanr$ on
+%$(\textsc{Cmt},m)$ before outputting $m$ and $\sigma$. If it doesn't, we can
+%easily construct another forger, $F_{pub}^{'\fanr,\fans}$, that does: 
+%$F_{pub}^{'\fanr,\fans}$ simply simulates $F_{pub}^{\fanr,\fans}$ until the 
+%latter outputs a message $m$ and a signature $\sigma)$, then queries $\fanr$ on 
+%$(\textsc{Cmt},m)$ and outputs $(m,\sigma)$. This additional random oracle 
+%query, which we'll call the ``crucial query'', has no effect on 
+%$F_{pub}^{'\fanr,\fans}$'s success probability, since it does not affect the 
+%choice of $m$ or $\sigma$. 
+
+We now describe a polynomial-time impersonator $I^\fant$ who, given $1^n$,
+$PK$ and some random bits, breaks the passive security of $ID$ (in the real
+world) by simulating $F^{\fanr,\fans}_{PK}$.
+%key $pub$ and access to a transcript-generating oracle $\fant$, gets
+%$V_{pub}$ to accept with probability non-negligible in the security parameter
+%$n$. Here the probability is taken over $(pub,pri) \gets G(1^n)$, the
+%randomness of $\fant$ and the coins of $I_{pub}^\fant$.  Say that the running
+%time of $F_{pub}^{\fanr,\fans}$ is bounded above by $n^c$, no matter what the
+%outcome of its coin tosses is; such a $c$ exists since
+%$F_{pub}^{\fanr,\fans}$ is assumed to run in strict polynomial time. This
+%means that for any random tape, $F_{pub}^{\fanr,\fans}$ makes at most $n^c$
+%random oracle queries, which we'll number from 1 to $n^c$. 
+Let $q_\fanr(n)$ denote the number of times $F^{\fanr,\fans}_{PK}$ queries
+$\fanr$. Since $F^{\fanr,\fans}_{PK}$ runs in (strict) polynomial time,
+$q_\fanr(n) \leq n^c$ for some $c$ (in the worst case, $F^{\fanr,\fans}_{PK}$
+does nothing but query $\fanr$, each query taking a single step).
+
+$I_{PK}^{\fant}$ begins 
+%his simulation of $F_{PK}^{\fanr,\fans}$ 
+by 
+%guessing the index of the ``crucial query'': he 
+randomly choosing an index $i \in \{1,\ldots,q_\fanr(n)\}$; as we'll see later,
+$i$ is not revealed to $F^{\fanr,\fans}_{PK}$ in the course of the simulation.  
+%and hopes that $F_{PK}^{\fanr,\fans}$'s $i^{th}$ random oracle query is about
+%$(\textsc{Cmt}^*,m^*)$. 
+Since we've assumed both that $F_{PK}^{\fanr,\fans}$ makes the crucial query
+and that he never queries $\fanr$ on the same string more than once, $i$ is
+the index of the crucial query with probability $\frac{1}{q_\fanr(n)} \geq
+\frac{1}{n^c}$. A technical but important point is that the distribution of
+$F^{\fanr,\fans}$'s views (namely what he ``sees'' during the simulation,
+including his random bits and the answers to his oracle queries) is
+independent of the choice of $i$, so that he gets no information about $i$. If
+that were not the case, $F^{\fanr,\fans}_{PK}$ could exploit his knowledge of
+$i$ to ensure that $I^\fant_{PK}$ never guesses the index of the crucial query
+correctly.
+%What does $I_{PK}^\fant$ gain by
+%correctly guessing the index of the crucial query? It enables him to parse
+%$F^{\fanr,\fans}_{PK}$'s $i^{th}$ $\fanr$ query as $(\textsc{Cmt}^*,m^*)$
+%(recall that we're assuming commitments have a fixed length of $\ell(n)$),
+%thereby learning the value of $\textsc{Cmt}^*$. The latter can then be sent to
+%$V$ to obtain a challenge $\textsc{Ch}$, which can in turn be given to
+%$F_{PK}^{\fanr,\fans}$ as the answer to the crucial query. This ensures that 
+%$\textsc{Rsp}^*$ is a correct answer to \textsc{Ch}, so that
+%$(\textsc{Cmt}^*,\textsc{Ch},\textsc{Rsp}^*)$ is a valid transcript.
+
+During the simulation, $I_{PK}^\fant$ responds to all of
+$F_{PK}^{\fanr,\fans}$'s random oracle queries but the $i^{th}$ with a
+randomly chosen $n$-bit string (since $F_{PK}^{\fanr,\fans}$ never queries
+$\fanr$ on the same string more than once, there is no risk of giving
+inconsistent answers). The $i^{th}$ query is handled as follows.  Suppose
+that, for his $i^{th}$ random oracle query, $F_{PK}^{\fanr,\fans}$ queries
+$\fanr$ on some $s \in \strs{*}$ (recall that $|s| \geq \ell(n)$, since
+$F^{\fanr,\fans}_{PK}$ doesn't query $\fanr$ on ``short strings'').
+$I_{PK}^{\fant}$ parses $s$ as $(\textsc{Cmt}^*,m^*)$, sends $\textsc{Cmt}^*
+\in \strs{\ell(n)}$ to $V_{PK}$, and receives a challenge $\textsc{Ch}^* \in
+\strs{n}$ in reply.
+%; if $|s| < \ell(n)$ then $I_{PK}^\fant$ sets $m^*$
+%to $\lambda$ and pads $s$ with an appropriate number of zeros to obtain a valid
+%commitment $\textsc{Cmt}^*$ 
+He then gives $\textsc{Ch}^*$ to $F_{PK}^{\fanr,\fans}$ as the answer to
+$\fanr(s)$ and continues his simulation. This ensures that $\textsc{Rsp}^*$ is
+a correct answer to $\textsc{Ch}^*$, so that
+$(\textsc{Cmt}^*,\textsc{Ch}^*,\textsc{Rsp}^*)$ is a valid transcript.
+
+Whenever $F_{PK}^{\fanr,\fans}$ asks to see a signature of a message $m$,
+$I_{PK}^\fant$ queries $\fant$ to obtain a valid transcript
+$(\textsc{Cmt},\textsc{Ch},\textsc{Rsp})$ and gives
+$(\textsc{Cmt},\textsc{Rsp})$ to $F_{PK}^{\fanr,\fans}$. To ensure that future
+$\fanr$ queries are answered consistently, $I^\fant$ then sets
+$\fanr(\textsc{Cmt},m)$ to \textsc{Ch}.
+%There is a problem with this approach if $F_{pub}^{\fanr,\fans}$ queries
+%$\fans$ on the same message $m'$ many times, which is a reasonable thing to
+%do because signing in $SIG(ID)$ is probabilistic. In order for the resulting
+%transcripts to be legitimate signatures of $m'$, it must be the case that
+%$\fanr(\textsc{Cmt}',m') = \textsc{Ch}'$ for all of them. $\fant$, however,
+%generates $\textsc{Ch}'$ randomly.  If the commitments $\textsc{Cmt}'$ are
+%distinct then $\textsc{Cmt}'\circ m'$ is a new message, so that
+%$\fanr(\textsc{Cmt}',m')$ is distributed uniformly over $\strs{c(n)}$ and
+%we're fine. If the commitments match, on the other hand, then we will likely
+%run into trouble: should the challenges $\textsc{Ch}'$ differ, as they almost
+%certainly will (since they're chosen randomly from $\strs{c(n)}$),
+%$\fanr(\textsc{Cmt}',m')$ will appear to have multiple values, preventing
+%$\fanr$ from being a well-defined function. Therefore a new commitment
+%$\textsc{Cmt}'$ is added to the (notional) set of ``forbidden commitments''
+%every time $\fans$ is queried on $m'$. In the worse case,
+%$F_{pub}^{\fanr,\fans}$ does nothing but query $\fans$ on some message $m'$,
+%which means that the size of the ``forbidden commitment set'' is bounded
+%above by $n^c$.  A similar situation can occur even if
+%$F_{pub}^{\fanr,\fans}$ doesn't query $\fans$ on the same message more than
+%once. 
+Observe that if $(\textsc{Cmt},\textsc{Rsp})$ is to be a legitimate signature
+of $m$, we must have $\fanr(\textsc{Cmt},m) = \textsc{Ch}$, so that every
+$\fans$ query effectively involves an implicit $\fanr$ query. But what if
+$\fanr$ has been queried on $(\textsc{Cmt},m)$ already? Unless we are very
+lucky and $\textsc{Ch}$ matches the value previously assigned to
+$\fanr(\textsc{Cmt},m)$ (which happens with probability $\frac{1}{2^n}$, since
+$\textsc{Ch} \in \strs{n}$ is chosen randomly), this prevents $\fanr$ from
+being well-defined. We may thus view a new commitment $\textsc{Cmt}$ as
+being added to the (notional) set of ``forbidden commitments'' every time
+$\fanr$ is queried on $s \in \strs{*}$ --- simply parse $s$ as
+$(\textsc{Cmt},m)$. Notice that the size of this ``forbidden commitment set''
+is polynomial in the security parameter $n$, because $q_\fanr(n) \leq n^c$.
+%In the worst case, $F_{PK}^{\fanr,\fans}$ queries $\fanr$ on as many strings
+%$x_1,x_2,x_3,\ldots$, which parse as $\textsc{Cmt}_1'\circ m'$,
+%$\textsc{Cmt}_2'\circ m'$, $\textsc{Cmt}_3'\circ m'$,\ldots, as possible, and
+%then queries $\fans$ on $m'$. Here the size of the ``forbidden commitment
+%set'' is bounded above by $n^c - 1$, because the signing query contributes no
+%forbidden commitment.  Both of these difficulties can be resolved by
+%appealing to the non-triviality assumption: 
+Since $ID$ is non-trivial (which informally means that the number of
+commitments is super-polynomial in $n$), the probability that a randomly
+chosen commitment belongs to the ``forbidden commitment set'' is therefore
+negligible in $n$, so this event can be safely ignored for the purposes of our
+analysis. 
+
+Eventually, $F_{PK}^{\fanr,\fans}$ outputs a message $m^*$ together with a
+purportedly valid signature $\sigma^* = (\textsc{Cmt}^*,\textsc{Rsp}^*)$ of
+$m^*$. $I^\fant_{PK}$ then sends $\textsc{Rsp}^*$ to $V_{PK}$ as the answer to
+the challenge $\textsc{Ch}^*$.
+%This only happens once all of his random oracle queries (and, in particular,
+%the $i^{th}$) have been answered, so y challenged $I_{PK}^{\fant}$ by this
+%point. $I_{PK}^{\fant}$ responds to the challenge with $\textsc{Rsp}^*$.
+%What is the probability that $V_{pub}$ accepts?  $F_{pub}^{\fanr,\fans}$
+%succeeds in outputting a legitimate signature $\sigma^*$ is a valid signature
+%of $m^*$ with non-negligible probability (because $F^{\fanr,\fans}_{PK}$
+%breaks the security of $SIG(ID)$ in the ROM, there is a $d$ such that
+Since $p_F(n)$ is non-negligible, 
+%by assumption, 
+there is a $d$ such that
+%\[ 
+%p_F(n) = \text{Pr}[V_{PK}(\textsc{Cmt}^*,\fanr(\textsc{Cmt}^*,m^*),
+%\textsc{Rsp}^*) = 1] > \frac{1}{n^d} \text { for infinitely many } n.
+%\] 
+%where the probability is taken over the coins of $F_{PK}^{\fanr,\fans}$,  
+%the randomness of $\fans$ -- recall that signing in $SIG(ID)$ is probabilistic
+%-- and the randomness of $\fanr$. 
+$p_F(n) > \frac{1}{n^d}$ for infinitely many $n$.
+What is the probability that $I_{PK}^{\fant}$ breaks the security of $ID$,
+namely that $V_{PK}(\textsc{Cmt}^*,\textsc{Ch}^*,\textsc{Rsp}^*) = 1$?
+%gets $V_{pub}$ to accept after sending it $\textsc{Cmt}$ and $\textsc{Rsp}$,
+%i.e. that , taken over $V_{pub}$'s coins (\textsc{Ch}), the randomness of the
+%transcript oracle $\fant$ and the coins of $I_{pub}^\fant$ 
+If $I_{PK}^\fant$ correctly guesses the index of the crucial query 
+%so that $\fanr(\textsc{Cmt}^*,m^*) = \textsc{Ch}^*$, 
+and there are no ``commitment collisions'' (recall that these only occur with
+negligible probability), then his simulation of $F^{\fanr,\fans}_{PK}$ is
+perfect; in that case his success probability is just $p_F(n)$. 
+%provided that $I_{PK}^\fant$'s simulation of $F_{PK}^{\fanr,\fans}$ is not
+%plagued by any ``commitment collisions''. Since these only occur with
+%negligible probability (and can thus be safely ignored, informally at least),
+Since the choice of $i$ is independent of the simulation, we get:
+\begin{align*}
+\text{Pr}[V_{PK}(\textsc{Cmt}^*,\textsc{Ch}^*,\textsc{Rsp}^*) = 1] &\approx
+\frac{1}{q_\fanr(n)}\cdot p_F(n) \geq \frac{1}{n^c}\cdot p_F(n) \\ 
+& > \frac{1}{n^c}\cdot \frac{1}{n^d} = \frac{1}{n^{c+d}}
+\text{ for infinitely many } n.
+\end{align*}
+$I_{PK}^\fant$ therefore breaks the passive security of $ID$, 
+so that $SIG(ID)$ is secure in the ROM if $ID$ is passively secure.
+$\blacksquare$
+% and we are done. 
+%\textsc{Remarks}: Observe that the interaction between $\fans$ and $\fanr$ -- 
+%namely the whole implicit queries business -- forced us to invoke the 
+%non-triviality assumption even in the case that $F_{pub}^{\fanr,\fans}$ did not 
+%query $\fans$ on the same message more than once. More precisely, we required 
+%{\it some} assumption strong enough to guarantee that the probability of 
+%landing in the forbidden commitment set when sampling the commitment space is 
+%negligible in $n$.
+%However, there would be no need for this type of assumption if $F_{pub}$
+%were not allowed to query $\fans$ at all, which yields the following result:
+%\[
+%ID \text{ passively secure } \Rightarrow SIG(ID) \text{ passively secure in 
+%the ROM,} 
+%\]
+%where a signature scheme is deemed {\bf passively secure in the ROM} if it is
+%secure in the ROM against adversaries not allowed any $\fans$ queries; note
+%that ordinary ROM security implies passive ROM security. 
+%\item $ID$ is {\bf passively secure} $\Leftarrow SIG(ID)$ is {\bf secure in 
+%the ROM}
+%\textsc{Proof Sketch}: The proof is again by a black-box reducibility
+%argument. We show how to convert an impersonator that breaks the passive
+%security of $ID$ into a forger that breaks the security of $SIG(ID)$ in the
+%ROM. 
+%Suppose that we are given a probabilistic polytime impersonator $I$ that
+%breaks the passive security of $ID$: a key pair $(pub,pri)$ is generated by
+%running $G$ on $1^n$ together with random bits; $I$ is given the public key
+%$pub$ and has access to a transcript-generating oracle $\fant$ which
+%probabilistically simulates the interaction between $P_{pri}$ and $V_{pub}$
+%to produce a transcript \textsc{Tr} = $(\textsc{Cmt},
+%\textsc{Ch},\textsc{Rsp})$ every time it's queried; the probability that
+%$I_{pub}^\fant$ gets $V_{pub}$ to accept after being shown a bunch of
+%legitimate 
+%transcripts by $\fant$, taken over the choice of $(pub,pri)$, the randomness 
+%of $\fant$ and the coins of $I_{pub}^\fant$, is non-negligible in $n$.
+%We construct a probabilistic polytime forger $F$ which, given a public key
+%$pub$ and access to a random oracle $\fanr$ and a signing oracle $\fans$, 
+%produces a signature $\sigma_m = (\textsc{Cmt},\textsc{Rsp})$ such that 
+%Pr$[V_{pub}(\textsc{Cmt},\fanr(\textsc{Cmt},m),\textsc{Rsp}) = 1]$ is 
+%non-negligible in $n$, for any message $m \in \strs{*}$; here the probability
+%is taken over $(pub,pri) \gets G(1^n)$, the randomness of $\fanr$ and
+%$\fans$, and the coins of $F_{pub,m}^{\fanr,\fans}$. 
+%Given a public key $pub$ and a message $m$ to sign, $F^{\fanr,\fans}_{pub,m}$ 
+%simulates $I_{pub}^\fant$ as follows: whenever $I_{pub}^\fant$ queries $\fant$,
+%$F^{\fanr,\fans}_{pub,m}$ computes $(\textsc{Cmt}',\textsc{Rsp}') = \fans(m')$, 
+%$\textsc{Ch}' = \fanr(\textsc{Cmt}',m')$ and gives the transcript 
+%$\textsc{Tr} = (\textsc{Cmt}',\textsc{Ch}',\textsc{Rsp}')$ to $I_{pub}^\fant$. 
+%The choice of messages $m' \in \strs{*}$ is immaterial as long as they are 
+%distinct and different from $m$. We need them to be distinct so that $\fanr$ is 
+%queried on a new string every time, ensuring that $\fanr(\textsc{Cmt}',m')$ is 
+%uniformly distributed over $\strs{c(n)}$ and $\textsc{Tr}$ is distributed 
+%exactly like a random transcript. They should differ from $m$ because $F$ can't 
+%win by forging the signatures of messages it queried $\fans$ on.
+%Eventually, $I_{pub}^\fant$ outputs a commitment $\textsc{Cmt}$ and awaits 
+%$V_{pub}$'s challenge. At this point, $F_{pub,m}^{\fanr,\fans}$ computes 
+%$\textsc{Ch} = \fanr(\textsc{Cmt},m)$ and gives $\textsc{Ch}$ to
+%$I_{pub}^\fant$, which responds with $\textsc{Rsp}$; notice that up till now 
+%$\fanr$ has only been queried on strings of the form $\textsc{Cmt}' \circ m'$, 
+%where $m' \neq m$, so $\textsc{Cmt}\circ m$ is a new string and 
+%$\fanr(\textsc{Cmt},m)$ is distributed uniformly over $\strs{c(n)}$. 
+%$F_{pub,m}^{\fanr,\fans}$ then outputs $\sigma = (\textsc{Cmt},\textsc{Ch},
+%\textsc{Rsp})$ as the signature of $m$.
+%The probability that $\sigma$ is a legitimate signature of $m$ with respect to
+%$(pub,pri)$ is equal to the probability that $I_{pub}^\fant$ gets $V_{pub}$ to
+%accept, which is non-negligible by assumption. Hence $F_{pub,m}^{\fanr,\fans}$ 
+%breaks the security of $SIG(ID)$ in the ROM.
+
+\section{The non-triviality assumption}
+\label{SEC:NonTriviality}
+
+It's not hard to show that passive security of $ID$ is a necessary condition
+for $SID(ID)$ to be secure in the ROM, meaning that $ID$ is passively secure
+whenever $SIG(ID)$ is secure in the ROM; Abdalla et al. claim that
+non-triviality is also necessary. To support this claim, they show that,
+subject to an assumption, there exists a passively secure trivial
+identification scheme which yields a Fiat-Shamir signature scheme that is
+{\it not} secure in the ROM.
+%, as opposed to showing that {\it for every} passively secure trivial canonical
+%identification scheme, the corresponding Fiat-Shamir signature scheme is not
+%secure in the ROM. 
+However, below we show that, subject to a different assumption, there exists a
+passively secure trivial canonical identification scheme $ID'$
+such that $SIG(ID')$ {\it is} secure in the ROM. 
+Thus, in some sense at least, the non-triviality assumption is {\it not} 
+necessary. 
+%Although the following isn't directly related to our main result (which
+%concerns {\it actively} secure canonical identification schemes), it helps
+%motivate it and involves similar techniques.
+
+%We now describe a trivial canonical identification scheme $ID$ which is
+%passively secure if trapdoor permutation is one-way. 
+Let $\fanf = (G,f,f')$ be a trapdoor permutation (see
+Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:Trapdoor} for the relevant
+definitions), and consider the following identification scheme $ID' =
+(G,P',V')$. $ID'$'s key generator $G$ is identical to that of $\fanf$, so $PK
+= k$ and $SK = k'$.  Informally, we think of $ID'$ as a two-round scheme: the
+verifier $V'$ challenges the prover $P'$ to invert $f_k$ on a random string
+$\textsc{Ch}$, accepting if and only if $P'$ does so successfully.  Formally,
+$ID'$ is a canonical (three-round) scheme where $P'$'s commitment
+$\textsc{Cmt}$ is fixed, say $\textsc{Cmt} = \lambda$ for concreteness. The
+verifier $V'$, who knows $k$, accepts a transcript
+$(\textsc{Ch},\textsc{Rsp})$  if and only if $f_{k}(\textsc{Rsp}) =
+\textsc{Ch}$ (since the commitment $\lambda$ is fixed, it may be omitted from
+the transcript).
+%, so that $\textsc{Rsp} = f_{k'}(\textsc{Ch})$. 
+We refer to such schemes as
+``hyper-trivial'', since not only is the entropy of their commitment
+distribution ``low'', it's actually zero.
+%
+%We show the following:
+%\begin{enumerate}[(i)]
+%
+%\item $ID'$ is passively secure.
+%\item $SIG(ID')$ is secure in the ROM.
+
+%\end{enumerate}
+First, we show that $ID'$ is passively secure. Observe that, although for
+completeness we establish it directly, the passive security of $ID'$ also
+follows from the fact that $SIG(ID')$ is secure in the ROM (as shown below).
+Suppose that $I^\fant$ is a polynomial-time passive impersonator who breaks
+the security of $ID'$, and denote his (non-negligible) success probability by
+$p_I(n)$. We use $I^\fant$ to construct a polynomial-time inverter $INV$ who
+breaks the one-wayness of $f_k$. 
+
+Recall that $INV$ is given $1^n$, $k$, $y \in \strs{n}$ and some random
+bits, and his goal is to output an $x \in \strs{n}$ such that 
+%$x = f_{k'}(y)$ (or, equivalently, 
+$f_k(x) = y$. 
+%with non-negligible probability. 
+$INV_k$ simulates $I_k^\fant$ as follows. Whenever $I_k^\fant$ queries the
+transcript oracle $\fant$, $INV_k$ randomly chooses $x' \in \strs{n}$,
+computes $y' = f_k(x') \in \strs{n}$ and gives $(y',x')$ to $I_k^\fant$.
+%Clearly, $f_{k'}(y') = x'$.  
+Since $f_k$ is a bijection, setting $y'$ to $f_k(x')$ for a random $x'$ is
+equivalent to setting $x'$ to 
+%$f_k^{-1}(y')$ 
+$f_{k'}'(y')$ for a random $y'$, so $(y',x')$
+has exactly the right distribution. Once $I^\fant_k$ outputs $\lambda$ to
+signal he is ready to be challenged, $INV_k$ gives him $y$, receiving
+$\textsc{Rsp}'$ in reply. $INV_k$ then outputs $\textsc{Rsp}'$ 
+as his guess at 
+%$f^{-1}_k(y)$. 
+$f_{k'}'(y)$. Since $INV_k$'s simulation of $I^\fant_k$ is
+perfect, $f_k(\textsc{Rsp}') = y$ with probability $p_I(n)$, which is
+non-negligible. $INV_k$ therefore breaks the one-wayness of $f_k$, so
+that $ID'$ is passively secure.
+%contradicting the assumption that $\fanf$ is a trapdoor permutation, 
+
+Next, we show that $SIG(ID')$ is secure in the ROM.  Suppose that
+$F^{\fanr,\fans}$ is a polynomial-time forger who breaks the security of
+$SIG(ID')$ in the ROM, and denote his (non-negligible) success probability by
+$p_F(n)$. We use $F^{\fanr,\fans}$ to construct a polynomial-time inverter
+$INV$ who breaks the one-wayness of $f_k$. 
+
+Recall that $F^{\fanr,\fans}$ is given $1^n$, $k$ and some random bits, and
+his goal is to output a new message $m^*$ 
+%(i.e. one he hasn't queried $\fans$ on) 
+together with a signature $\textsc{Rsp}^*$ such that $f_k(\textsc{Rsp}^*) =
+\fanr(m^*)$.  Whenever $F^{\fanr,\fans}_k$ queries $\fans$ on a message $m \in
+\strs{*}$, he is given 
+%$f_k^{-1}(\fanr(m))$
+$f_{k'}'(\fanr(m))$. As in Section~\ref{SEC:OldResult}, we assume, without
+loss of generality, that $F^{\fanr,\fans}_{k}$ doesn't query $\fanr$ on
+``short strings'' (i.e. strings whose length is less than $\ell(n)$), doesn't
+query $\fanr$ on the same string more than once, and makes the ``crucial
+query'' $\fanr(m^*)$.  We additionally assume that $F^{\fanr,\fans}_{k}$
+doesn't query $\fans$ on the same message more than once. There is no loss of
+generality in making this assumption, because signing in $SIG(ID')$ is
+deterministic (since $P'$ is deterministic).
+%Recall that $F^{\fanr,\fans}$ is given $1^n$, $PK$ and some random bits, and
+%his goal is to output a new message (i.e. one he hasn't queried $\fans$ on)
+%$m^*$ together with a valid signature $\textsc{Rsp}^*$ of $m^*$; notice that
+%we have omitted the commitment $\lambda$ (which is fixed) and the challenge
+%$\fanr(m^*)$ (which can be computed from $m^*$ itself) from the signature. As
+%per the definition of $SIG(ID)$, $SIGN^{\fanr}$ is given $1^n$, $SK$ (that is,
+%$k'$), a message $m$ and some random bits, and outputs $\textsc{Rsp} =
+%f_{k'}(\fanr(m))$ as the signature of $m$. $VER^\fanr$ is given $1^n$, $PK$
+%(that is, $k$) and a pair $(m,\alpha)$. He accepts if $f_k(\alpha) = \fanr(m)$
+%(so that $\alpha = f_{k'}(\fanr(m))$), and rejects otherwise. 
+%Now that we've described $SIG(ID')$ solely in terms of $\fanf$, we can forget
+%%about $ID'$.  
+%We use $F^{\fanr,\fans}$ to construct a polynomial-time inverter
+%$INV$ who breaks the one-wayness of $f_k$. Once again, $INV$ is given $1^n$,
+%$k$, $y \in \strs{n}$ and some random bits, and his goal is to output an $x
+%\in \strs{n}$ such that $x = f_{k'}(y)$. 
+Let $q_\fanr(n)$ and $q_\fans(n)$ denote the number of times
+$F^{\fanr,\fans}_k$ queries $\fanr$ and $\fans$, respectively, and suppose
+that the running time of $F^{\fanr,\fans}_k$ is bounded above by $n^c$; such a
+$c$ must exist because $F^{\fanr,\fans}_k$ runs in strict polynomial time.
+Observe that $q_\fanr(n) + q_\fans(n) \leq n^c$, since in the worst case
+$F^{\fanr,\fans}_{k}$ queries an oracle at every step of his execution.  
+
+Recall that $INV$ is given $1^n$, $k$, $y \in \strs{n}$ and some random bits,
+and his goal is to output an $x \in \strs{n}$ such that $f_k(x) = y$.  As in
+Section~\ref{SEC:OldResult}, $INV_k$ first randomly chooses an index 
+%his simulation of $F^{\fanr,\fans}_{k}$ by randomly choosing 
+$i \in \{1,\ldots,q_\fanr(n)\}$; $i$ represents $INV_k$'s guess at the index of
+the crucial query, and won't be revealed to $F^{\fanr,\fans}_{k}$ in the
+course of the simulation. Since $F^{\fanr,\fans}_{k}$ gets no information
+about $i$, $INV_k$ guesses the index of the crucial query correctly with
+probability $\frac{1}{q_\fanr(n)} \geq \frac{1}{n^c}$.
+%, where $n^c$ is an upper bound on the worst-case running time of
+%$F_{k}^{\fanr,\fans}$. 
+
+%Let $q_\fans(n)$ denote the number of times $F^{\fanr,\fans}_{k}$ queries
+%$\fans$. 
+Before beginning the simulation proper, $INV_k$ generates $n^c$
+``transcripts'' $(y_1,x_1), \ldots, \\(y_{n^c},x_{n^c})$ by randomly choosing $x_j
+\in \strs{n}$ and setting $y_j = f_k(x_j)$ for $1 \leq j \leq n^c$; since
+$f_k$ is a bijection, this is equivalent to randomly choosing $y_j$ and
+setting $x_j$ to 
+%$f_k^{-1}(y_j)$
+$f_{k'}'(y_j)$.  The idea of generating transcripts ahead of time is key,
+since it later enables $INV_k$ to consistently answer $F^{\fanr,\fans}_{k}$'s
+oracle queries; recall from Section~\ref{SEC:OldResult} that every $\fans$
+query effectively involves an implicit $\fanr$ query, and this time we can't
+rely on the non-triviality assumption to bail us out. A similar technique is
+used to prove our main result in Section~\ref{SEC:OurResult}.  
+
+$INV_k$ now begins his simulation of $F^{\fanr,\fans}_{k}$. As in
+Section~\ref{SEC:OldResult}, the $i^{th}$ random oracle query is treated
+specially.  Since in this case the commitment $\lambda$ is fixed, $INV_k$
+simply answers the query with $y$ (the string he is trying to invert $f_k$
+on). The rest of $F^{\fanr,\fans}_{k}$'s oracle queries are handled as
+follows. Each time $F^{\fanr,\fans}_{k}$ queries an oracle on a new message 
+%(i.e. a message he hasn't yet queried an oracle on) 
+$m \in \strs{*}$, $INV_k$ associates an unused transcript $(y_j,x_j)$ with
+$m$; all oracle queries regarding $m$ are answered using $(y_j,x_j)$.
+Specifically, $INV_k$ sets $\fanr(m)$ to $y_j$ and  $\fans(m)$ to $x_j$.
+%responds with $y_j$ and $x_j$ when $F^{\fanr,\fans}_k$ queries $\fanr$ and
+%$\fans$ on $m$, respectively (recall that $F^{\fanr,\fans}_{k}$ doesn't query
+%$\fanr$ or $\fans$ on any message more than once, by assumption).  %Because
+%of how the transcripts were generated, this ensures that Because $y_j =
+%f_k(x_j)$, $x_j$ was chosen randomly and $f_k$ is a bijection, so that Our
+%way of generating the transcripts ensures that $x_j$ is a valid signature of
+%$m$, as well as that . Because $x_j$ is chosen randomly and $f_k$ is a
+%bijection, both $x_j$ and $y_j$ are distributed correctly. 
+Note that $INV_k$ won't run out of
+transcripts, because $F^{\fanr,\fans}_{k}$ queries his oracles on at most $n^c$
+distinct messages. 
+%Since $f_k$ is a bijection, $x_j$ and $y_j$ have exactly the right
+%distribution.  Also note that, since $f_k$ is a bijection and $x_j$ was
+%chosen randomly, $x_j$ is a valid signature of $m$ and both $x_j$ and $y_j$
+%have the right distribution.  What, then, is the advantage of generating the
+%transcripts in advance, as opposed to answering $F^{\fanr,\fans}_{k}$'s
+%queries ``on-line''? As in Section~\ref{SEC:OldResult}, every $\fans$ query
+%involves an implicit $\fanr$ query: if $x$ is to be   
+
+$F^{\fanr,\fans}_{k}$ eventually outputs $\textsc{Rsp}^*$
+%, which is
+(purportedly a signature of $m^*$), which $INV_k$ then outputs 
+%$\textsc{Rsp}^*$ 
+as his guess at 
+%$f_k^{-1}(y)$
+$f_{k'}'(y)$. Since $INV_k$'s simulation of $F^{\fanr,\fans}_k$ is
+perfect and the choice of $i$ is independent of it,
+%the simulation
+$INV_k$ succeeds with probability at least $\frac{1}{n^c}\cdot p_F(n)$, which
+is non-negligible. $INV_k$ therefore breaks the one-wayness of $f_k$, 
+%contradicting the assumption that $\fanf$ is a trapdoor permutation,
+so that $SIG(ID')$ is secure in the ROM.
+
+Here we have only shown that $ID'$, which is hyper-trivial, yields a
+Fiat-Shamir signature scheme that is secure in the ROM. However, a similar
+argument demonstrates that every passively secure canonical identification
+scheme whose prover is deterministic (trivial or not) does. 
+%While we were unable to directly extend this result to passively secure
+%schemes where the prover isn't deterministic, in the next section we use a
+%similar approach to show that all actively secure canonical identification
+%schemes yield Fiat-Shamir signature schemes secure in the ROM.  
+%
+%A natural generalization of Fiat and Shamir's approach, often called the
+%``Fiat-Shamir paradigm'', involves converting an arbitrary secure canonical
+%identification scheme into a signature scheme using a hash function $h$ (or,
+%more properly, an ensemble $\ens{\fanh}{n}$ of such functions).  method for
+%efficiently converting canonical identification schemes (see
+%Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:IDschemes}) into signature
+%schemes (see Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:Signatures}),
+%which later came to be known as the ``Fiat-Shamir paradigm''. Informally, the
+%idea is to remove interaction from a canonical identification scheme $ID =
+%(G,P,V)$ using a hash function $h$ (or, more properly, an
+%efficiently-samplable ensemble $\ens{\fanh}{n}$ of such functions). The
+%function mapping $ID$ and $h$ to $SIG_h(ID)$ is sometimes called the
+%``Fiat-Shamir transform''.
+\section{Our result}
+\label{SEC:OurResult}
+In this section, we prove the following theorem.
+
+\begin{thm}
+For every (actively) secure canonical identification scheme $ID = (G,P,V)$,
+the corresponding Fiat-Shamir signature scheme, $SIG(ID) =
+(G,SIGN^\fanr,VER^\fanr)$, is secure in the ROM.
+\end{thm}
+\begin{proof}
+Suppose that $F^{\fanr,\fans}$ is a polynomial-time forger who breaks the
+security of $SIG(ID)$ in the ROM, and denote his (non-negligible) success
+probability by $p_F(n)$. We use $F^{\fanr,\fans}$ to construct an active
+impersonator $I$ who breaks the security of $ID$. 
+
+Recall that $F^{\fanr,\fans}$ is given $1^n$, $PK$
+and some random bits, and his goal is to output a new message 
+%(i.e. one he hasn't queried $\fans$ on) 
+$m^*$ together with a valid signature
+$(\textsc{Cmt}^*,\textsc{Rsp}^*)$ of $m^*$.
+%Let $F$ be a forger who breaks the security of $SIG(ID)$ in the $ROM$. $F$
+%has access to a random oracle $\fanr : \strs{*} \to \strs{n}$ and a signature
+%oracle $\fans$.  When queried on a string $s$ for the first time, $\fanr$
+%chooses $r \in \strs{n}$ uniformly at random and sets $\fanr(s) = r$.
+%Subsequently, $\fanr$ responds with $r$ whenever queried on $s$. To produce a
+%signature $\sigma = (\textsc{Cmt},\textsc{Rsp})$ of message $m$, $\fans$
+%first obtains a commitment \textsc{Cmt} from $P_{SK}$ and then gives him a
+%challenge $\fanr(\textsc{Cmt},m)$, to which $P_{SK}$ responds with
+%\textsc{Rsp}. Observe that $\fanr$'s replies must be consistent with those of
+%$\fans$. For instance, if $\fans(m) = (\textsc{Cmt},\textsc{Rsp})$ it should
+%be the case that $V_{PK}(\textsc{Cmt},\fanr(\textsc{Cmt},m),\textsc{Rsp}) =
+%1$.  Also, denote the message whose signature $F$ tries to forge by $m^*$,
+%and its supposed signature by $\sigma^* = (\textsc{Cmt}^*, \textsc{Rsp}^*)$.
+%Let $\varnothing \subset \fanc \subset \strs{*}$ denote $P$'s  commitment
+%space ($\fanc = \strs{n}$ and $\fanc = \{\lambda\}$ are both legitimate
+%choices).  
+As in previous sections, we make a number of ``regularity assumptions'' about
+$F^{\fanr,\fans}_{PK}$, without loss of generality:
+%, insisting that he have the following ``normal form'': 
+%\begin{enumerate}[(i)] \item 
+$F^{\fanr,\fans}_{PK}$ doesn't query $\fanr$ on ``short strings'' (i.e.
+strings whose length is less than $\ell(n)$), doesn't query $\fanr$ on the
+same string more than once, and makes the ``crucial query''
+$\fanr(\textsc{Cmt}^*,m^*)$ at some point during his execution. Note, however,
+that $F^{\fanr,\fans}_{PK}$ may query $\fans$ on the same message more than
+once.  Since signing in $SIG(ID)$ is probabilistic, this makes perfect sense
+and could yield useful information.
+%\item  All of $F^{\fanr,\fans}_{PK}$'s random oracle queries are of the form
+%$\fanr(\textsc{Cmt},m)$, where $\textsc{Cmt} \in \fanc$ and $m \in \strs{*}$.
+%\item $F^{\fanr,\fans}_{PK}$ queries $\fanr$ on $(\textsc{Cmt}^*,m^*)$ at
+%some point during his execution. This special $\fanr$ query is called the
+%``crucial query''.  \end{enumerate} It isn't too hard to show that if a
+%successful forger exists, then there exists one satisfying the above three
+%properties.  Suppose that $F$ fails to have property $(i)$, so that he
+%queries $\fanr$ on some string $s$ multiple times. Let $F'$ be the same as
+%$F$, except that $F'$ writes $ans = \fanr(s)$ down on an unused portion of
+%his working tape the first time $\fanr$ is queried on $s$, and all subsequent
+%random oracle queries about $s$ are answered by looking $ans$ up. Since
+%$\fanr$ is a function, $F'$'s success probability is unchanged, yet he only
+%queries $\fanr$ on $s$ once.  If there is another string $s'$ on which $F'$
+%queries $\fanr$ multiple times, we can repeat the above process to get a new
+%forger $F''$ which queries $\fanr$ on $s'$ once. Proceeding in this fashion,
+%we eventually obtain a forger who doesn't query $\fanr$ on any string more
+%than once, and whose success probability is identical to that of $F$. This
+%assumption guarantees that $F$ doesn't repeat random oracle queries, so that
+%$\fanr$'s answers are always random.  Now suppose that $F$ fails to have
+%property $(ii)$, so that at least one of his random oracle queries is not of
+%the form $\fanr(\textsc{Cmt},m)$. Let $F'$ be the same as $F$, except that
+%all malformed $\fanr$ queries are answered randomly. Since $\fanr$'s replies
+%are also random, these answers have exactly the right distribution. Notice
+%that there is no interplay between answers to $\fans$ queries and malformed
+%$\fanr$ queries, so no inconsistencies are introduced. The new forger's
+%success probability is therefore identical to that of $F$, and all of his
+%$\fanr$ queries are well-formed.  Finally, suppose that $F$ fails to have
+%property $(iii)$, namely that he never queries $\fanr$ on
+%$(\textsc{Cmt}^*,m^*)$. Let $F'$ be the same as $F$, except that instead of
+%outputting $(m^*,\sigma^*)$ right away, $F'$ first queries $\fanr$ on
+%$(\textsc{Cmt}^*,m^*)$. $F'$'s success probability is identical to that of
+%$F$, since the extra $\fanr$ query does not affect his output. It is also
+%worth noting that the new forger doesn't violate assumptions $(i)$ and
+%$(ii)$, because the extra $\fanr$ query is both new and well-formed.
+
+Recall that $I$ is given $1^n$, $PK$ and some random bits. As per the
+definition of active security (see Chapter~\ref{CH:Preliminaries},
+Section~\ref{SEC:IDschemes}), $I_{PK}$ first gets to interact with $P_{SK}$
+polynomially many times in the role of $V_{PK}$. Each time, $I_{PK}$ receives
+a commitment $\textsc{Cmt} \in \strs{\ell(n)}$ from $P_{SK}$, sends a
+(not necessarily random) challenge $\textsc{Ch} \in \strs{n}$ to $P_{SK}$, and
+then receives a response $\textsc{Rsp}$ from $P_{SK}$. Next, $I_{PK}$ sends
+a commitment $\textsc{Cmt}'$ to $V_{PK}$ --- this marks the end of his
+``interactive'' phase --- receiving a random challenge $\textsc{Ch}'$ in
+reply. His goal is to output a response $\textsc{Rsp}'$ such that
+$V_{PK}(\textsc{Cmt}',\textsc{Ch}',\textsc{Rsp}') = 1$.
+%His goal is to then  $I$ is allowed to first interact with $P$ in the role of
+%$V$ polynomially many times. Since $I$ is trying to break the \emph{active}
+%security of $ID$, he can send $P$ whatever messages he likes.  Consider the
+%experiment where a pair of keys $(PK,SK)$ is generated by running $G$ on
+%$1^n$, and $I$ is given the public key $PK$.
+
+Let $q_\fanr(n)$ and $q_\fans(n)$ denote the number of times
+$F^{\fanr,\fans}_{PK}$ queries $\fanr$ and $\fans$, respectively, and set
+$q(n) = q_\fanr(n) + q_\fans(n)$. Also, suppose that the running time of
+$F^{\fanr,\fans}_{PK}$ is bounded above by $n^c$; such a $c$ must exist since
+$F^{\fanr,\fans}_{PK}$ runs in strict polynomial time. Observe that $q(n) \leq
+n^c$, since in the worst case $F^{\fanr,\fans}_{PK}$ queries an oracle at
+every step of his execution.
+
+Before beginning his simulation of $F^{\fanr,\fans}_{PK}$, our impersonator
+$I_{PK}$ obtains $q(n)$ ``transcript blocks'' $\fanb_1,\ldots,\fanb_{q(n)}$,
+each consisting of $q_\fans(n)$ transcripts, by interacting with $P_{SK}$. 
+%of the form
+A new transcript is added to a given block $\fanb_k$ as follows.  $I_{PK}$
+first receives a commitment $\textsc{Cmt} \in \strs{\ell(n)}$ from $P_{SK}$
+(it's chosen according to $P_{SK}$'s commitment distribution, $\fanp_{SK}$).
+$I_{PK}$ next needs to decide what challenge $\textsc{Ch} \in \strs{\ell(n)}$
+to send to $P_{SK}$.
+%, sending him a challenge $r \in \strs{n}$ in reply. 
+If \textsc{Cmt} does not appear in any of the transcripts already contained in
+$\fanb_k$, $I_{PK}$ chooses $\textsc{Ch}$ randomly. Otherwise, he sets
+$\textsc{Ch}$ to the challenge associated with $\textsc{Cmt}$ (since
+$\textsc{Ch}$ repeats whenever $\textsc{Cmt}$ does, every commitment in
+$\fanb_k$ is associated with some particular challenge).  After sending
+$\textsc{Ch}$ to $P_{SK}$, $I_{PK}$ receives a response $\textsc{Rsp}$;
+%and sends it to $P_{SK}$. Otherwise, $r$ is set to the challenge associated
+%with \textsc{Cmt}.  $P_{SK}$ responds with \textsc{Rsp}, and 
+the transcript $(\textsc{Cmt},\textsc{Ch},\textsc{Rsp})$ is then added to
+$\fanb_k$.  Once the transcript blocks have been generated, $I_{PK}$ 
+%next guesses the index of $F$'s ``crucial query'' by randomly choosing $k \in
+%\{1,\ldots,q_\fanr(n)(n)\}$. 
+randomly chooses an index 
+%his simulation of $F^{\fanr,\fans}_{k}$ by randomly choosing 
+$i \in \{1,\ldots,q_\fanr(n)\}$; $i$ represents $I_{PK}$'s guess at the index
+of the crucial query, and won't be revealed to $F^{\fanr,\fans}_{PK}$ in the
+course of the simulation. 
+%Since $F^{\fanr,\fans}_{PK}$ gets no information
+%about $i$, $I_{PK}$ guesses the index of the crucial query correctly with
+%probability $\frac{1}{q_\fanr(n)} \geq \frac{1}{n^c}$.
+
+$I_{PK}$ now begins his simulation of $F^{\fanr,\fans}_{PK}$. 
+%Note that assumption $(ii)$ above
+%enables us to associate a unique message with every $\fanr$ query 
+%$F$ makes. Since $\fans$ queries explicitly reference a message, every oracle
+%query made by $F$ therefore has a message unambiguously associated with it. 
+Notice that, thanks to our ``regularity assumptions'' above, every
+oracle query made by $F^{\fanr,\fans}_{PK}$ can be unambiguously associated with
+some message $m \in \strs{*}$. Let $m_1,m_2,m_3,\ldots$ be the \emph{distinct}
+messages associated with $F^{\fanr,\fans}_{PK}$'s
+oracle queries (there are at most $q(n)$ such messages).
+%, since in the worst case every query concerns a different message. 
+$I_{PK}$ answers $\fanr$ and $\fans$ queries associated with the $k^{th}$
+distinct message $m_k$ using transcripts contained in the $k^{th}$ block
+$\fanb_k$. The idea is to ensure that $I_{PK}$ can answer as many $\fans(m_k)$
+queries as necessary --- there will be at most $q_\fans(n)$ --- in a way that
+is consistent with his answers to queries of the form
+$\fanr(\textsc{Cmt},m_k)$, $\textsc{Cmt} \in \strs{\ell(n)}$. Specifically,
+$I_{PK}$ answers $F^{\fanr,\fans}_{PK}$'s $j^{th}$ 
+%the answer to the $j^{th}$ 
+$\fans(m_k)$ query with $(\textsc{Cmt},\textsc{Rsp})$, where
+$(\textsc{Cmt},\textsc{Ch},\textsc{Rsp})$ is the $j^{th}$ transcript contained
+in $\fanb_k$. His answer to queries of the form $\fanr(\textsc{Cmt},m_k)$
+depends on whether the commitment $\textsc{Cmt} \in \strs{\ell(n)}$ appears in
+any of the transcripts in $\fanb_k$. If so, $I_{PK}$ sets
+$\fanr(\textsc{Cmt},m_k)$ to $\textsc{Ch} \in \strs{n}$, the challenge
+associated with \textsc{Cmt}. Otherwise, he randomly chooses an $r \in
+\strs{n}$ and sets $\fanr(\textsc{Cmt},m_k)$ to $r$. 
+
+As in previous sections, the $i^{th}$ random oracle query is handled
+specially. 
+%$I$ sends $\textsc{Cmt}^*$ to $V_{PK}$, receives a challenge $\textsc{Ch}^*$
+%in reply and gives $\textsc{Ch}^*$ to $F^{\fanr,\fans}_{PK}$ as the answer to
+%$\fanr(\textsc{Cmt}^*,m^*)$. 
+Suppose that, for his $i^{th}$ random oracle query, $F_{PK}^{\fanr,\fans}$
+queries $\fanr$ on some $s \in \strs{*}$ (recall that $|s| \geq \ell(n)$,
+since $F^{\fanr,\fans}_{PK}$ doesn't query $\fanr$ on ``short strings'').
+$I_{PK}^{\fant}$ parses $s$ as $(\textsc{Cmt}',m')$, sends $\textsc{Cmt}' \in
+\strs{\ell(n)}$ to $V_{PK}$, and receives a challenge $\textsc{Ch}' \in
+\strs{n}$ in reply.  He then gives $\textsc{Ch}'$ to $F_{PK}^{\fanr,\fans}$ as
+the answer to $\fanr(s)$ and continues his simulation.
+%Let $i^*$ be the true index of the ``crucial query'' and observe that, if  $i
+%\neq i^*$, then $I_{PK}$'s simulation of $F^{\fanr,\fans}_{PK}$ may break
+%down. What if $F^{\fanr,\fans}_{PK}$ requests to see some signatures of
+%$m^*$? One of these could well  involve $\textsc{Cmt}^*$. In that case, the
+%correct answer to $\fanr(\textsc{Cmt}^*,m^*)$ is the corresponding challenge,
+%$r$, which almost certainly differs from \textsc{Ch}.  On the other hand, if
+%$i = i^*$ then $m' = m^*$ and $\textsc{Cmt}' = \textsc{Cmt}^*$. $F$ won't
+%query $\fans$ on $m^*$ since that is the message whose signature he is trying
+%to forge, and $I$'s simulation of $F$ is perfect.
+
+Eventually, $F^{\fanr,\fans}_{PK}$ outputs a message $m^*$ together with a
+purported signature $(\textsc{Cmt}^*,\\ \textsc{Rsp}^*)$ of $m^*$.  $I_{PK}$ then
+sends $\textsc{Rsp}^*$ to $V_{PK}$ as the answer to the challenge
+$\textsc{Ch}'$. If $I_{PK}$ guessed the index of the crucial query correctly,
+then $m^* = m'$ and $\textsc{Cmt}^* = \textsc{Cmt}'$, so that
+$\fanr(\textsc{Cmt}^*,m^*) = \textsc{Ch}'$. In that case, $I_{PK}$'s
+simulation of $F^{\fanr,\fans}_{PK}$ is perfect. 
+%Denote the true index of the crucial query by $i^*$. 
+Let $A$ denote the event that 
+$V_{PK}(\textsc{Cmt}',\textsc{Ch}',\textsc{Rsp}^*) = 1$ and $B$ denote
+the event that $i=i^*$, where $i^*$ is the true index of the crucial query. 
+Since
+%, who either accepts or rejects the transcript
+%$(\textsc{Cmt}^*,\textsc{Ch}^*,\textsc{Rsp}^*)$.  Let $p_I(n)$ denote
+%$I_{PK}$'s success probability, and note that respectively. Note that
+%$q_\fanr(n)(n) \leq q(n) \leq t_F(n) \leq n^c$ for some $c$, where $t_F(n)$
+%is the running time of $F$. Also observe that 
+$p_F(n) > \frac{1}{n^d}$ for some $d$ and infinitely many $n$ (because
+$F^{\fanr,\fans}$ breaks the security of $SIG(ID)$ in the ROM), we get:
+%breaks the security of $\fs{ID}{h}$ in the random oracle model.
+%We have
+%\begin{equation*}
+%p_F(n) = \text{Pr}\left[
+%\begin{aligned} 
+%& (PK,SK) \gets GEN^\fanr(1^n); (m^*,\textsc{Cmt}^*,
+%\textsc{Rsp}^*) \gets F^{\fanr,\fans}_{PK}; \\ 
+%& VER^\fanr_{PK}(m^*,\textsc{Cmt}^*,\textsc{Rsp}^*) = 
+%V_{PK}(\textsc{Cmt}^*,\fanr(\textsc{Cmt}^*,m^*),\textsc{Rsp}^*) = 1
+%\end{aligned}
+%\right], 
+%\end{equation*}
+%where the probability is taken over the coins of $GEN$ and $F$, as well as the
+%randomness of $\fanr$ and $\fans$. We also have
+%\begin{equation*}
+%p_I(n) = \text{Pr}\left[
+%\begin{aligned}
+%(PK,SK) \gets G(& 1^n); \textsc{Ch} \gets \strs{n};
+%(\textsc{Cmt}',\textsc{Rsp}^*) \gets I^{P_{SK}}_{PK};\\ 
+%& V_{PK}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*) = 1
+%\end{aligned}
+%\right],
+%\end{equation*}
+%where the probability is taken over the coins of $G$, $I$ and $P_{SK}$, as
+%well as the choice of $\textsc{Ch}$.
+%Since $I$'s simulation of $F$ is perfect provided he correctly guesses the
+%index of the ``crucial query'', we have:
+\begin{align*}
+\text{Pr}[A] 
+%& = \text{Pr}[V_{PK}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*) = 1 \wedge k'
+%= k^*] + \\ &\text{Pr}[V_{PK}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*) = 1
+%\wedge k' \neq k^*] \\ & \geq
+%\text{Pr}[V_{PK}(\textsc{Cmt}',\textsc{Ch},\textsc{Rsp}^*) = 1 \wedge k' =
+%k^*] \\
+& \geq \text{Pr}[A,B] = \text{Pr}[A \ | \ B] \cdot \text{Pr}[B]\\ 
+& = p_F(n) \cdot \frac{1}{q_\fanr(n)} \geq \frac{p_F(n)}{n^c} >
+\frac{1}{n^{c+d}} \text{ for infinitely many } n.
+\end{align*} 
+$I_{PK}$ therefore breaks the security of $ID$, so that $SIG(ID)$
+is secure in the ROM.
+%This shows that $p_I(n)$ is non-negligible in $n$, so $I$ breaks the 
+%security of $ID$.
+\end{proof}
+

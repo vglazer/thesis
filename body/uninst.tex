@@ -1,0 +1,438 @@
+\chapter{Uninstantiability}
+\label{CH:Uninstantiability}
+
+\section{The random oracle methodology and ``uninstantiable'' schemes}
+\label{SEC:Methodology}
+As originally proposed in \cite{bellare:rompractical} and applied in practice,
+the Random Oracle Methodology involves taking a construction which is secure
+in the ROM (usually under a standard hardness assumption) and
+``instantiating'' the random oracle $\fanr$ using a ``cryptographically
+strong'' hash function $h: \strs{*} \to \strs{n}$; whenever $\fanr$ is queried
+on $m \in \strs{*}$, the answer is $h(m)$.  However, a hash function {\it
+ensemble} $\fanh = \ens{\fanh}{n}$, $\fanh_n = \{h_s : \strs{*} \to
+\strs{n}\}_{s \in \strs{n}}$ (see Chapter~\ref{CH:Preliminaries},
+Section~\ref{SEC:Hash}) must strictly speaking be used instead. The reason is
+that, as we'll see shortly, it isn't hard to come up with signature and
+public-key encryption schemes (see sections \ref{SEC:Signatures} and
+\ref{SEC:PKEPs} of Chapter~\ref{CH:Preliminaries}, respectively) which are
+secure in the ROM yet become hopelessly insecure if $\fanr$ queries are
+answered using a fixed function $h$. We therefore call a signature or
+public-key encryption scheme {\it uninstantiable} if it is secure in the ROM
+(possibly under some hardness assumption) yet insecure in the real world, no
+matter what hash function ensemble $\fanh$ is used to instantiate the random
+oracle $\fanr$.
+
+Since random oracles are one-way (see Chapter~\ref{CH:Preliminaries},
+Section~\ref{SEC:ROM}), the results of \cite{rompel:1waysigs} imply that
+signature schemes which are secure in the ROM exist unconditionally\footnote{A
+subtle but important technical point to note here is that both Rompel's
+construction and his proof are of the ``black-box'' variety.}. Given a hash
+function $h$, we can obtain a signature scheme which is secure in the ROM but
+cannot be instantiated using $h$ by modifying any signature scheme which is
+secure in the ROM as follows. Given a message $m \in \strs{*}$, the new signer
+computes a signature $\sigma$ of $m$ as before and then checks whether
+$\fanr(\bar{0}) = h(\bar{0})$. If so, he outputs $(pri,\sigma)$; otherwise, he
+outputs $(\bar{0},\sigma)$. 
+%(here we assume, without loss of generality, that $|pri| = n$). 
+Given a message $m$ and a purported signature $\alpha$ of $m$, the new
+verifier parses $\alpha$ as $(\beta,\gamma)$, where $|\beta| = n$, and then
+checks whether $\gamma$ is a valid signature of $m$ as before.
+%so that the verifier accepts any pair $(m,\sigma)$ signer , who is given a
+%message $m \in \strs{*}$, reveals the private key $pri$ whenever
+%$\fanr(\bar{0}) = h(\bar{0})$; notice that the above modification has no
+%effect on the correctness of the scheme. 
+Observe that our modification does not violate the correctness of the scheme,
+since every signature output by the signer is accepted by the verifier,
+whether $\fanr(\bar{0}) = h(\bar{0})$ or not. The modified scheme also
+remains secure in the ROM, because the probability that $\fanr(\bar{0}) =
+h(\bar{0})$ (taken over the randomness of $\fanr$) is $\frac{1}{2^n}$. 
+%will learn $pri$ in this way is $\frac{1}{2^n}$.
+%negligible in the security parameter $n$; specifically, it is
+%at most $\frac{q}{2^n}$, where $q$ is the number of times $ADV$
+%queries his signature (or decryption) oracle.  
+However, once $\fanr$ is instantiated using $h$, all the forger has to do to
+learn $pri$ --- thereby completely breaking the scheme's security --- is query
+his signature oracle on some string (say $\lambda$ for concreteness).
+
+The above approach can be readily adapted to yield a public-key encryption
+scheme which is secure in the ROM, but cannot be instantiated using $h$. To
+obtain such a scheme, simply take any public-key encryption scheme which is
+secure in the ROM (as noted in Chapter~\ref{CH:Introduction}, in light of the
+results of \cite{impagliazzo:nooneway} a hardness assumption of some sort will
+almost certainly be necessary here) and modify it as follows. Given a message
+$m \in \strs{n}$, the new encryptor computes an encryption $e$ of $m$ as
+before and then  checks whether $\fanr(\bar{0}) = h(\bar{0})$. If so, he
+outputs $(m,e)$; otherwise, he outputs $(\bar{0},e)$. Given a purported
+encryption $\alpha$, the new decryptor first parses $\alpha$ as
+$(\beta,\gamma)$, where $|\beta| = n$, then decrypts $\gamma$ as before.
+Observe that our modification once again doesn't violate the correctness of
+the scheme, since every encryption output by the encryptor is correctly
+decrypted by the decryptor, whether $\fanr(\bar{0}) = h(\bar{0})$ or not. It
+is easy to see that the modified scheme remains secure in the ROM, but becomes
+completely insecure if $\fanr$ is instantiated using~$h$.
+%all the forger has to do to
+%obtain $pri$ (thereby completely breaking the scheme's security) is query his
+%signature (or decryption) oracle.
+% on some message.
+%For example, let $SIG$ be a signature scheme which is secure in the ROM, and
+%consider the following modification $SIG'$ of $SIG$. Given a message $m \in
+%\strs{*}$, the new signer first checks whether $\fanr(m) = h(m)$. If so, he
+%outputs the private key $pri$ as the signature of $m$; otherwise, he signs
+%$m$ as before. $SIG'$ remains secure in the ROM, since the probability that a
+%polynomial-time forger learns $pri$ is negligible in the security parameter
+%$n$ (specifically, it is equal to $\frac{q}{2^n}$, where $q$ is the number of
+%times the signature oracle $\fans$ is queried).  Given a particular
+%efficiently-evaluable function $h: \strs{*} \to \strs{n}$, it is easy to come
+%up with signature schemes which are secure in the ROM, yet become insecure
+%when the random oracle $\fanr$ is ``instantiated'' using $h$ (i.e. $\fanr(s)$
+%is set to $h(s)$ for all $s \in \strs{*}$). For instance, let $SIG =
+%(GEN^\fanr,SIGN^\fanr,VER^\fanr)$ be a signature scheme which is secure in
+%the ROM, and consider the following modification $SIG' =
+%(GEN^\fanr,SIGN^\fanr,VER^\fanr)$ of $SIG$. The situation for public-key
+%encryption schemes is similar, except that a hardness assumption of some sort
+%is needed to show that the scheme is secure in the ROM.  Although this state
+%of affairs may justly be viewed as a failure of the Random Oracle
+%Methodology, we are willing to disregard such ``contrived'' or
+%``pathological'' examples. Instead, we are interested in constructions which
+%are secure in the ROM, yet insecure 
+
+\section{The first uninstantiability result}
+\label{SEC:Original}
+Canetti, Goldreich and Halevi first showed that uninstantiable signature and
+public-key encryption schemes exist in \cite{canetti:romfails}. 
+%their seminal 1998 paper three landmark theorems about security in the random
+%oracle model. The theorems underscore the limitations of the random oracle
+%methodology, in effect ``separating'' ROM-security and ``real-world''
+%security. 
+Their key insight was that, for every hash function ensemble $\fanh =
+\ens{\fanh}{n}$, $\fanh_n = \{h_s : \strs{*} \to \strs{n}\}_{s \in \strs{n}}$,
+there exists a binary relation $R^\fanh = \bigcup_{n \in
+\nats}\{(s,h_s(s))\}_{s \in \strs{n}}$ with the following two properties:
+\begin{enumerate}[(i)]
+
+\item There is a (deterministic) polynomial-time machine $M_\fanh$ which,
+given any $s \in \strs{n}$, outputs an $x \in \strs{*}$ such that
+$(x,h_s(x)) \in R^\fanh$.
+
+\item For every probabilistic polynomial-time ``finder'' $F^\fanr$ who is
+given $1^n$, the probability (taken over the random bits of $F^\fanr$ and the
+randomness of $\fanr$) that $F^\fanr$ outputs an $x \in \strs{*}$ such that
+$(x,\fanr(x)) \in R^\fanh$ is negligible in $n$.
+
+\end{enumerate}
+%Specifically, $R^\fanh = \bigcup_{n \in \nats}\{(s,h_s(s))\}_{s \in
+%\strs{n}}$. 
+$R^\fanh$ obviously satisfies property (i), since $M_\fanh$ can simply output
+$s$ itself as $x$. To see that $R^\fanh$ satisfies property (ii), observe that
+$(x,\fanr(x)) \in R^\fanh \Leftrightarrow \fanr(x) = h_x(x)$.  $F^\fanr$'s
+success probability is therefore at most $\frac{q_\fanr}{2^n}$, where
+$q_\fanr$ is the (polynomially bounded) number of times he queries $\fanr$.
+%), which is negligible in $n$. 
+Notice that $R^\fanh$ is also polynomial-time decidable in the following
+sense: to determine whether $(x,y) \in R^\fanh$, one need only compute $y' =
+h_x(x)$ (this can be done in polynomial time, because $\fanh$ is
+efficiently evaluable) and check if $y = y'$.
+
+Given any hash function ensemble $\fanh$, we can use $R^\fanh$ to obtain a
+signature scheme which is secure in the ROM yet becomes insecure when the
+random oracle $\fanr$ is instantiated using $\fanh$. The idea is to take a
+signature scheme which is secure in the ROM (as pointed out in
+Section~\ref{SEC:Methodology}, such schemes exist unconditionally) and modify
+it as follows. Given a message $m \in \strs{*}$, the new signer computes a
+signature $\sigma$ of $m$ as before and then checks whether $(m,\fanr(m)) \in
+R^\fanh$ (this can be done in polynomial time, since $R^\fanh$ is
+polynomial-time decidable). If so, he outputs $(pri,\sigma)$; otherwise, he
+outputs $(\bar{0},\sigma)$. Given a message $m$ and a purported signature
+$\alpha$ of $m$, the new verifier parses $\alpha$ as $(\beta,\gamma)$, where
+$|\beta| = n$, and then checks whether $\gamma$ is a valid signature of $m$ as
+before.
+%If the message $m \in \strs{*}$ to be signed satisfies
+%$(m,\fanr(m)) \in R^\fanh$ --- this can be determined in polynomial time,
+%since $R^\fanh$ is polynomial-time decidable --- the new signer outputs the
+%private key $pri$ as the signature of $m$; otherwise, he signs $m$ as before.
+Observe that our modification does not violate the correctness of the scheme,
+since every signature output by the signer is accepted by the verifier,
+whether $(m,\fanr(m)) \in R^\fanh$ or not.  The modified scheme also remains
+secure in the ROM, since property (ii) above guarantees that any forger has
+only a negligible probability of finding an $m$ such that $(m,\fanr(m)) \in
+R^\fanh$. However, once $\fanr$ is instantiated using $\fanh$, the forger, who
+is given $s$, need only query his signature oracle $\fans$ on $s$ to obtain
+$pri$. 
+%Notice that, since $R^\fanh$ is polynomial-time decidable, the new signer
+%still runs in polynomial time.
+
+We next use diagonalization to go from schemes which cannot be instantiated
+using some specific ensemble $\fanh$ to schemes which cannot be instantiated
+using {\it any} ensemble. Recall from Section~\ref{SEC:Hash} of
+Chapter~\ref{CH:Preliminaries} that every hash function ensemble $\fanh$ can
+be identified with its polynomial-time ``evaluator'' Turing machine $M_\fanh$. 
+%a (deterministic) polynomial-time Turing machine $M_\fanh$
+%such that $M_\fanh(s,x) = h_s(x) \in \strs{n}$ for all $s \in \strs{n}$ and $x
+%\in \strs{*}$. 
+We can therefore effectively enumerate all hash function ensembles by
+enumerating all polynomial-time Turing machines and padding or truncating
+their output as necessary. Let $M_\fanu$ be the universal Turing machine doing
+the enumerating, and denote the corresponding ``universal'' ensemble by $\fanu
+= \ens{\fanu}{n}$. Since the running time of {\it every} polynomial-time
+machine cannot be upper-bounded by a {\it single} polynomial, $M_\fanu$ will
+need to run in ``slightly super-polynomial'' time, say 
+$\fano(n^{\log n})$ for concreteness.
+%Specifically, let $M_\fanu$ be a Turing machine which, given $\langle M
+%\rangle,s \in \strs{n}$ and $x \in \strs{*}$, simulates $M$ on $(s,x)$ for
+%some super-polynomial number of steps, say $(2n + |x|)^{\log_2(2n + |x|)}$, and
+%pads or truncates the output so that it is of length exactly $2n$.
+%and padding or
+%truncating their output as necessary.
+%, we use the ``universal'' or ``diagonal'' ensemble $\fanu = \ens{\fanu}{k}$,
+%$\fanu_k = \{h_s^i : \strs{*} \to \strs{\frac{k}{2}}\}_{(i,s) \in \strs{k}}$.
+%When run on $i,s \in \strs{n}$ and $x \in \strs{*}$, the corresponding
+%``evaluator'' $M_\fanu$ simulates the $i^{th}$ Turing machine
+%Denote the ensemble corresponding to $M_\fanu$ by $\fanu = \ens{\fanu}{k}$.
+It is easy to see that when $\fanu$ is substituted for $\fanh$ in the above
+construction, the resulting signature scheme is uninstantiable.  However, the
+signer no longer runs in polynomial time, since to determine whether
+$(m,\fanr(m)) \in R^\fanu$ he must effectively simulate $M_\fanu$. 
+%(which runs in time $k^{\log_2k})$ 
+
+Fortunately, the above difficulty can be overcome with the aid of Micali's
+non-interactive CS proofs (\cite{micali:csproofs2}, \cite{micali:csproofs1}).
+Let $M_\fanu'$ be a decider for $R^\fanu$.
+% namely, given $(i,s,y)$, $M_\fanu'$
+%accepts if and only if $y = h_s^i = M_\fanu(i,s)$. 
+Instead of running $M_\fanu'$ directly to determine whether $(m,\fanr(m)) \in
+R^\fanu$, the new signer parses $m$ as $(s,\pi)$ and checks if $\pi$ is a
+valid CS proof that $M_\fanu'$ accepts $(s,\fanr(s))$ within $\fano(n^{\log
+n})$ steps, where $n = |s| + |\fanr(s)|$. Since CS proofs can be verified very
+efficiently, this only takes polynomial time. In the ROM, the scheme remains
+secure because CS proofs are ``computationally sound''\footnote{Interestingly,
+it is not known whether non-interactive CS proofs are computationally sound in
+the ``real world'' under some reasonable complexity assumption.}, meaning that
+it is infeasible to find a valid proof of a false statement. However, once
+$\fanr$ is instantiated using some ensemble $\fanh$, the ``perfect
+completeness'' property of CS proofs guarantees that a forger can compute a
+valid $\pi$ in polynomial time.
+
+%A non-interactive CS proof system is a pair $(P^\fanr,V^\fanr)$ of
+%deterministic polynomial-time oracle Turing machines satisfying the following
+%two properties: \begin{enumerate}[(i)] \item (Perfect Completeness) For every
+%$(1^n, \langle M \rangle, x, t, \pi)$ such that $M$ accepts $x$ in $t$ steps
+%Turing machine $M$ accepts $x \in \strs{*}$ in $t$ steps, then $V^\fanr$
+%accepts  with probability 1, where the probability is taken  over the
+%randomness of $\fanr$.  \item (Computational Soundness)
+%\end{enumerate}
+%Consider a Turing machine $M_\fanu'$ which accepts $(x,y)$ if and only if
+%Instead of simulating $M_\fanu$ to determine whether $(m,\fanr(m)) \in
+%R^\fanu$, the new signer parses $m$ as $(m',\pi)$ and reveals $pri$ only if
+%$V^\fanr(1^n, \langle M_\fanu \rangle, m', $ accepts $\pi$.  For every
+%$\langle M \rangle$ , $x \in \strs{*}$ and $1^t$ (where $\langle M \rangle$
+%describes a Turing machine $M$ under some reasonable encoding) such that $M$
+%accepts $x$ within $t$ steps, the prover $P^\fanr$ outputs a proof $\pi \in
+%\strs{*}$ such that the following two conditions hold:
+%, which are known to be ``computationally sound '' in the ROM.
+%We can similarly construct a public-key encryption scheme which is secure in
+%the ROM yet becomes insecure when $\fanr$ is instantiated using $\fanh$.
+%However, in light of the results of \cite{impagliazzo:nooneway}, a hardness
+%assumption of some sort will almost certainly be necessary in this case.
+Just as in Section~\ref{SEC:Methodology}, the above approach can be readily
+adapted to yield an uninstantiable public-key encryption scheme.
+
+\section{A simple proof of the first result}
+In \cite{maurer:indiffability}, Maurer, Renner and Holenstein introduced a new
+type of reducibility, based on the concept of {\it indifferentiability}. 
+%They then show that random oracles are not reducible (according to this new
+%definition) to another type of primitive called an ``asynchronous beacon''. 
+To motivate their definitions, they gave a simple
+proof of the existence of uninstantiable signature and public-key encryption
+schemes. We present a further simplified version of their argument below.
+%a slightly modified version of their proof.
+
+To obtain an uninstantiable signature scheme, modify any signature scheme
+which is secure in the ROM (as pointed out in
+Section~\ref{SEC:Methodology}, such schemes exist unconditionally) as follows.
+Given a message $m \in \strs{*}$, the new signer first computes a signature
+$\sigma$ of $m$ as before. He then parses $m$ as $(\langle M \rangle,1^t)$,
+where $\langle M \rangle$ describes a (deterministic) Turing machine $M$ under
+some reasonable encoding, and simulates $M$ on $\langle M \rangle$ for at most
+$t$ steps. If $M$ outputs $\fanr(\langle M \rangle)$, the signer outputs
+$(pri,\sigma)$; otherwise, he outputs $(\bar{0},\sigma)$.
+%(as in Section~\ref{SEC:Methodology}, we assume without loss of generality that
+%$|pri| = n$). 
+Given a message $m$ and a purported signature $\alpha$ of $m$,
+the new verifier parses $\alpha$ as $(\beta,\gamma)$, where $|\beta| =
+n$, and then checks whether $\gamma$ is a valid signature of $m$ as before.
+Observe that our modification does not violate the correctness of the scheme,
+since every signature output by the signer is accepted by the verifier,
+whether $M$ outputs $\fanr(\langle M \rangle)$ within $t$ steps or not. Also
+note that the new signer runs in polynomial time, since simulating $M$ takes
+time $\fano(t)$ and $t \leq |m|$.
+
+To convince yourself that the modified scheme remains secure in the ROM,
+consider a function family $\fanf = \ens{f}{t}$ where each $f_t: \strs{*} \to
+\strs{*}$ is defined by 
+\begin{equation*}
+f_t(\langle M \rangle) =
+\begin{cases}
+M(\langle M \rangle) & \text{ if $M$ halts within $t$ steps } \\
+\lambda & \text{ otherwise}
+\end{cases}
+\end{equation*}
+To learn $pri$ using the ``trapdoor'' we have built into the scheme, a forger
+would effectively need to find a $t \in \nats$ and an $x \in \strs{*}$ such
+that $f_t(x) = \fanr(x)$. His probability of finding such a pair $(t,x)$ is at
+most $\frac{q_\fanr}{2^n}$ (where $q_\fanr$ is the number of times he queries
+$\fanr$), which is negligible in $n$.
+%since no forger can predict $\fanr(\bar{0})$ with probability greater than
+%$\frac{1}{2^n}$.
+
+Once $\fanr$ is instantiated using a hash function ensemble $\fanh$, however,
+it becomes trivial to completely break the scheme's security. Recall that,
+because $\fanh$ is efficiently evaluable, there exists a (deterministic)
+polynomial-time Turing machine $M_\fanh$ such that $M_\fanh(s,x) = h_s(x)$ for
+all $s \in \strs{n}$ and $x \in \strs{*}$ (see Chapter~\ref{CH:Preliminaries},
+Section~\ref{SEC:Hash}). Let $M_{h_s}$ denote $M_\fanh$ with some particular
+$s$ ``hard-coded'' into it, so that $M_{h_s}(x) = M_\fanh(s,x)$ for all $x \in
+\strs{*}$, and suppose that $n^c$ is an upper bound on the running time of
+$M_{h_s}$. When given input $\langle M_{h_s} \rangle$, $M_{h_s}$ halts within
+$n^c$ steps and outputs $h_s(\langle M_{h_s} \rangle)$. The forger, who is
+given $s$, need therefore only query his signature oracle on $(\langle M_{h_s}
+\rangle, 1^{n^c})$ to learn $pri$. $\blacksquare$
+
+Just as in Section~\ref{SEC:Methodology}, the above approach can be readily
+adapted to yield an uninstantiable public-key encryption scheme.
+
+\section{An uninstantiability result for Fiat-Shamir signature schemes}
+\label{SEC:FiatShamir}
+The artificiality of \cite{canetti:romfails}'s constructions left open the
+possibility that ``reasonable'' signature schemes which are secure in the ROM,
+and in particular Fiat-Shamir signature schemes, can in fact be instantiated
+using appropriate hash function ensembles. 
+%(perhaps dependent on the particular scheme in question).  
+However, in \cite{goldwasser:fsparadigmfails} Goldwasser and Tauman-Kalai
+showed that there exist uninstantiable Fiat-Shamir signature schemes. It must
+be remarked that Goldwasser and Tauman-Kalai's construction is, if anything,
+even more contrived than those of \cite{canetti:romfails}. Barak and
+Goldreich's Universal Arguments (\cite{barak:universalarguments}) are used in
+place of Micali's CS proofs, and Merkle trees (\cite{merkle:tree}) also make
+an appearance. Most distressingly, the proof itself has a highly
+non-constructive, tree-like structure: rather than demonstrate that a single
+(albeit unnatural) Fiat-Shamir scheme is uninstantiable, Goldwasser and
+Tauman-Kalai exhibit three such schemes, one of which must be uninstantiable.
+Nonetheless, from a purely theoretical standpoint, Goldwasser and
+Tauman-Kalai's result deals a severe blow to the validity of the so-called
+Fiat-Shamir paradigm (see Chapter~\ref{CH:Fiatshamir},
+Section~\ref{SEC:Overview}).
+
+%Let $SIG = (GEN^\fanr,SIGN^\fanr,VER^\fanr)$ be a signature scheme which is
+%secure in the ROM; no hardness assumptions are necessary here, since secure
+%signature schemes exist if one-way functions do (\cite{rompel:1waysigs}), and
+%$\fanr$ is one-way in a strong, information-theoretic sense.  CGH use
+%Micali's CS proofs (see \cite{micali:csproofs1} and \cite{micali:csproofs2})
+%to construct a signature scheme and a public-key encryption scheme which are
+%secure (in the chosen-message and chosen-ciphertext or CCA2 sense,
+%respectively) in the random oracle model yet insecure in the ``real world'',
+%no matter what efficiently computable \emph{hash function ensemble} is used
+%to implement the oracle. Such schemes are now commonly called
+%``uninstantiable''. This is a somewhat startling result, since CS proofs are
+%only known to possess their crucial ``proof-of-knowledge'' property in the
+%random oracle model.  The reason one must resort to using cumbersome
+%\emph{function ensembles} instead of good old functions is as follows. Given
+%any suitable candidate function $f$, it is easy to come up with pathological
+%schemes which are secure in the random oracle model, yet insecure when oracle
+%queries are replaced with evaluations of $f$. Note that these schemes are
+%concocted \emph{after} $f$ is fixed.  The downside of CGH's schemes is that
+%they are prohibitively inefficient. It would be nice to have examples of
+%\emph{efficient, practical} uninstantiable signature and encryption schemes.
+%Additionally, CGH demonstrate that ``correlation-intractable'' ensembles do
+%not exist (in the ``real world''). Informally, this means that there is no
+%\emph{single} efficiently evaluable hash function ensemble which has
+%\emph{all} of the nice information-hiding properties enjoyed by a truly
+%random function (i.e. a random oracle). More formally, we call a binary
+%relation $\fanr$ ``evasive'' if the probability that a PPT\footnote{{\bf
+%P}robabilistic {\bf P}oly {\bf T}ime} OTM\footnote{{\bf O}racle {\bf T}uring
+%{\bf M}achine} adversary $A^{\fano}$ outputs a pair $(x,y) \in \fanr$ given
+%$1^n$ is negligible in the security parameter $n$, where the probability is
+%taken over the coins of $A$ and the randomness of the oracle $\fano$. An
+%ensemble $\fanf = \ens{\fanf}{n}$, where $\fanf_n = \{f_s: \strs{*} \to
+%\strs{\ell(n)}\}_{s \in \strs{n}}$ for some appropriate length function
+%$\ell: \nats \to \nats$ ($\ell(|x|) \equiv |x|$, for example) , is said to be
+%\emph{correlation intractable} if, for every evasive relation $\fanr$, the
+%probability that a PPT TM adversary $ADV$ which is given a randomly chosen
+%``key'' $s \in \strs{n}$ outputs a string $x$ such that $(x,f_s(x)) \in
+%\fanr$ is negligible in $n$. Notice that a correlation-intractable ensemble
+%$\fanf$ must ``work well'' for \emph{every} evasive relation. Therefore
+%\emph{specialized} ensembles which only work for some particular evasive
+%relation $\fanr$ might still exist.  Again informally, the non-existence of
+%correlation-intractable ensembles implies that, if there is to be any hope of
+%retaining security in the ``real world'', the function ensemble used to
+%``instantiate'' the random oracle must somehow depend on the functionality we
+%have in mind (because no one ensemble works in all cases). 
+
+%Although CGH exhibited an
+%``uninstantiable'' signature scheme secure in the ROM, their construction was
+%extremely contrived, making their impossibility result less convincing. In
+%practice, people were far more interested in the uninstantiability of
+%practical Fiat-Shamir (\cite{fiat:fsparadigm}) and Bellare \& Rogaway
+%(\cite{bellare:signrsa}) type schemes. Goldwasser and Tauman-Kalai exhibit an
+%uninstantiable Fiat-Shamir signature scheme in
+%\cite{goldwasser:fsparadigmfails}.
+%Unfortunately, their construction, which heavily relies on universal arguments
+%(see \cite{barak:universalarguments}), is again impractical. In fact, GTK's
+%proof isn't even fully constructive, since their case-by-case analysis
+%only establishes that one of three specified signature schemes must be
+%uninstantiable, without indicating which one it might be. This time, universal
+%arguments play a role similar to the one played by CS proofs in
+%\cite{canetti:romfails}.
+%\section{Some recent results}
+%\item \cite{nielsen:separating} (2002): In the context of secure asynchrous
+%multiparty computation (MPC) as defined in \cite{canetti:univ}, Nielsen shows
+%that secure non-interactive non-committing encryption is possible in the
+%random oracle model but not in the ``real-world'', nor in a weaker model he
+%calls the ``non-programmable'' ROM. His results suggest that, in the MPC
+%context at least, it is the ``programmability'' of the random oracle that
+%cannot be duplicated in the ``real world''.
+%\begin{itemize}
+%\item \cite{canetti:lengthromfails} (2004): CGH extend the negative result of
+%\cite{canetti:romfails} by exhibiting a \emph{stateless} uninstantiable
+%signature scheme which is secure in the ROM. Moreover, the attack which
+%demonstrates the scheme's uninstantiability requires only signatures of
+%``short messages'', i.e. ones of length polylogarithmic in the security
+%parameter $n$ ($\log^4n$, to be exact). The attack employed in
+%\cite{canetti:romfails} required signatures of messages longer than the
+%public key.  Instead of CS proofs, the new construction uses a novel
+%interactive proof system based on \emph{Merkle trees} \cite{Merkle:tree},
+%which incidentally also played a crucial role in
+%\cite{goldwasser:fsparadigmfails}. 
+%\item \cite{maurer:indiffability} (2004): Maurer, Renner and Holenstein
+%introduce a new type of indistinguishability for cryptosystems called
+%\emph{indifferentiability}, complete with a corresponding notion of
+%reducibility. They then show that a random oracle is not reducible to a
+%primitive called an \emph{asynchronous beacon}. This yields a very clean and
+%simple proof of the theorem from \cite{canetti:romfails} which asserts that
+%there exist uninstantiable public-key cryptosystems secure in the ROM.  \item
+%\cite{bellare:noromsig} (2004): Asymmetric (i.e. public-key) encryption
+%schemes are typically used in a ``hybrid'' fashion. Suppose we are in the
+%so-called Public-Key Infrastructure (PKI) setting, where  If $A$ wants to
+%communicate with $B$ securely, he randomly chooses a \emph{session key} $k$,
+%encrypts $k$ under $B$'s public key $pub$ and sends the resulting ciphertext
+%$c$ to $B$. $B$ then uses his private key $pri$ to decrypt $c$, obtaining
+%$k$.  $A$ and $B$ are now in possession of a shared private key $k$, and can
+%therefore communicate using a symmetric (i.e. shared-private-key) encryption
+%scheme.
+%Why doesn't $A$ just encrypt his messages to $B$ directly, using the
+%assymetric encryption scheme? One reason is \emph{efficiency}. Symmetric
+%encryption schemes typically require only fast operations such as binary
+%exclusive-or, whereas asymmetric schemes rely on expensive operations like
+%modular exponentiation. Another reason is \emph{security}. Symmetric schemes
+%are provably secure if the underlying function generators (usually DES or
+%AES) are pseudorandom, whereas the security of asymmetric schemes relies on a
+%plethora of complexity-theoretic conjectures, ranging from the plausible
+%(factoring and discrete log) to the not-so-plausible (elliptic curves).
+%Bellare, Boldyreva and Palacio define what it means for an asymmetric scheme
+%to be ``IND-CCA-preserving'', and then show that Hash ElGamal, a particular
+%modification of the ElGamal asymmetric encryption scheme
+%(\cite{elgamal:dlsigs}), is IND-CCA-preserving in the random oracle model,
+%yet yields an insecure system when the oracle is instantiated using any
+%efficiently-evaluable hash function ensemble. Notice that an asymmetric
+%scheme can be IND-CCA-preserving without actually being IND-CCA (i.e. CCA2)
+%secure, since it is only used to transmit randomly chosen messages. In
+%particular, the scheme may be \emph{deterministic}.  \end{itemize}

@@ -1,0 +1,21 @@
+% Force proofs to end in a filled-in square rather than a hollow one.
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+% For dagger footnotes
+\long\def\symbolfootnote[#1]#2{\begingroup%
+\def\thefootnote{\fnsymbol{footnote}}\footnote[#1]{#2}\endgroup}
+
+% When numbering sections, don't include the chapter number
+\def\thesection{\arabic{section}} 
+
+% A basic theorem environment
+\theoremstyle{plain}
+\newtheorem*{thm}{Theorem}
+
+% A basic definition environment
+\theoremstyle{definition}
+\newtheorem*{defn}{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+

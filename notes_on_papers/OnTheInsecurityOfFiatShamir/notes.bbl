@@ -1,0 +1,67 @@
+\begin{thebibliography}{GTK03}
+
+\bibitem[BBP04]{bellare:noromsig}
+Mihir Bellare, Alexandra Boldyreva, and Adriana Palacio.
+\newblock An uninstantiable random-oracle-model scheme for a hybrid-encryption
+  problem.
+\newblock In {\em Proceedings of Advances in Cryptology---EUROCRYPT 2004,
+  International Conference on the Theory and Applications of Cryptographic
+  Techniques}, volume 3027 of {\em Lecture Notes in Computer Science}, pages
+  171--188. Springer-Verlag, 2004.
+
+\bibitem[BG02]{barak:universalarguments}
+Boaz Barak and Oded Goldreich.
+\newblock Universal arguments and their applications.
+\newblock In {\em Proceedings of the 17th IEEE Annual Conference on
+  Computational Complexity---CCC '02}, pages 162--171. IEEE Computer Society,
+  2002.
+
+\bibitem[BR93]{bellare:rompractical}
+Mihir Bellare and Phillip Rogaway.
+\newblock Random oracles are practical: a paradigm for designing efficient
+  protocols.
+\newblock In {\em Proceedings of the 1st ACM conference on Computer and
+  communications security---CCS '93}, pages 62--73. ACM Press, 1993.
+
+\bibitem[CGH98]{canetti:romfails}
+Ran Canetti, Oded Goldreich, and Shai Halevi.
+\newblock The random oracle methodology, revisited (preliminary version).
+\newblock In {\em Proceedings of STOC '98: Thirtieth Annual ACM Symposium on
+  Theory of Computing}, pages 209--218. ACM Press, 1998.
+
+\bibitem[FS87]{fiat:fsparadigm}
+Amos Fiat and Adi Shamir.
+\newblock How to prove yourself: practical solutions to identification and
+  signature problems.
+\newblock In {\em Proceedings of Advances in cryptology---CRYPTO '86}, volume
+  263 of {\em Lecture Notes in Computer Science}, pages 186--194.
+  Springer-Verlag, 1987.
+
+\bibitem[Gol01]{goldreich:foundations1}
+Oded Goldreich.
+\newblock {\em Foundations of Cryptography: Basic Tools}.
+\newblock Cambridge University Press, 2001.
+
+\bibitem[GTK03]{goldwasser:fsparadigmfails}
+Shafi Goldwasser and Yael Tauman~Kalai.
+\newblock On the (in)security of the fiat-shamir paradigm.
+\newblock In {\em Proceedings of FOCS '03: 44th Annual IEEE Symposium on
+  Foundations of Computer Science}, pages 102--113. IEEE Computer Society,
+  2003.
+
+\bibitem[Mer90]{merkle:tree}
+Ralph~C. Merkle.
+\newblock A certified digital signature: That antique paper from 1979.
+\newblock In {\em Proceedings of Advances in Cryptology---CRYPTO '89, 9th
+  Annual International Cryptology Conference}, volume 435 of {\em Lecture Notes
+  in Computer Science}, pages 218--238. Springer-Verlag, 1990.
+
+\bibitem[Nie02]{nielsen:noromenc}
+Jesper~Buus Nielsen.
+\newblock Separating random oracle proofs from complexity theoretic proofs: The
+  non-committing encryption case.
+\newblock In {\em Proceedings of Advances in Cryptology - CRYPTO 2002, 22nd
+  Annual International Cryptology Conference}, volume 2442 of {\em Lecture
+  Notes in Computer Science}, pages 111--126. Springer-Verlag, 2002.
+
+\end{thebibliography}

@@ -1,0 +1,105 @@
+\chapter{Definitions and Basic Results}
+
+\section{Signatures}
+\subsection{Definitions}
+\subsection{Basic Results}
+\begin{itemize}
+
+\item \cite{goldwasser:signatures1} (1984): Goldwasser, Micali and Rivest
+exhibit the first signature scheme which is provably secure against adaptive
+chosen message attack ('secure' from now on) under a plausible complexity-theoretic assumption. Here the
+assumption is that ``claw-free'' trapdoor permutations exist, which is true if
+factoring is hard. Unfortunately, GMR's ``signature tree'' construction,
+whereby messages are associated with the leaves of a binary tree, and each node on
+the path from a leaf to the root must be authenticated in order to sign a
+particular message, is not practical. The full version (\cite{goldwasser:signatures2}) appeared in SICOMP
+in 1988.
+
+\item \cite{bellare:trapdoorsigs1} (1988): Bellare and Micali show how to
+obtain a secure signature scheme from any \emph{one-way} trapdoor permutation
+(no need for claw-freeness this time). Their construction is also
+of the inefficient, ``signature tree'' type. The full version (\cite{bellare:trapdoorsigs2}) 
+appeared in JACM in 1992. 
+
+\item \cite{naor:universal} (1989): Naor and Yung show how to construct
+secure signature schemes from weakly collision-resistant hash
+functions, and describe how the latter can be obtained from 1-1 one-way
+functions. In other words, they show that if 1-1 one-way functions exist then
+secure signature schemes exist. This is a two-fold improvement on Bellare and
+Micali's result: first, there's no need for the function to have a trap door
+(there are notoriously few natural examples of trapdoor one-way functions).
+Second, there's no need for the function to be \emph{onto}, so that the domain
+and codomain need not be identical (although collisions are still not
+allowed). Alas, Naor and Yung's construction is once again impractical. It is
+also not stateless, which imposes additional storage requirements.
+
+\item \cite{rompel:1waysigs} (1990): Building on the work of Naor and Yung, Rompel
+shows how to obtain weakly collision-resistant hash functions from ordinary (not necessarily injective)
+one-way functions, thereby demonstrating that secure signature
+schemes exist if one-way functions exist. This necessary condition is also
+sufficient, since any secure signature gives rise to a one-way function.
+Romplel's result is mainly of theoretical importance, since it effectively
+reuses Naor and Yung's impractical construction.
+\end{itemize}
+
+
+\section{ID schemes}
+\subsection{Definitions}
+\begin{itemize}
+\item See pages 270-274 of \cite{goldreich:foundations1} for some basic definitions.
+\end{itemize}
+
+\subsection{Basic Results}
+
+\section{Encryption}
+
+\subsection{Definitions}
+\subsection{Basic Results}
+\begin{itemize}
+\item \cite{goldwasser:probenc1} (1982): Goldwasser and Micali define
+semantic security and propose a practical cryptosystem which is semantically
+secure if quadratic residuosity is hard. The full version
+(\cite{goldwasser:probenc2}) appeared in JCSS in 1984.
+
+\item \cite{rackoff:cca2} (1991): Rackoff and Simon define CCA2 security and
+exhibit the first CCA2-secure cryptosystem. However, their construction relies on
+non-interactive zero-knowledge proofs of knowledge (see
+\cite{blum:noninterzerok}, \cite{bellare:noninterzk}, \cite{naor:cca1},
+\cite{feige:multnizk}, and pages 298-311 of \cite{goldreich:foundations1}) and is hence impractical.
+Another drawback of the RS construction is that it requires the presence
+of a trusted central authority that issues keys to all parties (i.e. a
+Public Key Infrastructure).
+
+\item \cite{dolev:nonmalleable1} (1991) Dolev, Dwork, and Naor independently construct
+another, more complicted CCA2 secure cryptosystem (in the context of
+non-malleability). Their cryptosystem uses non-interactive zero-knowledge
+proofs of knowledge as well and also isn't practical, but it does not rely on
+the presence of a public key infrastructure. The full version of this
+paper (\cite{dolev:nonmalleable2}) did not appear until 2000. 
+
+\item \cite{sahai:nizkcca} (1999): Sahai introduces the concept of
+\emph{non-malleable} NIZKs, and uses them to convert
+Naor and Yung's CCA1-secure cryptosystem (\cite{naor:cca1}) into a CCA2-secure
+one. If one-way functions exist, then every NIZK can be (efficiently) converted
+to a non-malleable one. At a high level, Sahai's modification of NY's scheme is much simpler
+and more elegant than Dolev, Dwork and Naor's CCA2 cryptosystem
+(\cite{dolev:nonmalleable1}). However, the details are still fairly messy. The
+cryptosystem is secure provided one-way trapdoor permutations exist.
+
+From a zero-knowledge perspective, one shortcoming of Sahai's construction is
+that it is only \emph{one-time simulation sound}, i.e. it is malleable if
+the adversary has access to more than one NIZK proof.
+
+\item \cite{desantis:robustnizk} (2001): De Santis, Di Crescenzo, Ostrovsky,
+Persiano and Sahai introduce \emph{many-time simulation sound} NIZKs, 
+both strengthening and simplifying Sahai's construction (\cite{sahai:nizkcca}). DDOPS's new NIZKs also
+yield a simpler, more elegant NY-type CCA2-secure cryptosystem.
+
+\item \cite{lindell:simplercca2} (2003): Yehuda Lindell applies the ideas
+of \cite{desantis:robustnizk} to one-time simulation sound NIZKs (which are
+sufficient for CCA2-secure cryptosystems) in order to come up with an
+even simpler NY-type CCA2-secure cryptosystem. His is the nicest cryptosystem
+whose CCA2 security rests on general assumptions -- the existence of one-way
+traproor permutations, to be exact -- to date.
+\end{itemize}
+

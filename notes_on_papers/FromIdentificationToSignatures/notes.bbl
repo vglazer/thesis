@@ -1,0 +1,27 @@
+\begin{thebibliography}{CGH98}
+
+\bibitem[Bar01]{barak:nonblackbox}
+Boaz Barak.
+\newblock How to go beyond the black-box simulation barrier.
+\newblock In {\em Proceedings of the 42nd IEEE symposium on Foundations of
+  Computer Science---FOCS '01}, page 106. IEEE Computer Society, 2001.
+
+\bibitem[BR93]{bellare:rompractical}
+Mihir Bellare and Phillip Rogaway.
+\newblock Random oracles are practical: a paradigm for designing efficient
+  protocols.
+\newblock In {\em Proceedings of the 1st ACM conference on Computer and
+  communications security---CCS '93}, pages 62--73. ACM Press, 1993.
+
+\bibitem[CGH98]{canetti:romfails}
+Ran Canetti, Oded Goldreich, and Shai Halevi.
+\newblock The random oracle methodology, revisited (preliminary version).
+\newblock In {\em Proceedings of the thirtieth annual ACM symposium on Theory
+  of computing---STOC '98}, pages 209--218. ACM Press, 1998.
+
+\bibitem[Mic00]{micali:csproofs}
+Silvio Micali.
+\newblock Computationally sound proofs.
+\newblock {\em SIAM J. Comput.}, 30(4):1253--1298, 2000.
+
+\end{thebibliography}

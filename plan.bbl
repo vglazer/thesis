@@ -1,0 +1,167 @@
+\begin{thebibliography}{GMR88}
+
+\bibitem[BFM88]{blum:noninterzerok}
+Manuel Blum, Paul Feldman, and Silvio Micali.
+\newblock Non-interactive zero-knowledge and its applications.
+\newblock In {\em Proceedings of the twentieth annual ACM symposium on Theory
+  of computing---STOC '88}, pages 103--112. ACM Press, 1988.
+
+\bibitem[BG02]{barak:universalarguments}
+Boaz Barak and Oded Goldreich.
+\newblock Universal arguments and their applications.
+\newblock In {\em Proceedings of the 17th IEEE Annual Conference on
+  Computational Complexity---CCC '02}, pages 162--171. IEEE Computer Society,
+  2002.
+
+\bibitem[BR93]{bellare:rompractical}
+Mihir Bellare and Phillip Rogaway.
+\newblock Random oracles are practical: a paradigm for designing efficient
+  protocols.
+\newblock In {\em Proceedings of the 1st ACM conference on Computer and
+  communications security---CCS '93}, pages 62--73. ACM Press, 1993.
+
+\bibitem[BR94]{bellare:oaep}
+Mihir Bellare and Phillip Rogaway.
+\newblock Optimal assymetric encryption.
+\newblock In {\em Proceedings of Advances in Cryptology---EUROCRYPT '94,
+  Workshop on the Theory and Application of Cryptographic Techniques}, volume
+  950 of {\em Lecture Notes in Computer Science}, pages 92--111.
+  Springer-Verlag, 1994.
+
+\bibitem[Can97]{canetti:hideinfo}
+Ran Canetti.
+\newblock Towards realizing random oracles: Hash functions that hide all
+  partial information.
+\newblock In {\em Proceedings of Advances in cryptology---CRYPTO '97}, volume
+  1294 of {\em Lecture Notes in Computer Science}, pages 455--469.
+  Springer-Verlag, 1997.
+
+\bibitem[CGH98]{canetti:romfails}
+Ran Canetti, Oded Goldreich, and Shai Halevi.
+\newblock The random oracle methodology, revisited (preliminary version).
+\newblock In {\em Proceedings of the thirtieth annual ACM symposium on Theory
+  of computing---STOC '98}, pages 209--218. ACM Press, 1998.
+
+\bibitem[CMR98]{canetti:perfecthash}
+Ran Canetti, Daniele Micciancio, and Omer Reingold.
+\newblock Perfectly one-way probabilistic hash functions (preliminary version).
+\newblock In {\em Proceedings of the thirtieth annual ACM symposium on Theory
+  of computing---STOC '98}, pages 131--140. ACM Press, 1998.
+
+\bibitem[Cr96]{cramer:signatures}
+Ronald Cramer and Ivan~Damg\aa rd.
+\newblock New generation of secure and practical rsa-based signatures.
+\newblock In {\em Proceedings of the 16th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '96}, pages 173--185.
+  Springer-Verlag, 1996.
+
+\bibitem[CS98]{cramer:cca2secure}
+Ronald Cramer and Victor Shoup.
+\newblock A practical public key cryptosystem provably secure against adaptive
+  chosen ciphertext attack.
+\newblock In {\em Proceedings of the 18th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '98}, volume 1462 of {\em
+  Lecture Notes in Computer Science}, pages 13--25. Springer-Verlag, 1998.
+
+\bibitem[CS99]{cramer:signatures2}
+Ronald Cramer and Victor Shoup.
+\newblock Signature schemes based on the strong rsa assumption.
+\newblock In {\em Proceedings of the 6th ACM conference on Computer and
+  communications security---CSS '99}, pages 46--51. ACM Press, 1999.
+
+\bibitem[DDN91]{dolev:nonmalleable1}
+Danny Dolev, Cynthia Dwork, and Moni Naor.
+\newblock Non-malleable cryptography.
+\newblock In {\em Proceedings of the twenty-third annual ACM symposium on
+  Theory of computing---STOC '91}, pages 542--552. ACM Press, 1991.
+
+\bibitem[DDN00]{dolev:nonmalleable2}
+Danny Dolev, Cynthia Dwork, and Moni Naor.
+\newblock Nonmalleable cryptography.
+\newblock {\em SIAM J. Comput.}, 30(2):391--437, 2000.
+
+\bibitem[DN94]{dwork:signatures}
+Cynthia Dwork and Moni Naor.
+\newblock An efficient existentially unforgeable signature scheme and its
+  applications.
+\newblock In {\em Proceedings of the 14th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '94}, pages 234--246.
+  Springer-Verlag, 1994.
+
+\bibitem[FS87]{fiat:fsparadigm}
+Amos Fiat and Adi Shamir.
+\newblock How to prove yourself: practical solutions to identification and
+  signature problems.
+\newblock In {\em Proceedings of Advances in cryptology---CRYPTO '86}, volume
+  263 of {\em Lecture Notes in Computer Science}, pages 186--194.
+  Springer-Verlag, 1987.
+
+\bibitem[GHR99]{gennaro:signatures}
+Rosario Gennaro, Shai Halevi, and Tal Rabin.
+\newblock Secure hash-and-sign signatures without the random oracle.
+\newblock In {\em Proceedings of Advances in Cryptology---EUROCRYPT'99:
+  International Conference on the Theory and Application of Cryptographic
+  Techniques}, volume 1592 of {\em Lecture Notes in Computer Science}, pages
+  123--139. Springer-Verlag, 1999.
+
+\bibitem[GK03]{goldwasser:fsparadigmfails}
+Shafi Goldwasser and Yael~Tauman Kalai.
+\newblock On the (in)security of the fiat-shamir paradigm.
+\newblock In {\em Proceedings of the 44th Annual IEEE Symposium on Foundations
+  of Computer Science---FOCS '03}, pages 102--113. IEEE Computer Society, 2003.
+
+\bibitem[GMR84]{goldwasser:signatures1}
+Shafi Goldwasser, Silvio Micali, and Ron~L. Rivest.
+\newblock A paradoxical solution to the signature problem.
+\newblock In {\em Proceedings of the 25th Annual Symposium on Foundations of
+  Computer Science---FOCS'84}, pages 441--449. IEEE Computer Society, 1984.
+
+\bibitem[GMR88]{goldwasser:signatures2}
+Shafi Goldwasser, Silvio Micali, and Ron~L. Rivest.
+\newblock A digital signature scheme secure against adaptive chosen-message
+  attacks.
+\newblock {\em SIAM Journal on Computing}, 17(2):281--308, 1988.
+
+\bibitem[Mer88]{merkle:signatures}
+Ralph~C. Merkle.
+\newblock A digital signature based on a conventional encryption function.
+\newblock In {\em A Conference on the Theory and Applications of Cryptographic
+  Techniques on Advances in Cryptology---CRYPTO '87}, volume 293, pages
+  369--378. Springer-Verlag, 1988.
+
+\bibitem[Mer90]{merkle:tree}
+Ralph~C. Merkle.
+\newblock A certified digital signature: That antique paper from 1979.
+\newblock In {\em Proceedings of Advances in Cryptology---CRYPTO '89, 9th
+  Annual International Cryptology Conference}, volume 435 of {\em Lecture Notes
+  in Computer Science}, pages 218--238. Springer-Verlag, 1990.
+
+\bibitem[Mic00]{micali:csproofs}
+Silvio Micali.
+\newblock Computationally sound proofs.
+\newblock {\em SIAM J. Comput.}, 30(4):1253--1298, 2000.
+
+\bibitem[NY89]{naor:signatures}
+M.~Naor and M.~Yung.
+\newblock Universal one-way hash functions and their cryptographic
+  applications.
+\newblock In {\em Proceedings of the twenty-first annual ACM symposium on
+  Theory of computing---STOC '89}, pages 33--43. ACM Press, 1989.
+
+\bibitem[Oka93]{okamoto:discretelogfs}
+Tatsuaki Okamoto.
+\newblock Provably secure and practical identification schemes and
+  corresponding signature schemes.
+\newblock In {\em Proceedings of the 12th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '92}, pages 31--53.
+  Springer-Verlag, 1993.
+
+\bibitem[RS92]{rackoff:cca2}
+Charles Rackoff and Daniel~R. Simon.
+\newblock Non-interactive zero-knowledge proof of knowledge and chosen
+  ciphertext attack.
+\newblock In {\em Proceedings of the 11th Annual International Cryptology
+  Conference on Advances in Cryptology---CRYPTO '91}, pages 433--444.
+  Springer-Verlag, 1992.
+
+\end{thebibliography}

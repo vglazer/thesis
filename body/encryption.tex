@@ -1,0 +1,644 @@
+%\chapter{Public-key Encryption Schemes Secure in the ROM}
+\chapter{A public-key encryption scheme CCA2-secure in the ROM}
+\label{CH:Encryption}
+
+%\section{Overview of Results}
+%\subsection{Factoring-based}
+%\subsubsection{RSA}
+%\subsubsection{Quadratic and N-residues}
+%\subsection{Discrete Log-based}
+%\subsubsection{Computational Diffie-Hellman}
+%\subsubsection{Decisional Diffie-Hellman}
+%\subsubsection{Bilinear Diffie-Hellman}
+\section{Public-key encryption in the ROM: an overview}
+\label{SEC:EncOverview}
+%\begin{itemize}
+
+%\subsection{In the beginning}
+%\item 
+In \cite{bellare:rompractical}, Bellare and Rogaway proposed the following
+public-key encryption scheme, which they showed to be CCA2-secure in the ROM (see Sections
+\ref{SEC:PKEPs} and \ref{SEC:ROM} of Chapter~\ref{CH:Preliminaries} for the
+relevant definitions).  Let 
+%$\fang: \strs{*} \to \strs{n}$ and $\fanh:
+%\strs{*} \to \strs{k}$ be random oracles, where $n$ and $k \leq n$ are 
+%security parameters of the scheme, and let 
+$(G,f,f')$ be a trapdoor permutation 
+%for more on trapdoor permutations, 
+(see Section~\ref{SEC:Trapdoor} of Chapter~\ref{CH:Preliminaries}). The key
+generator $GEN^\fanr$ simulates $G$ to obtain a pair of keys $(k,k')$ and sets
+$pub = k$, $pri = k'$. Let $n$ be the security parameter. To encrypt a message
+$m \in \strs{n}$, $ENC^\fanr_k$ chooses $r \in \strs{n}$ randomly, computes $y
+= f_k(r)$ and sets $e_m$ to $(y,\fanr(r)\oplus m, \fanr(r,m))$.  Given a
+purported encryption $e = (\alpha,\beta,\gamma)$, $DEC_{k'}^\fanr$ computes $r
+= f'_{k'}(\alpha)$ and sets $m = \beta \oplus \fanr(r)$. If $\gamma \neq
+\fanr(r,m)$, he outputs $\perp$, indicating a failure to decrypt; otherwise,
+he outputs $m$ as the decryption of $e$. Intuitively, $r$ is hard to find
+because $f_k$ is hard to invert. Together with the randomness of $\fanr$, this
+implies that $\fanr(r) \oplus m$ yields no information about $m$, which
+guarantees semantic security. The ``authentification code'' $\fanr(r,m)$
+ensures that encryptions are difficult to ``malleate''. 
+
+%\subsection{The OAEP saga}
+One drawback of the above scheme is that encryptions are of length about $3n$,
+or roughly three times the length of the message being encrypted. To address
+this issue, Bellare and Rogaway introduced the highly influential Optimal
+Asymmetric Encryption Padding or OAEP scheme
+in \cite{bellare:oaep}, a simplified version\footnote{The real scheme makes
+use of two independent random oracles, $\fang$ and $\fanh$, and has three
+security parameters.} of which is described next.  Let $\fanf = (G,f,f')$ be a
+trapdoor permutation. As before, the key generator $GEN^\fanr$ simulates $G$
+to obtain a pair of keys $(k,k')$ and sets $pub = k$, $pri = k'$. Let $n$ be
+the security parameter. To simplify the presentation, it will be convenient to
+assume that $f_k$ and $f'_{k'}$ map $2n$ bits to $2n$ bits (as opposed to $n$
+bits to $n$ bits). To encrypt a message $m \in \strs{n}$, $ENC^\fanr_k$
+chooses $r \in \strs{n}$ randomly, computes $\rho(m) = (m \oplus \fanr(r), r
+\oplus \fanr(m \oplus \fanr(r)))$ and sets $e_m = f_k(\rho(m))$; $\rho$ is
+sometimes called the {\it padding function}. Given a purported encryption
+$\alpha \in \strs{2n}$, $DEC^\fanr_{k'}$ computes $(\beta,\gamma) =
+f_{k'}'(\alpha)$, where $|\beta| = |\gamma| = n$, and sets $r = \gamma \oplus
+\fanr(\beta)$. He then outputs $m = \beta \oplus \fanr(r) \in \strs{n}$ as the
+decryption of $\alpha$; notice that every $\alpha$ is a valid encryption of
+{\it some} $m$, so that $DEC_{k'}^\fanr$ never outputs $\perp$. This scheme
+was shown to be ``plaintext aware'' in \cite{bellare:oaep}, where it was also
+claimed (without proof) that plaintext awareness implies ``security against
+chosen-ciphertext attack'' (it's not entirely clear whether the authors had
+CCA1 or CCA2 security in mind).
+
+After Bleichenbacher showed in \cite{bleichenbacher:pkcsbroken} that version
+1.5 of RSA Security's PKCS~\#1 standard (\cite{rsa:pkcs15}) is vulnerable to
+chosen-ciphertext attack, RSA-OAEP (a concrete implementation of the OAEP
+scheme where the role of $\fanf$ is played by the RSA function) served as the
+basis for version 2.0 of the standard (\cite{rsa:pkcs20}). RSA-OAEP was
+subsequently also incorporated into IEEE's public-key cryptography standard,
+IEEE P1363-2000 (\cite{ieee:p1363}).  However, in \cite{shoup:oaepbad} Shoup
+pointed out that, although OAEP is indeed {\it CCA1}-secure, there is an
+(additional, not random) oracle relative to which $\fanf$ remains one-way but
+OAEP fails to be {\it CCA2}-secure. Since standard
+``black-box'' security reductions relativize --- that is, hold relative to {\it
+every} oracle --- any reduction from inverting $\fanf$ to breaking the CCA2
+security of OAEP would therefore have to be ``non-black-box'', meaning that it
+would need to somehow depend on the specifics of $\fanf$. Shoup also proposed a
+modification of OAEP, called OAEP+, which he proved to be CCA2-secure in the
+ROM. In \cite{fujisaki:rsaoaepok1}, Fujisaki, Okamoto, Pointcheval and Stern
+proved that OAEP is CCA2-secure under the stronger assumption that $\fanf$ is
+``partial domain one-way'', as opposed to ``full domain one-way'' or simply
+one-way (also see \cite{fujisaki:rsaoaepok2} for the journal version). Since
+RSA is ``random self-reducible'' --- loosely, this means that being able to
+invert it on a large fraction of the inputs allows one to invert it on every
+single input --- it is ``partial domain one-way''  if and only if it is
+one-way.  Thus, Shoup's result notwithstanding, RSA-OAEP is in fact
+CCA2-secure under the RSA assumption.
+
+In \cite{boneh:simpleoaep}, Boneh observed that the OAEP padding function
+$\rho$ may be viewed as two rounds of a ``Feistel network'' and proposed two
+simpler, more elegant single-round padding functions. When used in conjunction
+with either RSA or Rabin's modular squaring function, these new paddings yield
+encryption schemes which are CCA2-secure in the ROM (under the assumption
+that RSA is hard to invert and factoring is hard, respectively).
+Interestingly, Boneh recommends using the Rabin function in preference to
+RSA where his paddings are concerned, since it has better ``reduction
+efficiency''.
+
+%There hasn't been a great deal of work on discrete logarithm-based
+%encryption schemes which are CCA2-secure in the ROM for the following reason. 
+In \cite{cramer:cca2secure}, Cramer and Shoup described an efficient,
+practical public-key encryption scheme (its efficiency is comparable to that
+of RSA-OAEP) which is CCA2-secure in the ``real world'' (and hence also in the
+ROM) under the non-standard-yet-highly-plausible ``Decisional Diffie-Hellman''
+assumption.  This important result is perhaps the main reason why there hasn't been
+a great deal of work done on discrete logarithm-based public-key encryption schemes which are
+CCA2-secure in the ROM.
+%comes up with a greatly
+%simplified OAEP-type padding which is also CCA2 secure in the random
+%oracle model. He also advocates using the Rabin (squaring) function rather
+%than RSA, since the reduction from factoring to breaking the chosen ciphertext
+%security is \emph{tighter} in that case. In other words, an adversary that breaks the CCA2 security
+%of the cryptosystem can be converted into a factoring algorithm with very
+%little overhead.
+%
+%\cite{bellare:oaep}, implies CCA1 security, it does not imply CCA2 security.
+%Oracle Methodology and proposed a public-key encryption scheme which is CCA2-secure 
+%in the ROM. This scheme later served as the basis for OAEP.                            
+%
+%\item 
+%In \cite{bellare:oaep}, Bellare and Rogaway proposed OAEP, a cryptosystem
+%which is purportedly CCA2 secure in the random oracle model if the RSA
+%function is one-way.  
+%
+%\item 
+%In \cite{bellare:minroms}, Bellare and Rogaway propose two new
+%cryptosystems purportedly CCA2-secure in the random oracle model, one (OAEP-like) based on the hardness 
+%of RSA and the other on the hardness of the computational Diffie-Hellman problem. 
+% 
+%\item 
+%\subsection{A sampling of other schemes}
+%In \cite{tsiounis:elgamal}, Tsiounis and Yung show that the ElGamal
+%encryption scheme (\cite{elgamal:dlsigs}) is semantically secure in the ``real
+%world'' under the \emph{decisional} Diffie-Hellman assumption. They also exhibit an 
+%extension of the ElGamal scheme which is CCA2-secure in the random oracle model under
+%the decisional Diffie-Hellman assumption and a special assumption about
+%the unforgeability of Schnorr signatures (\cite{schnorr:discretelogfs}).
+% 
+%\item 
+%In \cite{fujisaki:enhance}, Fujisaki and Okamoto show how to
+%efficiently convert any semantically secure public-key cryptosystem into one that is CCA2-secure
+%in the random oracle model.
+% 
+%\item \cite{fujisaki:integration} (1999): Fujisaki and Okamoto show how to
+%combine a public-key cryptosystem which is ``one-way secure'' with a
+%an indistinguishability-secure private-key cryptosystem to form a public-key
+%cryptosystem which is CCA2-secure in the random oracle model. The public-key
+%cryptosystem must additionally satisfy a technical condition called
+%``$\gamma$-uniformity''. Informally, there must be ``enough'' distinct ciphertexts for every plaintext. 
+%``One-way security'' is a non-standard, weak notion of security. A 
+%cryptosystem is said to be ``one-way secure'' if no efficient adversary which is given a properly generated 
+%public key and a random ciphertext 
+%(i.e. the encryption of a random plaintext) can correctly decrypt it
+%with significant probability.
+%
+%\item 
+%In \cite{shoup:oaepbad}, Shoup points out that Bellare and Rogaway
+%did \emph{not} in fact show that OAEP is CCA2 secure in the random oracle model.
+%Rather, they showed it is ``plaintext aware''. However, the particular
+%definition of ``plaintext-awareness'' used in their paper is \emph{not}
+%equivalent to chosen ciphertext security. Shoup proposes an alternative
+%padding scheme, dubbed OAEP+, which \emph{is} CCA2 secure in the random oracle
+%model. Note that Shoup did not \emph{prove} that OAEP is insecure.
+%Nevertheless, he did show that OAEP is insecure relative to an oracle. This
+%rules out the existence of a standard ``black-box'' reduction from the one-wayness of the
+%underlying trapdoor permutation to the chosen ciphertext security of the
+%resulting cryptosystem.
+% 
+%\item 
+%In \cite{fujisaki:rsaoaepok}, Expanding on Shoup's work, Fujisaki,
+%Okamoto, Pointcheval, and Stern show that RSA-OAEP \emph{is} in fact CCA2 secure in the random oracle model.
+%However, unlike Bellare and Rogaway's, their proof makes
+%crucial use of the algebraic properties of the RSA function.
+%\item 
+%
+%\item 
+%In \cite{boneh:ibeweil1}, Dan Boneh and Matt Franklin describe an
+%\emph{identity-based} encryption scheme which is CCA2 secure in the random oracle
+%model, provided an elliptic curves analogue of the computational Diffie-Hellman
+%problem is hard. The full version 
+%(\cite{boneh:ibeweil2}) appeared in SICOMP
+%in 2003.
+% 
+%\item 
+%In \cite{cocks:iberomquad}, Cocks presents an identity-based
+%encryption scheme which is CCA2-secure in the random oracle model if
+%quadratic residuosity is hard.
+%
+%\end{itemize}
+
+\section{The original scheme}
+\label{SEC:DHIES}
+In \cite{bellare:minroms}, Bellare and Rogaway proposed a discrete
+logarithm-based public-key encryption scheme called 
+%allegedly CCA2-secure in the ROM: an OAEP-like RSA-based scheme (see
+%Section~\ref{SEC:EncOverview} for more on OAEP and its security) and a
+%discrete logarithm-based scheme called 
+the Diffie-Hellman Integrated Encryption Scheme or DHIES, which they claimed
+is CCA2-secure in the ROM under the ``Computational Diffie-Hellman''
+assumption (a standard discrete log-type hardness assumption). However, in
+\cite{abdalla:dhies1} Abdalla, Bellare and Rogaway conceded that DHIES is
+unlikely to be CCA2-secure in the ROM under the above assumption (see also
+\cite{abdalla:dhies2}). Instead, they proved that DHIES is CCA2-secure in
+the ``real world'' under a strong, non-standard Diffie-Hellman-type
+assumption called the ``Hash Diffie-Hellman'' assumption;  their new focus on
+``real-world'' security (as opposed to security in the ROM) was likely a
+response to Cramer and Shoup's 1998 discovery (\cite{cramer:cca2secure}) of a
+practical public-key encryption scheme which is CCA2-secure in the ``real
+world'' under the non-standard-yet-plausible ``Decisional Diffie-Hellman''
+assumption. Although its security rests on a rather less believable
+assumption, DHIES is somewhat more efficient than Cramer and Shoup's scheme.
+We now give an informal description of the DHIES encryption scheme.
+%In Section~\ref{SEC:Ourscheme}, was
+%show how to add redundancy to DHIES in order to ensure that it is indeed
+%CCA2-secure in the ROM under the ``Computational Diffie-Hellman'' assumption.
+
+%The scheme 
+%is loosely based on the one suggested by ElGamal in
+%\cite{elgamal:dlsigs} and 
+%utilizes a secure MAC $(MAC,VER)$ and a secure shared private-key
+%cryptosystem $(ENC,DEC)$ as follows. 
+
+Let $G$ be a cyclic multiplicative group of order $p-1$, where $p$ is some
+$n$-bit prime ($n$ being the security parameter). For concreteness, 
+%it might help to 
+think of $G$ as $\fanz^{*}_p = \{1,2,\ldots,p - 1\}$ (here the group
+operation is multiplication mod $p$). We will need to assume that membership in
+$G$ is efficiently testable, which is the case for $\fanz^*_p$. It will also
+sometimes be convenient to treat the elements of $G$ as strings over
+$\strs{}$, say via their binary encoding.  
+
+Fix a generator $g \in G$, so that $G = \{g, g^2, \ldots, g^{p-1}\}$; 
+$g$ is implicitly given to all participants, as are $p$ and $1^n$.
+Informally, the Computational Diffie-Hellman assumption (often abbreviated as
+the CDH assumption) with respect to $G$ says that $g^{uv} \in G$ is hard to
+compute from $g^u \in G$ and $g^v \in G$.  Formally, the CDH assumption holds
+for $G$ if, for every probabilistic polynomial-time adversary $A$ who is given
+$g^u \in G$ and $g^v \in G$ for randomly chosen $u,v \in \{1, \ldots, p-1\}$,
+the probability $p_A(n)$ that $A$ outputs $g^{uv} \in G$ is negligible; here
+$p_A(n)$ is taken over the random bits of $A$ as well as the choice of $u$ and
+$v$.  
+
+We will need a secure MAC $\fanm = (SIGN,VER)$ (see
+Section~\ref{SEC:Signatures} of Chapter~\ref{CH:Preliminaries}) and a secure
+``private-key encryption scheme'' $\fane = (ENC,DEC)$ (the latter haven't
+actually been formally defined in this thesis). $\fanm$ must also be
+``non-malleable'' in the following sense: given a signature $\sigma$ of some
+message $m$, it is infeasible to find another signature $\sigma' \neq \sigma$
+of $m$.
+%Although we haven't formally defined security for private-key encryption
+%schemes in this thesis, 
+Both secure non-malleable MACs and secure ``private-key encryption schemes''
+can be implemented using ``pseudorandom function generators''
+(\cite{goldreich:pseudorandom2}), which exist if one-way functions (see
+Section~\ref{SEC:Oneway} of Chapter~\ref{CH:Preliminaries}) do
+(\cite{goldreich:pseudorandom1}, \cite{goldreich:pseudorandom3}).   
+
+To generate a matching public/private key pair, randomly choose a $v \in
+\{1,\ldots,p-1\}$ and set $pub = g^v \in G$, $pri = v$. 
+
+To encrypt a message $m \in \strs{n}$ given a public key $g^v$, 
+%proceed as follows. 
+first randomly choose $u \in \{1,\ldots,p-1\}$ and compute $g^u
+\in G$, $(g^v)^u = g^{uv} \in G$. Next, query the random oracle $\fanr$ on
+$(g^u, g^{uv})$ (notice that here we are treating elements of $G$ as binary
+strings) to obtain two keys $k_1,k_2 \in \strs{n}$ (here we assume for
+convenience that $\fanr : \strs{*} \to \strs{2n}$). Finally, compute $s =
+ENC_{k_1}(m)$, $t = SIGN_{k_2}(s)$ and output $e_m = (g^u,s,t)$ as the
+encryption of $m$. 
+
+To decrypt a purported ciphertext $e = (\alpha,\beta,\gamma)$ given a private
+key $v$, proceed as follows. If $\alpha \notin G$, output $\perp$, indicating
+a failure to decrypt. Otherwise, compute $\alpha^v \in G$ and query $\fanr$ on
+$(\alpha,\alpha^v)$ to obtain $k_1, k_2 \in \strs{n}$. If
+$VER_{k_2}(\beta,\gamma) = 0$, output $\perp$. Otherwise, output
+$DEC_{k_1}(\beta)$ as the decryption of $e$.
+
+%Bellare and Rogaway claimed in \cite{bellare:minroms} that the above
+%cryptosystem is secure against adaptive chosen ciphertext attack (i.e.
+%CCA2-secure) in the random oracle model if the computational Diffie-Hellman
+%problem is hard for $G$, and both $(MAC,VER)$ and $(ENC,DEC)$ are secure in
+%the appropriate sense.  Here is some --- ultimately incorrect, as it turns
+%out --- intuition as to why DHIES should be CCA2-secure in the ROM under the
+%Computational Diffie-Hellman assumption, which basically says that it's hard
+%to compute (all of) $g^{uv} \in G$ given $g^u \in G$ and $g^v \in G$ for
+%randomly chosen $u,v \in \{1, \ldots, p-1\}$. Recall that the adversary $ADV$
+%chooses two $n$-bit messages, $m_0$ and $m_1$, and then sees the encryption
+%$e_b = (g^u,s,t)$ of $m_b$ for a randomly chosen $b \in \strs{}$.  Since
+%$\fane$ and $\fanm$ are both secure, the only way If the adversary doesn't
+%know the keys $k_1$ and $k_2$ then the chosen-message security of the MAC
+%guarantees non-malleability and the indistinguishability security of the
+%shared private key cryptosystem ensures semantic security. Since $\fanr$ is
+%truly random, the only way to obtain $k_1$ and $k_2$ with significant
+%probability is to compute $\alpha^v$ given $\alpha$ and $g^v$, i.e. to solve
+%the Diffie-Hellman problem for $G$. 
+
+%Although this informal argument is intuitively appealing, Abdalla, Bellare
+%and Rogaway conceded in \cite{abdalla:dhies1} that the cryptosystem most
+%likely cannot be formally proven secure, even in the random oracle model (see
+%\cite{abdalla:dhies2} for the full version and \cite{abdalla:dhaes} for an
+%earlier draft).  
+%
+%We propose a modified version of the cryptosystem and prove that it is CCA2
+%secure in the random oracle model.
+
+Next, we briefly argue why DHIES is unlikely to be CCA2-secure in the ROM
+(without actually {\it proving} that it isn't).  The standard way to
+demonstrate that a public-key encryption scheme is CCA2-secure is to show that
+it is both semantically secure (see Chapter~\ref{CH:Preliminaries},
+Section~\ref{SEC:PKEPs}) and ``plaintext-aware''. 
+%; since we are working in the ROM, here both must be shown in the ROM. 
+Informally, a public-key encryption scheme is plaintext-aware if the
+decryption oracle $\fand$ is useless to the CCA2 adversary $ADV$, meaning that
+$ADV$ is only able to get $\fand$ to decrypt ciphertexts he could have
+decrypted himself. 
+%($\fand$ outputs $\perp$ for the rest of the ciphertexts).
+More formally, we say that a public-key encryption scheme is {\it
+plaintext-aware in the ROM} if, for every probabilistic polynomial-time
+adversary $ADV^{\fanr,\fand}$, there is a corresponding probabilistic
+polynomial-time adversary $A^\fanr$ such that the difference between the
+success probabilities of $ADV^{\fanr,\fand}$ and $A^\fanr$ 
+%(taken over their random bits, the randomness of $\fanr$ and the choice of
+%$pub$) 
+is negligible (in $n$). $A^{\fanr}$ essentially simulates
+$ADV^{\fanr,\fand}$, computing $\fand$'s answers himself 
+%(with some negligible error) 
+based on $ADV^{\fanr,\fand}$'s view. Below, we provide evidence that DHIES
+fails to have this property.
+
+Recall that $ADV^{\fanr,\fand}$ is given $g^v \in G$, chooses a pair of
+messages $m_0,m_1 \in \strs{n}$ and then sees an encryption $e_b = (g^u, s =
+ENC_{k_1}(m_b), t = SIGN_{k_2}(s))$, where $k_1k_2 = \fanr(g^u, g^{uv})$ and 
+$b \in \strs{}$, $u \in \{1,\ldots,p-1\}$ are chosen randomly.
+Since $ADV^{\fanr,\fand}$ is not allowed to query $\fand$ on $e_b$, he must
+modify at least one of $g^u$, $s$ and $t$. 
+
+If $ADV^{\fanr,\fand}$ queries $\fand$ on $e' = (g^{u'}, s', t')$, where
+either $s' \neq s$ or $t' \neq t$ (or both), $A^\fanr$ can safely respond with
+$\perp$. This is almost certainly the right answer, because in order for $e'$
+to be a valid ciphertext $ADV^{\fanr,\fand}$ would need to either sign a new
+message (if $s' \neq s$), or come up with another signature of an old message
+(if $s' = s$); the former is infeasible because $\fanm$ is secure, whereas the
+latter is infeasible because $\fanm$ is non-malleable.
+%Similarly, if he queries $\fand$ on $(g^u, s', t)$ for some $s'
+%\neq s$ then the answer is almost certainly $\perp$, because $(ENC,DEC)$ is a
+%secure private-key encryption scheme by assumption. Querying $\fand$ on
+%$(\alpha, s, t)$ for any $\alpha \notin G$ would also result in an answer of
+%$\perp$. 
+If, on the other hand, $ADV^{\fanr,\fand}$ queries $\fand$ on $(g^{u'},s,t)$
+for some $u' \neq u$, the correct answer is again almost certainly $\perp$,
+provided that
+%Although $A^{\fanr}$ would like to give
+%$\perp$ as the answer, $\fand$ will actually reveal $m_b$ if 
+$g^{u'v} \neq g^{uv}$. Although we haven't done so, we could ensure that
+is the case by stipulating that $|G| = q$ for some prime $q$.
+%Since $A^\fanr$ has no information about
+%$b$, the difference between his and $ADV^{\fanr,\fand}$'s success
+%probabilities certainly wouldn't be negligible in this case. This means that
+%our proof of plaintext-awareness will break down if it is possible for
+%$ADV^{\fanr,\fand}$ to find 
+%a $u' \neq u$ such that $g^{u'v} = g^{uv}$.
+%In other words, $ADV^{\fanr,\fand}$ need only find 
+%an $\alpha = g^{u'} \in G$ such that $\alpha^v = g^{uv}$ (note that he need
+%not even know the value of $u'$ explicitly), which isn't ruled out by the
+%Computational Diffie-Hellman assumption.  
+
+However, as we shall now see, $\fand$ allows $ADV^{\fanr,\fand}$ to determine,
+given any $\alpha,\beta \in G$, whether $\alpha^v = \beta$ (recall that
+$ADV^{\fanr,\fand}$ does {\it not} know $v$). First, $ADV^{\fanr,\fand}$
+computes $k_1k_2 = \fanr(\alpha,\beta)$ and creates an encryption $e' =
+(\alpha, s' = ENC_{k_1}(m), t' = SIGN_{k_2}(s'))$ of some message $m \in
+\strs{n}$, say $\bar{0}$ for definiteness. Next, he queries $\fand$ on $e'$.
+It is easy to show that $\fand(e') = m$ (as opposed to $\perp$) if and only if
+$\alpha^v = \beta$. Since it is by no means clear how $A^\fanr$ would emulate
+such a functionality, a stronger assumption than CDH is apparently required to
+ensure that DHIES is CCA2-secure in the ROM. 
+%However, it should be stressed
+%that the above reasoning doesn't conclusively establish that DHIES isn't
+%CCA2-secure in the ROM under the CDH assumption, because some other proof of
+%security which doesn't rely on demonstrating plaintext-awareness could exist
+%in principle.
+
+\section{Our modification}
+\label{SEC:Ourscheme}
+We now describe a modified version of DHIES, called DHIES+, which is provably
+secure in the ROM under the CDH assumption. Although in what follows we only
+show how to encrypt a single bit in order to simplify the presentation, our
+scheme can be easily extended to encrypt $n$-bit messages with the aid of a
+secure MAC and a secure private-key encryption scheme.
+
+Let $G$ be a cyclic multiplicative group of order $q$, where $q$ is some
+$n$-bit prime ($n$ being the security parameter). For concreteness, think of
+$G$ as a subgroup of $\fanz_p^*$, where $p > q$ is some other prime. Notice
+that here, unlike in Section~\ref{SEC:DHIES}, $|G|$ is prime. This will be
+important in Section~\ref{SEC:Plaintext} below. Fix a generator $g \in G$, so
+that $G = \{g, g^2, \ldots, g^q\}$; $g$ is once again implicitly given to all
+participants, as are $q$ and $1^n$.
+
+To generate a matching public/private key pair, randomly choose a $v \in
+\{1,\ldots,q\}$ and set $pub = g^v \in G$, $pri = v$. 
+
+To encrypt a bit $b$ given a public key $g^v$, first randomly choose $u \in
+\{1,\ldots,q\}$ and compute $g^u \in G$, $(g^v)^u = g^{uv} \in G$. Next,
+query $\fanr$ to obtain $s_0s_1r = \fanr(g^{uv})$, where $s_0,s_1,r \in
+\strs{n}$ (here we assume for convenience that $\fanr: \strs{*} \to
+\strs{3n}$).  Finally, compute $t = u \oplus r$ and output $e_b = (g^u, s_b,
+t)$ as the encryption of $b$. 
+
+To decrypt a purported ciphertext $e = (\alpha,\beta,\gamma)$ given a private
+key $v$, proceed as follows:
+\begin{enumerate}
+\item If $\alpha \notin G$, output $\perp$, indicating
+a failure to decrypt. 
+\item Compute $\alpha^v \in G$ and query $\fanr$ to
+obtain $s_0s_1r = \fanr(\alpha^v)$.
+\item Set $u = \gamma \oplus r$ and compute $g^u \in G$.  If
+$\alpha \neq g^u$, output $\perp$. 
+\item If $\beta \notin \{s_0,s_1\}$, output
+$\perp$. Otherwise, output a $b$ such that $\beta = s_b$ as the decryption of
+$e$. 
+\end{enumerate}
+\begin{rem}
+Notice that there is a small probability ($\frac{1}{2^n}$,
+to be exact) that $s_0 = s_1$, in which case we won't be able to decrypt $e$
+correctly. This unlikely occurrence can be avoided by making the scheme
+slightly more complicated, but we won't go into the details here.
+\end{rem}
+We will prove that DHIES+ is CCA2-secure in the ROM in two stages. First,
+we'll show that it is semantically secure in the ROM under the CDH
+assumption. Next, we'll show that it is plaintext-aware in the ROM.
+
+\subsection{Semantic security}
+\label{SEC:Semantic}
+Intuitively, DHIES+ is semantically secure in the ROM under the CDH assumption
+because $s_b$ provides the adversary with no information about $b$ unless he
+can compute $g^{uv} \in G$, which is infeasible if the Diffie-Hellman problem
+is hard for $G$. More formally, suppose that $ADV^\fanr$ is a probabilistic
+polynomial-time adversary who breaks the semantic security (see
+Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:PKEPs}) of DHIES+ in the ROM. 
+%and denote his
+%(non-negligible) success probability by $p_{ADV}(n)$; the latter  
+Since in this case there are only two possible plaintexts (namely $0$ and
+$1$), there is no need to let $ADV^\fanr$ choose $m_0$ and $m_1$. Instead, he
+simply gets a public key $g^v \in G$ and an encryption $e_b = (g^{u}, s_b, t)$
+of a randomly chosen bit $b$, where $s_0s_1r = \fanr(g^{uv})$ and $t = u
+\oplus r$.  Denote $ADV^\fanr$'s success probability by
+$p_{ADV}(n)$ and the total number of times he queries $\fanr$ during his
+execution by $c(n)$; $p_{ADV}(n)$ is taken over $ADV^\fanr$'s random bits,
+as well as the randomness of $\fanr$ and the choice of $b$, $u$ and $v$. Since
+$ADV^\fanr$ runs in strict polynomial time, $c(n) \leq n^c$ for some $c$. 
+We may assume without loss of generality that $ADV^\fanr$ never queries
+$\fanr$ on the same string more than once, since $\fanr$'s response would be
+identical.
+%Observe that 
+%$ADV^\fanr$ must query $\fanr$ on $g^{uv} \in G$ at some point, since 
+%$p_{ADV}(n)$ would be at most $\frac{1}{2}$ if he did not (because $s_b$ 
+%would then yield no information about $b$). As in Section~\ref{SEC:OurResult}
+%of Chapter~\ref{CH:Fiatshamir}, we will refer to this special $\fanr$ query
+%as the ``crucial query''.
+
+We use $ADV^\fanr$ to construct a probabilistic polynomial-time solver $S$
+who, given $g^u \in G$ and $g^v \in G$ for randomly chosen $u,v \in
+\{1,\ldots,q\}$, outputs $g^{uv} \in G$ with non-negligible probability.
+%To prove that DHIES+ is semantically secure in the ROM under the CDH
+%assumption, we show how to convert a probabilistic polynomial-time adversary
+%$ADV^\fanr$ who correctly outputs $b$ with probability significantly above
+%$\frac{1}{2}$ when given a public key $g^{v'}$ and an encryption $e_b =
+%(g^{u'}, s_b, t)$ of a randomly chosen bit $b$, where $s_0s_1r =
+%\fanr(g^{u'v'})$ and $t = u'\oplus r$, into a probabilistic polynomial-time
+%solver $S$ who, given $g^u \in G$ and $g^v \in G$ for randomly chosen $u,v \in
+%\{1,\ldots,p-1\}$, outputs $g^{uv} \in G$ with significant probability.
+%On input $(g^u, g^v)$, 
+$S$ first
+%guesses the index of $ADV^\fanr$'s
+%``crucial'' $\fanr(g^{uv})$ query by 
+randomly chooses $i \in \{1,\ldots,c(n)\}$ and $s,t \in \strs{n}$. He then
+simulates $ADV^\fanr$ on $(g^v, (g^u, s, t))$, answering all of $ADV^\fanr$'s
+$\fanr$ queries randomly. As soon as $ADV^\fanr$ asks his $i^{th}$ random
+oracle query, $\fanr(m)$, $S$ ends the simulation and outputs $m$ as the value
+of $g^{uv}$ (if $ADV^\fanr$ terminates before asking the $i^{th}$ query or $m
+\notin G$, $S$ outputs some dummy value such as $g^u$). 
+
+Let $A$ be the event that $ADV^\fanr$ succeeds and $B$ be the event that
+$ADV^\fanr$ queries $\fanr$ on $g^{uv} \in G$ at some point.
+%so that there exists an $i^* \in \{1,\ldots,q_\fanr\}$ such that $ADV^\fanr$'s
+%$i^{*^{th}}$ random oracle query is $\fanr(g^{uv})$. 
+%is the index of $ADV^\fanr$'s ``crucial'' $\fanr(g^{uv})$ query. 
+Observe that
+\begin{align*} 
+p_{ADV}(n) = \text{Pr}[A] &= \text{Pr}[A,B] +
+\text{Pr}[A,\overline{B}]\\ & = \text{Pr}[A,B] + \text{Pr}[A \ | \
+\overline{B}]\cdot\text{Pr}[\overline{B}] \\
+& \leq \text{Pr}[A,B] + \text{Pr}[A \
+| \ \overline{B}],
+\end{align*} 
+and note that Pr$[A \ | \ \overline{B}] = \frac{1}{2}$, because in that case
+$s_b$ yields no information about $b$. Since $ADV^\fanr$ breaks the semantic
+security of DHIES+ in the ROM, $p_{ADV}(n) > \frac{1}{2} + \frac{1}{n^d}$
+for some $d$ and infinitely many $n$. We therefore have:
+%and the choice of $i$ is independent of the simulation of $ADV^\fanr$, 
+\begin{align*}
+\text{Pr}[A,B] & \geq p_{ADV}(n) - \text{Pr}[A \ | \ \overline{B}]
+ = p_{ADV}(n) - \frac{1}{2}\\
+& > \frac{1}{2} + \frac{1}{n^d} - \frac{1}{2} = \frac{1}{n^d} \text{ for infinitely many } n.
+\end{align*}
+Now denote the success probability of $S$ (taken over his random bits, as well
+as the choice of $u$ and $v$) by $p_S(n)$, and let $C$ be the event that
+$ADV^{\fanr}$'s $i^{th}$ random oracle query is $\fanr(g^{uv})$. Since $i \in
+\{1,\ldots,c(n)\}$ is chosen uniformly (and independently of the simulation
+of $A^\fanr$), where $c(n) \leq n^c$, we get:
+\begin{align*}
+p_{S}(n) = \text{Pr}[A, B, C] &= \text{Pr}[C \ | \ A, B] \cdot \text{Pr}[A, B] 
+= \frac{1}{c(n)} \cdot \text{Pr}[A, B] \\
+&> \frac{1}{c(n)} \cdot \frac{1}{n^d} \geq \frac{1}{n^c}\cdot \frac{1}{n^d}
+= \frac{1}{n^{c+d}} \text{ for infinitely many } n.
+\end{align*}
+This shows that $p_\fans(n)$ is non-negligible, so that  DHIES+ is
+semantically secure in the ROM under the CDH assumption. $\blacksquare$
+%The lower bound on Pr[$A, B]$ was obtained by observing that 
+
+%$ADV^\fanr$ eventually outputs a bit $b'$ and terminates. $S$ then outputs $a$
+%as the value of $g^{uv} \in G$, where $\fanr(a)$ was $ADV^\fanr$'s $i^{th}$
+%random oracle query. 
+%What is $p_S(n)$, the probability (taken over the random
+%bits of $S$, as well as the choice of $u$ and $v$) that $a_i = g^{uv}$?
+
+\subsection{Plaintext awareness}
+\label{SEC:Plaintext}
+Informally, DHIES+ is plaintext-aware in the ROM because the fact that $u$
+(and not merely $g^u$) is incorporated into the ciphertext $e$ enables the
+simulator to not only determine if the adversary knows the decryption of $e$,
+but to actually decrypt it himself (albeit with negligible error). 
+%[some crap about why DHIES+ is plaintext-aware in the ROM.
+%Adversary almost certainly won't be able to malleate the encryption he's
+%given, $u$ gives away the correct decryption of encryption the adversary
+%generated himself].  
+
+More formally, let $ADV^{\fanr,\fand}$ be a probabilistic polynomial-time
+adversary who is given a public key $g^v \in G$ and attempts to break the CCA2
+security (see Chapter~\ref{CH:Preliminaries}, Section~\ref{SEC:PKEPs}) of
+DHIES+ in the ROM. Suppose for simplicity that there is no ``lunchtime
+attack'' phase, so that $ADV^{\fanr,\fand}$ gets an encryption $e_b =
+(g^u,s_b,u \oplus r)$ of a random bit $b$ (where $s_0s_1r = \fanr(g^{uv})$),
+queries the decryption oracle $\fand$ on a bunch of strings
+$a_0,a_1,a_2,\ldots$, and finally outputs a bit $b'$. We may assume 
+%without loss of generality 
+that $a_i \in \strs{3n}$ (so that $a_i = (\alpha_i,
+\beta_i, \gamma_i)$ for some $\alpha_i, \beta_i, \gamma_i \in \strs{n}$), 
+%and that $a_i \neq e_b$, 
+since $\fand$'s reply would definitely be $\perp$ otherwise. 
+%$ADV^{\fanr,\fand}$ next queries $\fand$ on some more
+%strings $(\alpha_i, \beta_i, \gamma_i)$ and finally outputs a bit $b'$.  
+Let $p_{ADV}(n)$ denote the probability that $b' = b$; $p_{ADV}(n)$ taken over
+$ADV^{\fanr,\fand}$'s random bits and the randomness of $\fanr$, as well as
+the choice of $v$, $u$ and $b$.  We must exhibit a probabilistic
+polynomial-time adversary $A^\fanr$, also given $g^v$ and $e_b$, such that
+$|p_{ADV}(n)-p_A(n)|$ is negligible; here $p_A(n)$ is the probability that
+$A^\fanr$ correctly outputs $b$, taken over his random bits and the randomness
+of $\fanr$, as well as the choice of $v$, $u$ and $b$. 
+
+Let $A^\fanr$ simulate $ADV^{\fanr,\fand}$, answering his $\fand(a_i)$ queries
+as follows.
+%\begin{itemize}
+%\item If $\alpha_i \notin G$, answer $\perp$.
+$A^\fanr$ checks whether $ADV^{\fanr,\fand}$ has previously queried the random
+oracle $\fanr$ on a string $w$ such that $(\alpha_i,\beta_i,\gamma_i) =
+(g^{u'},s'_{m},u' \oplus r')$, where $w = g^{u'v}$, $s'_0s'_1r' =
+\fanr(w)$, $u' \in \{1,\ldots,q\}$ and $m$ is a bit; he is
+basically just trying to determine if $ADV^{\fanr,\fand}$ already knows the
+decryption of $a_i$.  $A^\fanr$'s answer is $m$ if such a $w$ exists and $\perp$
+otherwise. 
+%\end{itemize}
+
+First, observe that whenever $A^\fanr$ answers $\fand(a_i)$ with $m$, so does
+$\fand$, since $\fand(g^{u'}, s'_{m}, u' \oplus r') = m$ provided that
+$s'_0s'_1r' = \fanr(g^{u'v})$ and $u' \in \{1,\ldots,q\}$. It remains to
+show that if $A^\fanr$'s answer is $\perp$, then so is $\fand$'s (almost
+certainly, anyway). We consider the following two exhaustive cases.
+\begin{itemize}
+\item {\bf Case \#1:} $\alpha_i \neq g^u$
+
+If $\alpha_i \notin G$ then $\fand(a_i) =\ \perp$ and we are done. Let us
+therefore suppose that $\alpha_i = g^{u'}$ for some $u' \in \{1,\ldots,q\}$,
+$u' \neq u$, so that $a_i = (g^{u'},\beta_i,\gamma_i)$. %(note that $\fanr$ was
+%queried on $g^{uv}$ in order to generate the encryption $e_b = (g^u, s_b,
+%t))$, so 
+Set $s'_0s'_1r' = \fanr(g^{u'v})$. Since $G$ has prime order, we are
+guaranteed that $g^{u'v} \neq g^{uv}$. This matters because we would otherwise
+have $s'_b = s_b$, $r' = r$, and $ADV^{\fanr,\fand}$ has information about
+both $s_b$ and $r$ by virtue of having seen $e_b = (g^u,s_b,u\oplus r)$.
+
+\begin{itemize}
+\item {\bf Subcase \#1a:} $ADV^{\fanr,\fand}$ has queried $\fanr$ on 
+$g^{u'v}$
+
+Since $A^\fanr$'s answer was $\perp$, either $\beta_i \notin \{s'_0, s'_1\}$
+or $\gamma_i \neq u' \oplus r'$. In both cases, $\fand(a_i) = \ \perp$.
+\item {\bf Subcase \#1b:} $ADV^{\fanr,\fand}$ hasn't queried $\fanr$ on 
+$g^{u'v}$
+
+In this case $s_0'$, $s_1'$ and $r'$ are completely random (note that this
+assertion is justified only because $g^{u'v} \neq g^{uv}$). The probability
+that $a_i$ is a valid encryption, so that $\fand(a_i) \neq \ \perp$, is
+therefore 
+\[\underbrace{\frac{2}{2^n}}_{s'_0 \text{ or } s'_1} \cdot \: 
+\underbrace{\frac{1}{2^n}}_{r'} = \frac{2}{4^n},
+\]
+which is certainly negligible.
+%The reason we care whether $w = g^{uv}$ is that $\fanr$ was definitely
+%queried on the latter in order to generate the encryption .
+\end{itemize}
+
+\item {\bf Case \#2:} $\alpha_i = g^u$
+
+\begin{itemize}
+\item {\bf Subcase \#2a:} $\gamma_i = u \oplus r$
+
+%In this case $a_i = (g^u, \beta_i, u \oplus r)$. 
+If $\beta_i \notin \{s_0,s_1\}$ then $\fand(a_i) = \ \perp$ and we are done,
+so suppose that $\beta_i = s_{\bar{b}}$ (recall that $ADV^{\fanr,\fand}$ isn't
+allowed to query $\fand$ on $e_b = (g^u, s_b, u\oplus r)$).  Since $A^\fanr$'s
+answer was $\perp$, we know that $ADV^{\fanr,\fand}$ hasn't queried $\fanr$ on
+$g^{uv}$, and consequently has no information about $s_{\bar{b}}$ (because
+$ADV^{\fanr,\fand}$ hasn't seen $s_{\bar{b}}$, we may view it as not
+having been chosen yet). The probability that $a_i$ is a valid encryption (so
+that $\fand(a_i) \neq \ \perp$) is therefore $\frac{1}{2^n}$ in this case,
+which is again negligible.  \item {\bf Subcase \#2b:} $\gamma_i \neq u \oplus
+r$
+
+In this case $\fand(a_i) = \ \perp$, so we are done.
+\end{itemize}
+
+\end{itemize}
+%almost certainly is as well.
+We can therefore conclude that the difference between $p_A(n)$ and
+$p_{ADV}(n)$ is negligible, which means that DHIES+ is plaintext-aware in the
+ROM. Since we have already shown in Section~\ref{SEC:Semantic} that DHIES+ is
+semantically secure in the ROM under the CDH assumption, this completes our
+proof that it is CCA2-secure in the ROM under the CDH assumption.
+$\blacksquare$

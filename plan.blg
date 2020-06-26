@@ -1,0 +1,45 @@
+This is BibTeX, Version 0.99c (Web2C 7.3.1)
+The top-level auxiliary file: plan.aux
+The style file: alpha.bst
+Database file #1: $THESISDIR/share/references/random_oracles.bib
+You've used 24 entries,
+            2543 wiz_defined-function locations,
+            700 strings with 9208 characters,
+and the built_in function-call counts, 12700 in all, are:
+= -- 1387
+> -- 449
+< -- 33
++ -- 155
+- -- 148
+* -- 827
+:= -- 1833
+add.period$ -- 93
+call.type$ -- 24
+change.case$ -- 147
+chr.to.int$ -- 24
+cite$ -- 24
+duplicate$ -- 587
+empty$ -- 1006
+format.name$ -- 177
+if$ -- 2856
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 24
+newline$ -- 123
+num.names$ -- 72
+pop$ -- 157
+preamble$ -- 1
+purify$ -- 171
+quote$ -- 0
+skip$ -- 528
+stack$ -- 0
+substring$ -- 883
+swap$ -- 235
+text.length$ -- 33
+text.prefix$ -- 5
+top$ -- 0
+type$ -- 192
+warning$ -- 0
+while$ -- 136
+width$ -- 27
+write$ -- 342
