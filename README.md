@@ -1,5 +1,10 @@
 # Thesis
-Here it [is](https://github.com/vglazer/thesis/blob/master/body/ut-thesis.pdf)
+A common way to produce [signature schemes](https://en.wikipedia.org/wiki/Digital_signature) 
+is to apply the [Fiat-Shamir transform](https://en.wikipedia.org/wiki/Fiat%E2%80%93Shamir_heuristic) 
+to an [identification scheme](http://www-math.ucdenver.edu/~wcherowi/courses/m5410/identschemes.pdf), 
+which preserves security in the [Random Oracle Model](https://en.wikipedia.org/wiki/Random_oracle). 
+We explore the pitfalls of this 
+[here](https://github.com/vglazer/thesis/blob/master/body/ut-thesis.pdf)
 
 # Odds and Ends
 * [The rise and fall of the Random Oracle Methodology](https://github.com/vglazer/thesis/blob/master/plan.pdf)
